@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
-import com.javapai.framework.common.vo.PageResult;
+import com.javapai.framework.common.vo.RstPageResult;
+import com.javapai.framework.common.vo.RstResultBuilder;
 import com.javapai.framework.constant.CL_Database;
 
 /**
@@ -21,51 +22,11 @@ public abstract class AbstractBizService implements TopBaseService {
 	protected org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
 	
 	/**
-	 * 分页查询.<br>
-	 * 
-	 * @param sql
-	 *            SQL语句.<br>
-	 * @param sqlArgs
-	 *            SQL参数.<br>
-	 * @param startIndex
-	 *            分页当前页.<br>
-	 * @param pageSize
-	 *            分页每数据量.<br>
-	 * @param mappedClass
-	 *            映射对象.<br>
-	 * @return
-	 */
-	public <T> PageResult<T> getPage(String sql, List<Object> sqlArgs, Integer startIndex, Integer pageSize, Class<T> mappedClass) {
-		return getPage(sql, startIndex, pageSize, mappedClass, sqlArgs.toArray());
-	}
-	
-	/**
-	 * 分页查询.<br>
-	 * 
-	 * @param sql
-	 * @param startIndex
-	 * @param pageSize
-	 * @param mappedClass
-	 * @param sqlArgs
-	 * @return
-	 */
-	public <T> PageResult<T> getPage(String sql, Integer startIndex, Integer pageSize, Class<T> mappedClass, Object... sqlArgs) {
-		Integer totalRecord = this.getSqlCount(sql, sqlArgs);
-		if (null != startIndex && null != pageSize) {
-			sql = this.getPageSQL(sql, startIndex, pageSize);
-		}
-
-		Integer pageIndex = (startIndex / pageSize) + 1;
-		List<T> list = jdbcTemplate.query(sql, sqlArgs, new BeanPropertyRowMapper<T>(mappedClass));
-		return new PageResult<T>(pageIndex, pageSize, list, totalRecord);
-	}
-	
-	/**
 	 * 根据传入参数进行分页查询.<br>
 	 * 
 	 * @param sql
 	 *            SQL语句.
-	 * @param startIndex
+	 * @param pageIndex
 	 *            记录起始行.
 	 * @param pageSize
 	 *            每页记录数。
@@ -74,10 +35,50 @@ public abstract class AbstractBizService implements TopBaseService {
 	 * @param values
 	 * @return
 	 */
-	public <T> PageResult<T> getPage(String sql, Integer startIndex, Integer pageSize, Class<T> mappedClass) {
-		return getPage(sql, startIndex, pageSize, mappedClass, new Object[]{});
+	public <T> RstPageResult<T> getPage(String sql, Integer pageIndex, Integer pageSize, Class<T> mappedClass) {
+		return getPage(sql, pageIndex, pageSize, mappedClass, new Object[]{});
 	}
+	
+	/**
+	 * 分页查询.<br>
+	 * 
+	 * @param sql
+	 *            SQL语句.<br>
+	 * @param sqlArgs
+	 *            SQL参数.<br>
+	 * @param pageIndex
+	 *            分页当前页.<br>
+	 * @param pageSize
+	 *            分页每数据量.<br>
+	 * @param mappedClass
+	 *            映射对象.<br>
+	 * @return
+	 */
+	public <T> RstPageResult<T> getPage(String sql, List<Object> sqlArgs, Integer pageIndex, Integer pageSize, Class<T> mappedClass) {
+		return getPage(sql, pageIndex, pageSize, mappedClass, sqlArgs.toArray());
+	}
+	
+	/**
+	 * 分页查询.<br>
+	 * 
+	 * @param sql
+	 * @param pageIndex
+	 * @param pageSize
+	 * @param mappedClass
+	 * @param sqlArgs
+	 * @return
+	 */
+	public <T> RstPageResult<T> getPage(String sql, Integer pageIndex, Integer pageSize, Class<T> mappedClass, Object... sqlArgs) {
+		Integer totalRecord = this.getSqlCount(sql, sqlArgs);
+		if (null != pageIndex && null != pageSize) {
+			sql = this.getPageSQL(sql, pageIndex - 1, pageSize);
+		}
 
+		List<T> list = jdbcTemplate.query(sql, sqlArgs, new BeanPropertyRowMapper<T>(mappedClass));
+//		return new RstPageResult<T>((pageIndex / pageSize) + 1, pageSize, list, totalRecord);
+		return RstResultBuilder.buildPageResult((pageIndex / pageSize) + 1, pageSize, list, totalRecord);
+	}
+	
 	/**
 	 * 取得数据库类型.
 	 * 
@@ -131,7 +132,7 @@ public abstract class AbstractBizService implements TopBaseService {
 	}
 	
 	/**
-	 * 构造MySQL数据分页SQL
+	 * 构造MySQL数据分页SQL.<br>
 	 * 
 	 * @param sql
 	 * @param startIndex
@@ -140,7 +141,7 @@ public abstract class AbstractBizService implements TopBaseService {
 	 */
 	private String getMySQLPageSQL(String sql, Integer startIndex, Integer pageSize) {
 		if (null != startIndex && null != pageSize) {
-			return sql + " limit " + startIndex + "," + pageSize;
+			return sql + " limit " + (startIndex) + "," + pageSize;
 		} else if (null != startIndex && null == pageSize) {
 			return sql + " limit " + startIndex;
 		} else {
@@ -189,39 +190,4 @@ public abstract class AbstractBizService implements TopBaseService {
 	}
 	
 	
-	
-
-//	public Page<Map<String, Object>> getPage(String sql, Integer startIndex, Integer pageSize, Object... values) {
-//		/*方法1（关闭理由：没有必要自定义countsql,有特殊要求时，自己外部实现）*/
-////		return this.getPage(sql, null, startIndex, pageSize, values);
-//		
-//		/*方法2*/
-//		Integer totalRecord = this.getSqlCount(sql, values);
-//		if (null != startIndex && null != pageSize) {
-//			sql = this.getPageSQL(sql, startIndex, pageSize);
-//		}
-//		
-//		Integer pageIndex = (startIndex / pageSize) + 1;
-//		List<Map<String, Object>> items = jdbcTemplate.query(sql, values, new ColumnMapRowMapper());
-//		return new Page<Map<String, Object>>(pageIndex, pageSize, items, totalRecord);
-//	}
-	
-//	public Page<Map<String, Object>> getPage(String sql, String countSQL, Integer startIndex, Integer pageSize, Object... values) {
-////		if (StringUtils.isEmpty(countSQL) && StringUtils.isNotEmpty(SQL)) {
-////			countSQL = "select count(*) from (" + SQL + ") xCount";
-////		}
-//		Integer totalRecord = this.getSqlCount(countSQL, values);
-//		
-//		String pageQueryString = sql;
-//		if (null != startIndex && null != pageSize) {
-//			pageQueryString = this.getPageSQL(sql, startIndex, pageSize);
-//		}
-//		
-//		List<Map<String, Object>> items = jdbcTemplate.query(pageQueryString, values,
-//				new ColumnMapRowMapper());
-////		Page page = new Page(startIndex,pageSize,items);
-//		Page<Map<String, Object>> page = new Page<>(startIndex, pageSize, items, totalRecord);
-//		return page;
-//	}
-
 }

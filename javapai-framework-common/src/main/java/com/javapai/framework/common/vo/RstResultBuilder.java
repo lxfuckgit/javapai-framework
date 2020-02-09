@@ -1,6 +1,8 @@
 package com.javapai.framework.common.vo;
 
-import com.javapai.framework.common.enums.Enums;
+import java.util.List;
+
+import com.javapai.framework.enums.Enums;
 
 /**
  *
@@ -105,6 +107,20 @@ public final class RstResultBuilder {
 		RstResult<T> entity = buildNormalResult();
 		entity.setData(data);
 		return entity;
+	}
+	
+	/**
+	 * 构造一个正常响应.<br>
+	 *
+	 * @param data
+	 *            响应数据.<br>
+	 * @return
+	 */
+	public static <T> RstPageResult<T> buildPageResult(int pageIndex, int pageSize, List<T> pageList, int totalRecord) {
+		RstPageResult<T> result = new RstPageResult<>(pageIndex, pageSize, pageList, totalRecord);
+		result.setCode(RESPONSE_OK);
+		result.setMessage(RESPONSE_MSG);
+		return result;
 	}
 	
 }
