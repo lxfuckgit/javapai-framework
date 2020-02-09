@@ -3,8 +3,8 @@ package com.javapai.framework.common.dto;
 import java.io.Serializable;
 
 /**
- * 基础DTO(和请求设置相关参数定义于此).<br>
- * 建议所有DTO对象继承。<br>
+ * 基础DTO(用以描述入参所来源的设备相关信息)，建议所有DTO对象继承。<br>
+ * <br>
  * 
  * @author liuxiang
  *

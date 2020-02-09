@@ -1,20 +1,9 @@
 package com.javapai.framework.common.dto;
 
 /**
- * Request Header(和请请求app应用相关的参数设定).<br>
- * JSON形式统一请求报文.<br>
+ * 接口请求基础入参对象(用以描述和App应用相关的参数信息)。<br>
  * 
- * 目的：用以取代{@link #com.javapai.framework.action.RstParam}
- * 
- * 改进点：
- * <br>
- * 1、将RstParam.RstHead对象的每个属性给出明确的定义且每个属性与RstBody平行所有属性外置平行化;
- * 2、原来RstHead请求头参数过多且大多为业务参数，为统一只将token参数放置于http-header中，其它参数放于http-body中.
- * <br>
- * 
- * RequestHead类是在BaseDTO基础上扩展出业务上所需要的共公请求参数。<br>
- * 
- * @author liu.xiang
+ * @author pooja
  *
  */
 @SuppressWarnings("serial")
