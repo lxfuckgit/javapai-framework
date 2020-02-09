@@ -13,6 +13,15 @@ package com.javapai.framework.pagination;
  */
 public interface Paginate {
 	/**
+	 * 
+	 */
+	public static final int DEFAULT_PAGE_SIZE = 20;
+	/**
+	 * 
+	 */
+	public static final int DEFAULT_PAGE_INDEX = 1;
+	
+	/**
 	 * 返回当前页记录条数.<br>
 	 * 
 	 * @return
