@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 /**
  * JSON格式化工具类。<br>
@@ -49,6 +50,9 @@ public class UtilJson {
 		mapper.setDateFormat(dateFormat);
 		mapper.setTimeZone(TimeZone.getDefault());
 //		mapper.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
+		
+		//限定格式化timestamp.
+		mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 		
 		/*反序列化时，忽略属性与json一一对应*/
 		// before jackson 1.9

@@ -42,7 +42,7 @@ public abstract class UtilHttp {
 	};
 	
 	/**
-	 * 通过Get请求url。<br>
+	 * {@link UtilHttp#requestGet(String, Map)}
 	 * 
 	 * @param url
 	 * @return
@@ -52,9 +52,10 @@ public abstract class UtilHttp {
 	};
 	
 	/**
+	 * 通过Get方式向url地址以parameter参数提交请求。<br>
 	 * 
-	 * @param url
-	 * @param parameter
+	 * @param url 请求地址.<br>
+	 * @param parameter 请求参数.<br>
 	 * @return
 	 */
 	public static String requestGet(String url, Map<String, Object> parameter) {
@@ -78,6 +79,19 @@ public abstract class UtilHttp {
 	public static String jsonPost(String url, Map<String, Object> parameter) {
 		return request(url, parameter, json_header, "Post");
 	};
+	
+	public static String jsonPost(String url, String jsondata, Map<String, String> header) {
+		return null;//jsonPost(url, UtilJson.string2Map(jsondata), header);
+	}
+
+	public static String jsonPost(String url, Map<String, Object> parameter, Map<String, String> header) {
+		if (null == header) {
+			header = json_header;
+		} else {
+			header.putAll(json_header);
+		}
+		return request(url, parameter, header, "POST");
+	}
 	
 	/**
 	 * 通过Post方式以parameter中指定的参数请求请定url.<br>
@@ -158,17 +172,17 @@ public abstract class UtilHttp {
 	            conn.setDoInput(true);
 	            conn.setRequestMethod("POST");
 	            
-				if ((parameters != null) && (parameters.size() > 0)) {
+				if (parameters != null && parameters.size() >= 0) {
 					// 4.1:获取URLConnection对象对应的输出流
 					OutputStream out = conn.getOutputStream();
 //					out = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
 					
 					// 4.2:发送请求参数
-					if("application/json".equalsIgnoreCase(conn.getRequestProperty("Content-Type"))){
-						//json data
+					if ("application/json".equalsIgnoreCase(conn.getRequestProperty("Content-Type"))) {
+						// json data
 						out.write(UtilJson.object2Json(parameters).getBytes("UTF-8"));
-					} else if(form_header.get("Content-Type").equals(conn.getRequestProperty("Content-Type"))) {
-						//form data
+					} else if (form_header.get("Content-Type").equals(conn.getRequestProperty("Content-Type"))) {
+						// form data
 						StringBuffer ss = new StringBuffer();
 						for (Map.Entry<String, Object> entry : parameters.entrySet()) {
 							ss.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
@@ -226,7 +240,7 @@ public abstract class UtilHttp {
 			
 			// 6：读取返回内容(BufferedReader字符流)
 			// br = new BufferedReader(new InputStreamReader(url.openStream()));/// so, do that is Ok
-			br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			br = new BufferedReader(new InputStreamReader(conn.getInputStream()));//为什么原生xxxStream不行,会乱码呢?
 			String line = "";
 			while ((line = br.readLine()) != null) {
 				result += line;
