@@ -4,13 +4,18 @@ import com.javapai.framework.common.dto.BaseRstDTO;
 import com.javapai.framework.pagination.Paginate;
 
 /**
- * 基础分页DTO参数说明。<br>
+ * 默认分页DTO参数说明。<br>
  * 
+ * <br>
+ * 此类不可被继承，仅应用于无参且需要分页的情况;
+ * 
+ * <br>如果需要对请求中参数对象加入分页参数可自行<strong>implements</strong> {@link com.javapai.framework.pagination}接口并增加接口中要求的分页参数.<br>
+ * <br>
  * @author pooja
  *
  */
 @SuppressWarnings("serial")
-public class RstPageDTO extends BaseRstDTO implements Paginate {
+public final class RstPageDTO extends BaseRstDTO implements Paginate {
 	/**
 	 * 页-记录数.
 	 */
@@ -19,6 +24,10 @@ public class RstPageDTO extends BaseRstDTO implements Paginate {
 	 * 页-索引号.
 	 */
 	private int pageIndex;
+	
+	public RstPageDTO() {
+		super();
+	}
 
 	public RstPageDTO(int pageIndex, Integer pageSize) {
 		if (pageIndex < 0) {
