@@ -244,5 +244,6 @@
 		<module>javapai-framework-fileparse</module>
 		<module>javapai-framework-javafx</module>
 		<module>javapai-framework-utils</module>
+		<module>javapai-framework-registry</module>
 	</modules>
 </project>
