@@ -1,25 +1,15 @@
 package com.javapai.framework.enums;
 
 /**
- * 公共枚举.<br>
+ * 公共状态机-枚举.<br>
  * 
  * <p>
- * 状态机.<br>
+ * 如果有定义不合适请根据场景自行定义，例如OrderStatusEnum.<br>
  * 
  * @author liu.xiang
  *
  */
 public enum StatusEnum {
-//	/**
-//	 * 可用
-//	 */
-//	STATUS_ENABLE("STATUS_ENABLE"),//特殊场景下的状态，交由特定class，例如OrderStatusEnum.
-//
-//	/**
-//	 * 禁用
-//	 */
-//	STATUS_DISABLE("STATUS_DISABLE"),
-	
 	/**
 	 * 初始化
 	 */
