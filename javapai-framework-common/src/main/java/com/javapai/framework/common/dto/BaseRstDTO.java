@@ -1,7 +1,9 @@
 package com.javapai.framework.common.dto;
 
 /**
- * 接口请求基础入参对象(用以描述和App应用相关的参数信息)。<br>
+ * 默认请求基础入参对象。<br>
+ * 
+ * BaseRstDTO主要用以描述当前请求中涉及到和App应用相关的参数信息。
  * 
  * @author pooja
  *

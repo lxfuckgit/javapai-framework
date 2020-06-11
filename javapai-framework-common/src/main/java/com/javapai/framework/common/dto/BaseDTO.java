@@ -3,8 +3,10 @@ package com.javapai.framework.common.dto;
 import java.io.Serializable;
 
 /**
- * 基础DTO(用以描述入参所来源的设备相关信息)，建议所有DTO对象继承。<br>
+ * 基础DTO，建议所有DTO对象继承。<br>
+ * 
  * <br>
+ * BaseDTO参数用以描述请求源(调用方)的设备相关信息。 <br>
  * 
  * @author liuxiang
  *
@@ -32,16 +34,15 @@ public abstract class BaseDTO implements Serializable {
 	 */
 	private String deviceIdfv;
 	/**
-	 * 手机系统.<br>
-	 * ios or android.
+	 * 设备运行系统.<br>
+	 * 哪个平台:ios,android,heimei.
 	 */
-	private String phoneOs;
-	// ??哪个平台(ios or android )?哪个系统(android6 android5 ios10 )？
-	// private String sysVersion;
+	private String deviceOs;// phoneOs
 	/**
-	 * 手机型号.<br>
+	 * 设备型号 及 设备版本.<br>
+	 * 哪个系统型号:android6 android5 ios7p
 	 */
-	private String phoneModel;
+	private String deviceModel;// phoneModel
 
 	public String getDeviceId() {
 		return deviceId;
@@ -83,20 +84,20 @@ public abstract class BaseDTO implements Serializable {
 		this.deviceIdfv = deviceIdfv;
 	}
 
-	public String getPhoneOs() {
-		return phoneOs;
+	public String getDeviceOs() {
+		return deviceOs;
 	}
 
-	public void setPhoneOs(String phoneOs) {
-		this.phoneOs = phoneOs;
+	public void setDeviceOs(String deviceOs) {
+		this.deviceOs = deviceOs;
 	}
 
-	public String getPhoneModel() {
-		return phoneModel;
+	public String getDeviceModel() {
+		return deviceModel;
 	}
 
-	public void setPhoneModel(String phoneModel) {
-		this.phoneModel = phoneModel;
+	public void setDeviceModel(String deviceModel) {
+		this.deviceModel = deviceModel;
 	}
 
 }

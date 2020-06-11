@@ -1,4 +1,4 @@
-package com.javapai.framework.common.enums;
+package com.javapai.framework.enums;
 
 import java.util.LinkedHashMap;
 

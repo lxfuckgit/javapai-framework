@@ -1,4 +1,4 @@
-package com.javapai.framework.common.enums;
+package com.javapai.framework.enums;
 
 /**
  * Title : 枚举类基类.<br>
@@ -24,7 +24,7 @@ public interface Enums<K,V> {
 
 	/**
 	 * 读取当前枚举类代表的值. <br>
-	 * getValue()=getName();
+	 * getValue() = getName();
 	 *
 	 * @return
 	 * 

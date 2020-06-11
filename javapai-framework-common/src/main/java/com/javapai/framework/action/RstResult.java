@@ -1,6 +1,7 @@
-package com.javapai.framework.common.vo;
+package com.javapai.framework.action;
 
 import java.io.Serializable;
+import java.util.function.Supplier;
 
 /**
  * 请求结果对象.<br>
@@ -69,6 +70,26 @@ public final class RstResult<T> implements Serializable {
 
 	public void setData(T data) {
 		this.data = data;
+	}
+	
+	/**
+	 * 
+	 * @param supplier
+	 * @return
+	 */
+	public static <T> T call(Supplier<RstResult<T>> reslut) {
+		RstResult<T> result = reslut.get();
+		if (null == result) {
+			throw new RuntimeException("远程调用未获得结果。原因未知！！");
+		}
+
+		switch (result.getCode()) {
+		case "00000000":
+			return result.getData();
+			
+		default:
+			throw new RuntimeException();
+		}
 	}
 
 }

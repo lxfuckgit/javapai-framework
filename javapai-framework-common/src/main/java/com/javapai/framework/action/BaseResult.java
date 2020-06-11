@@ -1,4 +1,4 @@
-package com.javapai.framework.common.vo;
+package com.javapai.framework.action;
 
 public abstract class BaseResult {
 	/**
