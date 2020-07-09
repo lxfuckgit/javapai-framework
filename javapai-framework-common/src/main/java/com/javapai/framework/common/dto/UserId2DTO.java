@@ -1,4 +1,4 @@
-package com.javapai.framework.action;
+package com.javapai.framework.common.dto;
 
 import java.io.Serializable;
 
@@ -6,17 +6,15 @@ import java.io.Serializable;
 //import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import com.javapai.framework.common.dto.BaseRstDTO;
-
 /**
  * 字符类型的userId标识入参。<br>
  * 
- * @see {@link RstUserIdDTO.java}
+ * @see {@link UserIdDTO.java}
  * @author pooja
  *
  */
 @SuppressWarnings("serial")
-public final class RstUserId2DTO extends BaseRstDTO implements Serializable {
+public final class UserId2DTO extends BaseRstDTO implements Serializable {
 	/**
 	 * 用户标识.<br>
 	 */
