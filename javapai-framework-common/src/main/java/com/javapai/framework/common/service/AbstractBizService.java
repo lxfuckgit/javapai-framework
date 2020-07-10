@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
-import com.javapai.framework.common.vo.RstPageResult;
-import com.javapai.framework.common.vo.RstResultBuilder;
+import com.javapai.framework.action.PageResult;
+import com.javapai.framework.action.RstResultBuilder;
 import com.javapai.framework.constant.CL_Database;
 
 /**
@@ -35,7 +35,7 @@ public abstract class AbstractBizService implements TopBaseService {
 	 * @param values
 	 * @return
 	 */
-	public <T> RstPageResult<T> getPage(String sql, Integer pageIndex, Integer pageSize, Class<T> mappedClass) {
+	public <T> PageResult<T> getPage(String sql, Integer pageIndex, Integer pageSize, Class<T> mappedClass) {
 		return getPage(sql, pageIndex, pageSize, mappedClass, new Object[]{});
 	}
 	
@@ -54,7 +54,7 @@ public abstract class AbstractBizService implements TopBaseService {
 	 *            映射对象.<br>
 	 * @return
 	 */
-	public <T> RstPageResult<T> getPage(String sql, List<Object> sqlArgs, Integer pageIndex, Integer pageSize, Class<T> mappedClass) {
+	public <T> PageResult<T> getPage(String sql, List<Object> sqlArgs, Integer pageIndex, Integer pageSize, Class<T> mappedClass) {
 		return getPage(sql, pageIndex, pageSize, mappedClass, sqlArgs.toArray());
 	}
 	
@@ -68,7 +68,7 @@ public abstract class AbstractBizService implements TopBaseService {
 	 * @param sqlArgs
 	 * @return
 	 */
-	public <T> RstPageResult<T> getPage(String sql, Integer pageIndex, Integer pageSize, Class<T> mappedClass, Object... sqlArgs) {
+	public <T> PageResult<T> getPage(String sql, Integer pageIndex, Integer pageSize, Class<T> mappedClass, Object... sqlArgs) {
 		Integer totalRecord = this.getSqlCount(sql, sqlArgs);
 		if (null != pageIndex && null != pageSize) {
 			sql = this.getPageSQL(sql, pageIndex - 1, pageSize);
