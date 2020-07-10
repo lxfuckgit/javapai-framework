@@ -74,7 +74,7 @@ public final class PageResult<T> extends BaseResult implements Serializable {
 	 * @param pageList
 	 * @param totalRecord
 	 */
-	public PageResult(int pageIndex, int pageSize, List<T> data, int totalRecord) {
+	public PageResult(int pageIndex, int pageSize, List<T> data, long totalRecord) {
 		this.pageIndex = pageIndex;
 		this.pageSize = pageSize;
 		this.data = data;

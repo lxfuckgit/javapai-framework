@@ -116,7 +116,7 @@ public final class RstResultBuilder {
 	 *            响应数据.<br>
 	 * @return
 	 */
-	public static <T> PageResult<T> buildPageResult(int pageIndex, int pageSize, List<T> pageList, int totalRecord) {
+	public static <T> PageResult<T> buildPageResult(int pageIndex, int pageSize, List<T> pageList, long totalRecord) {
 		PageResult<T> result = new PageResult<>(pageIndex, pageSize, pageList, totalRecord);
 		result.setCode(RESPONSE_OK);
 		result.setMessage(RESPONSE_MSG);
