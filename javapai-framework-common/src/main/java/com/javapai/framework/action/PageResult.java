@@ -39,7 +39,7 @@ public final class PageResult<T> extends BaseResult implements Serializable {
 	 * @deprecated 理由：记录总页数被假定为不可人为通过get/set修改，故被列为无意义属性。<br>
 	 *             如需知道总页数，请参见方法：{@link PageResult#totalPages()};<br>
 	 */
-	private int totalPages;
+	private long totalPages;
 
 	/**
 	 * 总记录数.<br>
@@ -47,7 +47,7 @@ public final class PageResult<T> extends BaseResult implements Serializable {
 	 * 
 	 * @deprecated 参见{@link PageResult#totalRecords()}
 	 */
-	private int totalRecord;
+	private long totalRecord;
 
 	/**
 	 * 当前页数据集.
@@ -106,7 +106,7 @@ public final class PageResult<T> extends BaseResult implements Serializable {
 		this.data = data;
 	}
 
-	public int getTotalPages() {
+	public long getTotalPages() {
 		totalPages = totalRecord / pageSize;// 这样会不会有线程问题
 		return totalPages;
 	}
@@ -115,7 +115,7 @@ public final class PageResult<T> extends BaseResult implements Serializable {
 	// this.totalPages = totalPages;
 	// }
 
-	public int getTotalRecord() {
+	public long getTotalRecord() {
 		return totalRecord;
 	}
 
