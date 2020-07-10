@@ -110,14 +110,14 @@ public final class RstResultBuilder {
 	}
 	
 	/**
-	 * 构造一个正常响应.<br>
+	 * 构造一个正常的分页响应报文.<br>
 	 *
 	 * @param data
 	 *            响应数据.<br>
 	 * @return
 	 */
-	public static <T> RstPageResult<T> buildPageResult(int pageIndex, int pageSize, List<T> pageList, int totalRecord) {
-		RstPageResult<T> result = new RstPageResult<>(pageIndex, pageSize, pageList, totalRecord);
+	public static <T> PageResult<T> buildPageResult(int pageIndex, int pageSize, List<T> pageList, int totalRecord) {
+		PageResult<T> result = new PageResult<>(pageIndex, pageSize, pageList, totalRecord);
 		result.setCode(RESPONSE_OK);
 		result.setMessage(RESPONSE_MSG);
 		return result;

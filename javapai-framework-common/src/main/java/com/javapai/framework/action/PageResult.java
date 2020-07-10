@@ -4,46 +4,56 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * 分页请求下系统返回的报文结果对象。<br>
  * 
  * @author liu.xiang
  * 
  * @param <T>
  */
-public final class RstPageResult<T> extends BaseResult implements Serializable {
+public final class PageResult<T> extends BaseResult implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
-	 * 当前页记录条数.<br>
+	 * 当前页记录条数(current page size).<br>
 	 * 每页记录条数. <br>
 	 * 
 	 * @see com.javapai.framework.paginationPageArgs.pageSize
 	 */
 	private int pageSize;
+
 	/**
-	 * 当前页索引.<br>
-	 * 当前用户正在浏览数据页.<br>
+	 * 当前页索引(current page index).<br>
+	 * 当前页的索引页号.<br>
 	 * 
 	 * @see com.javapai.framework.paginationPageArgs.pageIndex
 	 */
 	private int pageIndex;
+
 	/**
 	 * 总页数.<br>
-	 * 在未分页情况下，查询结果集的总页数.<br>
+	 * 查询结果集的总页数=总记录数/每页记录数.<br>
+	 * 
+	 * @deprecated 理由：记录总页数被假定为不可人为通过get/set修改，故被列为无意义属性。<br>
+	 *             如需知道总页数，请参见方法：{@link PageResult#totalPages()};<br>
 	 */
 	private int totalPages;
+
 	/**
 	 * 总记录数.<br>
 	 * 在未分页情况下，查询结果集的总条数.<br>
+	 * 
+	 * @deprecated 参见{@link PageResult#totalRecords()}
 	 */
 	private int totalRecord;
 
 	/**
 	 * 当前页数据集.
 	 */
-	private List<T> pageList;
+	private List<T> data;// 和RstResult保持一样的属性头信息.
+//	private List<T> pageList;
 
 	/**
 	 * 
@@ -51,10 +61,10 @@ public final class RstPageResult<T> extends BaseResult implements Serializable {
 	 * @param pageSize
 	 * @param pageList
 	 */
-	public RstPageResult(int pageIndex, int pageSize, List<T> pageList) {
+	public PageResult(int pageIndex, int pageSize, List<T> data) {
 		this.pageIndex = pageIndex;
 		this.pageSize = pageSize;
-		this.pageList = pageList;
+		this.data = data;
 	}
 
 	/**
@@ -64,10 +74,10 @@ public final class RstPageResult<T> extends BaseResult implements Serializable {
 	 * @param pageList
 	 * @param totalRecord
 	 */
-	public RstPageResult(int pageIndex, int pageSize, List<T> pageList, int totalRecord) {
+	public PageResult(int pageIndex, int pageSize, List<T> data, int totalRecord) {
 		this.pageIndex = pageIndex;
 		this.pageSize = pageSize;
-		this.pageList = pageList;
+		this.data = data;
 		this.totalRecord = totalRecord;
 	}
 
@@ -88,12 +98,12 @@ public final class RstPageResult<T> extends BaseResult implements Serializable {
 		this.pageSize = pageSize;
 	}
 
-	public List<T> getPageList() {
-		return pageList;
+	public List<T> getData() {
+		return data;
 	}
 
-	public void setPageList(List<T> pageList) {
-		this.pageList = pageList;
+	public void setData(List<T> data) {
+		this.data = data;
 	}
 
 	public int getTotalPages() {

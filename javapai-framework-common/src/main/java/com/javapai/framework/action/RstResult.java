@@ -4,22 +4,15 @@ import java.io.Serializable;
 import java.util.function.Supplier;
 
 /**
- * 请求结果对象.<br>
+ * 常规请求下系统返回的报文结果对象。<br>
  * 
  * @author liu.xiang
  *
- * @param <T> 报文中具体数据包对象。<br>
+ * @param <T>
+ *            报文中具体数据报文对象。<br>
  */
 @SuppressWarnings("serial")
-public final class RstResult<T> implements Serializable {
-	/**
-	 * 响应状态码.<br>
-	 */
-	private String code;
-	/**
-	 * 状态码消息。<br>
-	 */
-	private String message;
+public final class RstResult<T> extends BaseResult implements Serializable {
 	/**
 	 * 返回数据包对象。<br>
 	 */
@@ -39,29 +32,12 @@ public final class RstResult<T> implements Serializable {
 	 * @param message
 	 */
 	public RstResult(String code, String message) {
-		this.code = code;
-		this.message = message;
+		super(code, message);
 	}
 	
 	public RstResult(String code, T data) {
-		this.code = code;
+		super.setCode(code);
 		this.data = data;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 	public T getData() {
