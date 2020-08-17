@@ -28,9 +28,9 @@ import com.javapai.framework.fileparse.office.OfficeReader;
  * 
  */
 public interface ExcelReader extends OfficeReader<TableFormat> {
-	public TableFormat readFile(File File, int sheetIndex);
+	public TableFormat readSheet(File file, int sheetIndex);
 	
-	public TableFormat readSheet(File File, int sheetIndex, SheetConfig config);
+	public TableFormat readSheet(File file, int sheetIndex, SheetConfig config);
 	
 	public TableFormat readSheet(InputStream strean, int sheetIndex);
 
@@ -39,5 +39,8 @@ public interface ExcelReader extends OfficeReader<TableFormat> {
 	public TableFormat readSheet(InputStream strean, String sheetName);
 
 	public TableFormat readSheet(InputStream strean, String sheetName, SheetConfig config);
+	
+	//未开放原因:通过类实例来绑定config，再调用：readFile(File file)即可。
+//	public java.util.List<TableFormat> readFile(File file, SheetConfig config);
 
 }

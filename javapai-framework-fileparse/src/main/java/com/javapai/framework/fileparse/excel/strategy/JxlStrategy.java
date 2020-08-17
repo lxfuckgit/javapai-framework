@@ -64,7 +64,7 @@ public final class JxlStrategy implements JXLExcelReader {
 	}
 	
 	@Override
-	public TableFormat readFile(File File, int sheetIndex) {
+	public TableFormat readSheet(File File, int sheetIndex) {
 		// TODO Auto-generated method stub
 		return null;
 	}
