@@ -18,10 +18,10 @@ import org.slf4j.LoggerFactory;
 
 import com.javapai.framework.config.TableFormat;
 import com.javapai.framework.fileparse.excel.AbstractExcelHandler;
-import com.javapai.framework.fileparse.excel.ExcelReader;
+import com.javapai.framework.fileparse.excel.POIExcelReader;
 import com.javapai.framework.fileparse.excel.config.SheetConfig;
 
-public final class PoiStrategy extends AbstractExcelHandler implements ExcelReader {
+public final class PoiStrategy extends AbstractExcelHandler implements POIExcelReader {
 	/**/
 	protected static Logger log = LoggerFactory.getLogger(PoiStrategy.class);
 
@@ -263,6 +263,18 @@ public final class PoiStrategy extends AbstractExcelHandler implements ExcelRead
 			break;
 		}
 		return cellValue;
+	}
+
+	@Override
+	public TableFormat readFile(File File, int sheetIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TableFormat readSheet(File File, int sheetIndex, SheetConfig config) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

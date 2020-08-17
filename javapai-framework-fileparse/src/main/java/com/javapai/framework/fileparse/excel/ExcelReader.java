@@ -1,10 +1,7 @@
 package com.javapai.framework.fileparse.excel;
 
+import java.io.File;
 import java.io.InputStream;
-import java.util.List;
-
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
 import com.javapai.framework.config.TableFormat;
 import com.javapai.framework.fileparse.excel.config.SheetConfig;
@@ -31,6 +28,10 @@ import com.javapai.framework.fileparse.office.OfficeReader;
  * 
  */
 public interface ExcelReader extends OfficeReader<TableFormat> {
+	public TableFormat readFile(File File, int sheetIndex);
+	
+	public TableFormat readSheet(File File, int sheetIndex, SheetConfig config);
+	
 	public TableFormat readSheet(InputStream strean, int sheetIndex);
 
 	public TableFormat readSheet(InputStream strean, int sheetIndex, SheetConfig config);
