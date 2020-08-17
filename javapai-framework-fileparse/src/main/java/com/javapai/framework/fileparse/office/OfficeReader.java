@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
-public interface OfficeReader<T> extends OfficeHandler<T> {
+public interface OfficeReader<T> extends OfficeHandler {
 	/**
 	 * 读取指定的office文件对象。<br>
 	 * 
