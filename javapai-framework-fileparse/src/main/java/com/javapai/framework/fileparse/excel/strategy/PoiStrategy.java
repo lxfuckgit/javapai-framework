@@ -3,6 +3,7 @@ package com.javapai.framework.fileparse.excel.strategy;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,19 +39,24 @@ public final class PoiStrategy extends AbstractExcelHandler implements POIExcelR
 	@Override
 	public List<TableFormat> readFile(File file) {
 		// TODO Auto-generated method stub
-		return null;
+		return readSheet(getWorkbook(file));
 	}
 
 	@Override
 	public List<TableFormat> readFile(InputStream stream) {
 		// TODO Auto-generated method stub
-		return null;
+		return readSheet(getWorkbook(stream));
 	}
 
 	@Override
 	public List<TableFormat> readSheet(Workbook workBook) {
 		// TODO Auto-generated method stub
-		return null;
+		List<TableFormat> list = new ArrayList<TableFormat>();
+		for (int i = 0; i < workBook.getNumberOfSheets(); i++) {
+			list.add(readSheet(workBook.getSheetAt(i)));
+			// list.add(readSheet(workBook.getSheet("sheetName"));
+		}
+		return list;
 	}
 
 	@Override
@@ -77,6 +83,9 @@ public final class PoiStrategy extends AbstractExcelHandler implements POIExcelR
 
 		if (rows <= 20000) {
 			for (Row row : sheet) {
+				if (emptyRow(row)) {
+					continue;
+				}
 				Map<Integer, Object> data = readRow(row);
 				if (null != config.getNoteIndex() && config.getNoteIndex().equals(Integer.valueOf(row.getRowNum()))) {
 					data.forEach((k, v) -> {
@@ -112,25 +121,25 @@ public final class PoiStrategy extends AbstractExcelHandler implements POIExcelR
 	@Override
 	public TableFormat readSheet(Workbook workBook, int sheetIndex) {
 		// TODO Auto-generated method stub
-		return null;
+		return readSheet(workBook.getSheetAt(sheetIndex));
 	}
 
 	@Override
 	public TableFormat readSheet(Workbook workBook, int sheetIndex, SheetConfig config) {
 		// TODO Auto-generated method stub
-		return null;
+		return readSheet(workBook.getSheetAt(sheetIndex), config);
 	}
 
 	@Override
 	public TableFormat readSheet(Workbook workBook, String sheetName) {
 		// TODO Auto-generated method stub
-		return null;
+		return readSheet(workBook.getSheet(sheetName));
 	}
 
 	@Override
 	public TableFormat readSheet(Workbook workBook, String sheetName, SheetConfig config) {
 		// TODO Auto-generated method stub
-		return null;
+		return readSheet(workBook.getSheet(sheetName), config);
 	}
 
 	@Override
@@ -148,29 +157,60 @@ public final class PoiStrategy extends AbstractExcelHandler implements POIExcelR
 	@Override
 	public TableFormat readSheet(InputStream strean, String sheetName) {
 		// TODO Auto-generated method stub
-		return null;
+		return readSheet(getWorkbook(strean), sheetName);
 	}
 
 	@Override
 	public TableFormat readSheet(InputStream strean, String sheetName, SheetConfig config) {
 		// TODO Auto-generated method stub
+		return readSheet(getWorkbook(strean), sheetName, config);
+	}
+	
+	@Override
+	public TableFormat readSheet(File file, int sheetIndex) {
+		// TODO Auto-generated method stub
+		return readSheet(getWorkbook(file), sheetIndex);
+	}
+
+	@Override
+	public TableFormat readSheet(File file, int sheetIndex, SheetConfig config) {
+		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private boolean emptyRow(Row row) {
+		// TODO Auto-generated method stub
+		if (null == row) {
+			log.info(">>>发现一个空行数据对象!");
+			return true;
+		}
+		
+		/* 
+		int cells = 0;// 空单元格记数器。
+		Iterator<Cell> iter = row.cellIterator();
+		while (iter.hasNext() && iter.next().getCellType() == Cell.CELL_TYPE_BLANK) {
+			cells++;
+		}
+		return cells == (row.getLastCellNum() - row.getFirstCellNum());
+		*/
+		
+		Iterator<Cell> iter = row.cellIterator();
+		while (iter.hasNext()) {
+			Cell cell = iter.next();
+			if (null != readCell(cell) && !"".equals(readCell(cell))) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	// @Override
 	protected Map<Integer, Object> readRow(Row row) {
-		if (null == row) {
-			log.info(">>>发现一个空行数据对象!");
-			return null;
-		}
-
+//		short lastCell = row.getLastCellNum();
 		short firstCell = row.getFirstCellNum();
-		int totalCells = row.getPhysicalNumberOfCells(); // totalCells =
-															// row.getLastCellNum()-
-															// firstCell
+		int totalCells = row.getPhysicalNumberOfCells(); 
 		log.info(">>>批注：正在处理Excel表单第" + row.getRowNum() + "行数据!.");
-		// log.info(">>>本行数据开始于[" + firstCell + "]列结束于[" + lastCell + "]列,共[" +
-		// totalCells + "]列.");
+		log.info(">>>本行数据开始于[" + firstCell + "]列结束于[" + row.getLastCellNum() + "]列,共[" + totalCells + "]列.");
 
 		// java.text.DecimalFormat df = new DecimalFormat("#");
 		Map<Integer, Object> datamap = new LinkedHashMap<Integer, Object>();
@@ -196,25 +236,26 @@ public final class PoiStrategy extends AbstractExcelHandler implements POIExcelR
 
 		return datamap;
 	}
-
+	
 	/**
 	 * 返回单元格内容.<br>
 	 * 
 	 * @param cell
 	 * @return
 	 */
-	private String readCell(Cell cell) {
-		String cellValue = "";
+	private Object readCell(Cell cell) {
+		/*
+		// poi底层的cell对象本身不会出现为null的情况，so...
 		if (cell == null || "null".equals(cell)) {
-			return cellValue;
+			return "";
 		}
-
+		*/
+		Object cellValue = null;
 		switch (cell.getCellType()) {
-		// if numeric(cell.getCellType() == 0)
 		case Cell.CELL_TYPE_NUMERIC:
 			// cellValue = cell.getNumericCellValue();
 			if (DateUtil.isCellDateFormatted(cell)) {
-				cellValue = String.valueOf(cell.getDateCellValue());
+				cellValue = cell.getDateCellValue();
 			} else {
 				cell.setCellType(Cell.CELL_TYPE_STRING);
 				String temp = cell.getStringCellValue();
@@ -242,7 +283,7 @@ public final class PoiStrategy extends AbstractExcelHandler implements POIExcelR
 			cell.setCellType(Cell.CELL_TYPE_STRING);
 			cellValue = cell.getStringCellValue();
 			if (cellValue != null) {
-				cellValue = cellValue.replaceAll("#N/A", "").trim();
+				//cellValue = cellValue.replaceAll("#N/A", "").trim();
 			}
 			break;
 		// case XSSFCell.CELL_TYPE_FORMULA:
@@ -254,27 +295,18 @@ public final class PoiStrategy extends AbstractExcelHandler implements POIExcelR
 		// }
 		// break;
 		case Cell.CELL_TYPE_BLANK:
-			// cell空数据检查。
 			break;
+			
 		case Cell.CELL_TYPE_ERROR:
-			cellValue = "";
 			break;
+			
 		default:
 			break;
 		}
+		
 		return cellValue;
 	}
 
-	@Override
-	public TableFormat readFile(File File, int sheetIndex) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public TableFormat readSheet(File File, int sheetIndex, SheetConfig config) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

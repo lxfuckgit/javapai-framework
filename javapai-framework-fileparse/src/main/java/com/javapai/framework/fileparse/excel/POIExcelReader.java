@@ -15,6 +15,12 @@ import com.javapai.framework.fileparse.excel.config.SheetConfig;
  */
 // public abstract class POIExcelReader {
 public interface POIExcelReader extends ExcelReader {
+	/**
+	 * 解析workBook工作表对象的所有sheet表单数据。<br>
+	 * 
+	 * @param workBook
+	 * @return
+	 */
 	public List<TableFormat> readSheet(Workbook workBook);
 
 	/**
