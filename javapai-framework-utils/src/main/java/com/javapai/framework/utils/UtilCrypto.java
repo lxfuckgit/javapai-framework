@@ -1,12 +1,17 @@
 package com.javapai.framework.utils;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.Mac;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -23,6 +28,15 @@ public class UtilCrypto {
 	private static final String SHA1 = "SHA1";
 	private static final String MD5 = "MD5";
 	private static final String HMAC_SHA1 = "HmacSHA1";
+	private static final String DES = "DES";
+	
+	private static byte iv[] = { 0x12, 0x34, 0x56, 0x78, (byte) 0x90,
+			(byte) 0xAB, (byte) 0xCD, (byte) 0xEF };
+	
+	// private static byte iv [] = {0x78, (byte) 0x90, (byte) 0xAB, (byte) 0xCD,
+		// (byte) 0xEF,0x12, 0x34, 0x56};
+	
+	private static IvParameterSpec zeroIv = new IvParameterSpec(iv);
 
 	/**
 	 * SHA加密 并转换为16进制大写字符串
@@ -55,6 +69,78 @@ public class UtilCrypto {
 		}
 
 		return "";
+	}
+	
+	/**
+	 * DES加密。<br>
+	 * 
+	 * @param encryptStr
+	 *            待加密字符串.<br>
+	 * @param encryptKey
+	 *            加密密钥.<br>
+	 * @return
+	 */
+	public static String encrypDES(String encryptStr, String encryptKey) {
+		IvParameterSpec zeroIv = new IvParameterSpec(iv);
+		SecretKeySpec key = new SecretKeySpec(encryptKey.getBytes(), DES);
+		Cipher cipher = null;
+		try {
+			cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			cipher.init(Cipher.ENCRYPT_MODE, key, zeroIv);
+		} catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			byte[] encryptedData = cipher.doFinal(encryptStr.getBytes());
+			return new String(encryptedData);
+		} catch (IllegalBlockSizeException | BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * DES解密。<br>
+	 * 
+	 * @param encryptStr
+	 *            待解密字符串.<br>
+	 * @param decryptKey
+	 *            解密密钥.<br>
+	 * @return
+	 */
+	public static String decryptDES(String encryptStr, String decryptKey) {
+		IvParameterSpec zeroIv = new IvParameterSpec(iv);
+		SecretKeySpec key = new SecretKeySpec(decryptKey.getBytes(), "DES");
+		Cipher cipher = null;
+		try {
+			cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			cipher.init(Cipher.DECRYPT_MODE, key, zeroIv);
+		} catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			byte[] decryptedData = cipher.doFinal(encryptStr.getBytes());
+			return new String(decryptedData);
+		} catch (IllegalBlockSizeException | BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;		
 	}
 
 	/**
@@ -97,9 +183,9 @@ public class UtilCrypto {
 	 * @return
 	 * @throws Exception
 	 */
-	// public static String encryptBASE64(byte[] key) {
-	// return filter((new sun.misc.BASE64Encoder()).encodeBuffer(key));
-	// }
+	public static String encryptBASE64(byte[] key) {
+		return filter((new sun.misc.BASE64Encoder()).encodeBuffer(key));
+	}
 
 	/**
 	 * BASE64解密
@@ -108,9 +194,15 @@ public class UtilCrypto {
 	 * @return
 	 * @throws IOException
 	 */
-	// public static byte[] decryptBASE64(String key) throws IOException {
-	// return (new sun.misc.BASE64Decoder()).decodeBuffer(key);
-	// }
+	public static byte[] decryptBASE64(String key) {
+		try {
+			return (new sun.misc.BASE64Decoder()).decodeBuffer(key);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	/**
 	 * 删除BASE64加密时出现的换行符 <功能详细描述>
