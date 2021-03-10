@@ -1,25 +1,27 @@
 package com.javapai.framework.enums;
 
-import com.javapai.framework.common.enums.Enums;
-
 /**
  * 错误码枚举类(非因特殊原因，请勿随意修改).<br>
  * 
  * 错误码定义规范：8位长度=2位系统码+3位预留位+3位错误码.<br>
+ * <br>
+ * <br>
+ * 说明：错误码用来定义不同接口间调用时的状态表达，为防错误码[code]出现爆炸且难以维护,不同系统间的异常码定义交由不同接口提供方根据<strong>错误码命名规范</strong>和当时业务场景自行决定.
  * 
  * @author liuxiang
  *
  */
 public enum ErrorCode implements Enums<String,String> {
-	/* 统一异常码(防code爆炸，难以维护,具体异常内容交由调用方根据当时场景决定！)， */
-	ERROR_EXCEPTION("FFFFFFFF", "预留用户自定义异常!"),//预留用户自定义系统异常.
-	ERROR_EXCEPTION_RPC("40000990", "系统服务异常!"),//跨系统RPC间调用异常.
-    ERROR_EXCEPTION_CREATE("40000991", "系统创建服务异常!"),//本系统内CRUD操作异常.
-    ERROR_EXCEPTION_UPDATE("40000992", "系统更新服务异常!"),//本系统内CRUD操作异常.
-    ERROR_EXCEPTION_DELETE("40000993", "系统删除服务异常!"),//本系统内CRUD操作异常.
-	ERROR_EXCEPTION_SELECT("40000994", "系统查询服务异常!"),//本系统内CRUD操作异常.
+	/* 常规类-错误码 */
+	EXCEPTION_UNDEFINE("FFFFFFFF", "预留用户自定义异常!"),//预留用户自定义系统异常.
+	EXCEPTION_RPC("40000101", "系统RPC服务异常!"),//跨系统RPC间调用异常.
+	EXCEPTION_HTTP("40000102", "系统HTTP服务异常!"),//跨系统HTTP间调用异常.
+    EXCEPTION_CREATE("40000991", "系统创建服务异常!"),//本系统内CRUD操作异常.
+    EXCEPTION_UPDATE("40000992", "系统更新服务异常!"),//本系统内CRUD操作异常.
+    EXCEPTION_DELETE("40000993", "系统删除服务异常!"),//本系统内CRUD操作异常.
+	EXCEPTION_SELECT("40000994", "系统查询服务异常!"),//本系统内CRUD操作异常.
 	
-	/* [参数类] 错误码 */
+	/* 参数类-错误码 */
 	PARAMS_EMPTY("410001001","必要参数不允许为空!"),
     PARAMS_ILLEGE("410001002","参数格式不合法"),
     PARAMS_VERISON("410001003","应用版本号参数缺失!"),
@@ -34,7 +36,8 @@ public enum ErrorCode implements Enums<String,String> {
     PARAMS_SCHOOL("410001004","无效学校信息"),
     PARAMS_RUXUEDATA("410001204","入学时间参数为空!"),
     PARAMS_ADDRESS("410001205","地址参数不能为空"),
-    PARAMS_LASTNAME("41000100","姓名不能为空"), 
+    PARAMS_LASTNAME("41000100","姓名不能为空"),
+    PARAMS_APPID("41000101","必要参数不允许为空!"),
     
 	/* [业务类] 错误码  */
     ERROR_REGISTER("", "用户注册失败!"),
@@ -57,9 +60,6 @@ public enum ErrorCode implements Enums<String,String> {
 	ERROR_EXIST_USER("40000377", "该用户已存在!"), 
 	ERROR_EXIST_PHONE("40000378", "该手机号码已被注册!"),
 	
-	
-    
-
 	PASSWORD_LENGH("", "密码长度要求不达标!"), // 具体多长取决于业务API进一步说明.
 	PASSWORD_PATTERN("", "密码格式为要求不达标!"), // 具体格式取决于API进一步说明.
 	
