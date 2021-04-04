@@ -1,5 +1,6 @@
 package com.javapai.framework.utils;
 
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -64,6 +65,23 @@ public final class UtilUUID {
 	public static String getRandomInteger() {
 		int temp = (int) (Math.random() * 9999);
 		return String.valueOf(temp);
+	}
+	
+	/**
+	 * 
+	 * @param length
+	 *            生成字符串的长度。<br>
+	 * @return
+	 */
+	public static String getRandomString(int length) {// length表示
+		String base = "abcdefghijklmnopqrstuvwxyz0123456789";
+		Random random = new Random();
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < length; i++) {
+			int number = random.nextInt(base.length());
+			sb.append(base.charAt(number));
+		}
+		return sb.toString();
 	}
 
 	// 感觉用UUID一点逻辑感都没了 也看不出日期
