@@ -7,6 +7,7 @@ import com.javapai.framework.enums.Enums;
 /**
  *
  * @author liuxiang
+ * @deprecated　由{@link com.javapai.framework.common.ResultBuilder}代替。
  *
  */
 public final class RstResultBuilder {
@@ -18,20 +19,29 @@ public final class RstResultBuilder {
 	 * 返回成功.
 	 */
 	public static final String RESPONSE_MSG = "请求成功!";
-	
-//	/**
-//	 * 构建一个错误报文体.<br>
-//	 * 错误码统一定义为：FFFFFFFF<br>
-//	 * 
-//	 * @param message
-//	 * @return
-//	 */
-//	public static <T> RstResult<T> buildErrorResponse(String message) {
-//		RstResult<T> entity = new RstResult<>();
-//		entity.setCode(ErrorCode.ERROR_EXCEPTION.getKey());
-//		entity.setMessage(message);
-//		return entity;
-//	}
+
+	/**
+	 * 返回失败-状态码.
+	 */
+	public static final String RESPONSE_FAIL = "9999";
+	/**
+	 * 返回失败-状态描述.
+	 */
+	public static final String RESPONSE_FAIL_MSG = "请求失败!";
+
+	// /**
+	// * 构建一个错误报文体.<br>
+	// * 错误码统一定义为：FFFFFFFF<br>
+	// *
+	// * @param message
+	// * @return
+	// */
+	// public static <T> RstResult<T> buildErrorResponse(String message) {
+	// RstResult<T> entity = new RstResult<>();
+	// entity.setCode(ErrorCode.ERROR_EXCEPTION.getKey());
+	// entity.setMessage(message);
+	// return entity;
+	// }
 
 	/**
 	 * 构造一个失败响应.<br>
@@ -48,7 +58,27 @@ public final class RstResultBuilder {
 		result.setMessage(enums.getValue());
 		return result;
 	}
-	
+
+	/**
+	 * 构造一个失败响应.<br>
+	 * 
+	 * @param enums
+	 *            错误码实例.<br>
+	 * @param custMessage
+	 *            自定义错误消息.<br>
+	 * @return
+	 */
+	public static <T> RstResult<T> buildErrorResponse(Enums<String, String> enums, String custMessage) {
+		RstResult<T> result = new RstResult<>();
+		result.setCode(String.valueOf(enums.getKey()));
+		if (null != custMessage && custMessage.length() > 0) {
+			result.setMessage(custMessage);
+		} else {
+			result.setMessage(enums.getValue());
+		}
+		return result;
+	}
+
 	/**
 	 * 构造一个失败响应.<br>
 	 *

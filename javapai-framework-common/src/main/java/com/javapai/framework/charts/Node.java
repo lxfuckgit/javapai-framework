@@ -1,4 +1,6 @@
-package com.javapai.framework.common.vo;
+package com.javapai.framework.charts;
+
+import com.javapai.framework.common.I_KV;
 
 /**
  * 结点-VO值对象。<br>
@@ -8,15 +10,21 @@ package com.javapai.framework.common.vo;
  * @author pooja
  *
  */
-public class NodeVO {
+public class Node implements I_KV<String, String> {
+	/**
+	 * 结点标识.
+	 */
 	private String key;
+	/**
+	 * 结点值.
+	 */
 	private String value;
 
-	public NodeVO() {
+	public Node() {
 		super();
 	}
 
-	public NodeVO(String key, String value) {
+	public Node(String key, String value) {
 		super();
 		this.key = key;
 		this.value = value;
