@@ -144,7 +144,7 @@
 				<version>${slf4j-version}</version>
 				<!-- 原因：这里日志包只依赖slf4j，不依赖具体实现包(log4j/logback)，具体实现请自行解决依赖问题。 -->
 				<!-- 不强制外部系统引用logback -->
-<!-- 		    <scope>test</scope> -->
+				<scope>provided</scope>
 			</dependency>
 			
 			<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
@@ -205,6 +205,13 @@
 			    <groupId>org.dom4j</groupId>
 			    <artifactId>dom4j</artifactId>
 			    <version>2.1.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.opencsv</groupId>
+				<artifactId>opencsv</artifactId>
+				<version>4.6</version>
+				<scope>provided</scope>
 			</dependency>
 			
 			<!-- https://mvnrepository.com/artifact/junit/junit -->
