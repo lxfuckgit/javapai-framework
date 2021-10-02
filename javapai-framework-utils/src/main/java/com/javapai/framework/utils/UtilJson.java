@@ -2,6 +2,7 @@ package com.javapai.framework.utils;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -48,8 +50,8 @@ public class UtilJson {
 		/*序列化时间的指定时间格式，时区问题。1：@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh" , timezone="GMT+8")*/
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		mapper.setDateFormat(dateFormat);
+		//指定时区->TimeZone.getTimeZone("GMT+8:00")
 		mapper.setTimeZone(TimeZone.getDefault());
-//		mapper.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
 		
 		//限定格式化timestamp.
 		mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
@@ -91,16 +93,17 @@ public class UtilJson {
 		return null;
 	}
 	
-//	public static <T> List json2List(String jsonString, Class<T> c) {
-//		JavaType type = mapper.getTypeFactory().constructParametricType(List.class, c);
-//		try {
-//			return mapper.readValue(jsonString, type);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		return null;
-//	};
-
+	public static <T> List<T> json2List(String jsonString, Class<T> c) {
+		JavaType type = mapper.getTypeFactory().constructParametricType(List.class, c);
+		try {
+			return mapper.readValue(jsonString, type);
+		} catch (IOException e) {
+			logger.error("---->" + e.getMessage());
+			e.printStackTrace();
+		}
+		return null;
+	};
+	
 	/**
 	 * 把JavaBean转换为json字符串.<br>
 	 * 
