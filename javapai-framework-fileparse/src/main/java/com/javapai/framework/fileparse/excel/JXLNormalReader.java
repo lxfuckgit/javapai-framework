@@ -1,11 +1,10 @@
-package com.javapai.framework.fileparse.excel.strategy;
+package com.javapai.framework.fileparse.excel;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
 import com.javapai.framework.config.TableFormat;
-import com.javapai.framework.fileparse.excel.JXLExcelReader;
 import com.javapai.framework.fileparse.excel.config.SheetConfig;
 
 /**
@@ -20,7 +19,7 @@ import com.javapai.framework.fileparse.excel.config.SheetConfig;
  * 
  */
 @Deprecated
-public final class JxlStrategy implements JXLExcelReader {
+public final class JXLNormalReader extends JXLExcelReader {
 	// @Override
 	// protected Map<Integer, Object> readRow(Row row) {
 	// // TODO Auto-generated method stub
