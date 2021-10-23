@@ -340,6 +340,80 @@ public final class UtilValidate {
 	}
 	
 	/**
+	 * 字符是否是汉字。<br>
+	 * 
+	 * @param c
+	 * @return T＝是;F=否;
+	 */
+	public static boolean isChinese(char c) {
+		Character.UnicodeScript us = Character.UnicodeScript.of(c);
+		if (us == Character.UnicodeScript.HAN) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * 字符是否是汉字字符。<br>
+	 * 
+	 * @param c
+	 * @return
+	 */
+	public static boolean isChineseChar(char c) {
+		Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
+		if (ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
+				|| ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
+				|| ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B
+				|| ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
+				|| ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS
+				|| ub == Character.UnicodeBlock.GENERAL_PUNCTUATION) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * 统计文本中汉字的个数。<br>
+	 * 
+	 * @param text
+	 * @return
+	 */
+	public static int countChineseV1(String text) {
+		int result = 0;
+		String Reg = "^[\u4e00-\u9fa5]{1}$";// 这种方式只能统计部分汉字。
+
+		for (int i = 0; i < text.length(); i++) {
+			String b = Character.toString(text.charAt(i));
+			if (b.matches(Reg))
+				result++;
+		}
+		return result;
+	}
+	
+	/**
+	 * 统计文本中汉字（包括汉字字符）的个数。<br>
+	 * 
+	 * @param text
+	 * @return
+	 */
+	public static int countChineseV2(String text) {
+		int result = 0;
+		if (UtilValidate.isNotBlank(text)) {
+			char[] ch = text.toCharArray();
+			for (char c : ch) {
+				if (UtilValidate.isChinese(c) || UtilValidate.isChineseChar(c)) {
+					result++;
+				}
+			}
+			return result;
+		} else {
+			return result;
+		}
+	}
+	
+	/**
 	 * 读取OS操作系统-环境变量(Environment Variable).<br>
 	 * 
 	 * @return
