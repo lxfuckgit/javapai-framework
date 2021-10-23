@@ -19,19 +19,18 @@ public final class TableFormat extends XFormat {
 	 * 注：为保证title和conent数据的对应，对每条记录的索引值(map.key)都进行了一一的有序对应。
 	 */
 	private Map<Integer, String> tableTitle = new LinkedHashMap<Integer, String>();
-//	private Map<Integer, Object> tableTitle = new HashMap<Integer, Object>();
-	
+
 	/**
 	 * 二维表-内容行。 <br>
 	 */
 	private List<Map<Integer, Object>> tableConent = new ArrayList<Map<Integer, Object>>();
-	
+
 	/**
-	 * 特殊备注行.<br>
-	 * 为区别数据行，将某些备注说明单独存放。<br>
+	 * 二维表-备注行.<br>
+	 * 注：为区别内容行，可将某些特殊行(备注之类)单独存放。<br>
 	 */
-	private List<String> noteList = new ArrayList<>();
-	
+	private List<Map<Integer, Object>> tableRemark = new ArrayList<>();
+
 	/**
 	 * excel错误消息。 记录excel解析过程中，行解析消息。
 	 */
@@ -58,20 +57,20 @@ public final class TableFormat extends XFormat {
 	public List<Map<Integer, Object>> getTableConent() {
 		return tableConent;
 	}
-	
-	/*不希望表头或表体被整体set修改*/
-//	public void setTableConent(List<Map<Integer, Object>> tableConent) {
-//	this.tableConent = tableConent;
-//}
-	
-	public List<String> getNoteList() {
-		return noteList;
+
+	/* 不希望表体被整体set修改 */
+	// public void setTableConent(List<Map<Integer, Object>> tableConent) {
+	// this.tableConent = tableConent;
+	// }
+
+	public List<Map<Integer, Object>> getTableRemark() {
+		return tableRemark;
 	}
 
-//	public void setNoteList(List<String> noteList) {
-//		this.noteList = noteList;
-//	}
-	
+	// public void setTableRemark(List<Map<Integer, String>> noteList) {
+	// this.tableRemark = tableRemark;
+	// }
+
 	public List<Map<Integer, Object>> getErroDataList() {
 		return erroDataList;
 	}
@@ -80,9 +79,14 @@ public final class TableFormat extends XFormat {
 		this.erroDataList = erroDataList;
 	}
 
-//	public void addTitle(String title) {
-//		tableTitle.put(title);
-//	}
+	/**
+	 * 
+	 * @param title
+	 */
+	public void addTitle(String title) {
+		// tableTitle索引从0开始，所以tableTitle.size()就是空索引位。
+		tableTitle.put(tableTitle.size(), title);
+	}
 
 	/**
 	 * 标记行的列标题。<br>
@@ -96,12 +100,31 @@ public final class TableFormat extends XFormat {
 		tableTitle.put(index, title);
 	}
 
+	/**
+	 * @see TableFormat#addContent(Map, int);<br>
+	 * @param content
+	 */
 	public void addContent(Map<Integer, Object> content) {
 		tableConent.add(content);
 	}
 
+	/**
+	 * 向容器增加一行内容。<br>
+	 * 
+	 * @param content
+	 * @param index
+	 */
 	public void addContent(Map<Integer, Object> content, int index) {
 		tableConent.add(index, content);
+	}
+
+	/**
+	 * 向容器增加一行备注。<br>
+	 * 
+	 * @param content
+	 */
+	public void addRemark(Map<Integer, Object> remark) {
+		tableRemark.add(remark);
 	}
 
 	/**
