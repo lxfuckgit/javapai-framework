@@ -1,9 +1,7 @@
-package com.javapai.framework.common;
+package com.javapai.framework.action;
 
 import java.util.List;
 
-import com.javapai.framework.action.PageResult;
-import com.javapai.framework.action.RstResult;
 import com.javapai.framework.enums.Enums;
 
 /**
