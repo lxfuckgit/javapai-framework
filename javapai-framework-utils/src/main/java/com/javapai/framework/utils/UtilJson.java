@@ -25,48 +25,57 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  * 2：因为fastjson快的特点，所有其json标准支持得并非那么完整。<br>
  * 3:<br>
  * 
+ * <br>
+ * <strong>重要提示：</strong>本工具类依赖第三方jackson序列化包，在使用时，请自行导入所需要的依赖包。<br>
+ * <strong>提示说明：</strong>框架提供方认为jackson包属于常规包，在很多成熟的框架中都有集成(例如spring框架)，为了防止出现不同jackson包的版本冲突，我们提倡让使用方自行引用jackson包决定包的版本号。<br>
+ * 
  * @author pooja
  *
  */
-public class UtilJson {	
+public class UtilJson {
 	/**
 	 * 
 	 */
 	protected static Logger logger = LoggerFactory.getLogger(UtilJson.class);
-	
-	/*mapper会不会多实例？*/
+
+	/* mapper会不会多实例？ */
 	private static final ObjectMapper mapper = new ObjectMapper();
-	/*http://www.blogjava.net/crazycy/archive/2014/07/15/415839.html*/
-//	private static ObjectMapper mapper;
-//
-//	public static synchronized ObjectMapper getInstance() {
-//		if (mapper == null) {
-//			mapper = new ObjectMapper();
-//		}
-//		return mapper;
-//	}
+	/* http://www.blogjava.net/crazycy/archive/2014/07/15/415839.html */
+	// private static ObjectMapper mapper;
+	//
+	// public static synchronized ObjectMapper getInstance() {
+	// if (mapper == null) {
+	// mapper = new ObjectMapper();
+	// }
+	// return mapper;
+	// }
 
 	static {
-		/*序列化时间的指定时间格式，时区问题。1：@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh" , timezone="GMT+8")*/
+		/*
+		 * 序列化时间的指定时间格式，时区问题。1：@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",
+		 * locale = "zh" , timezone="GMT+8")
+		 */
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		mapper.setDateFormat(dateFormat);
-		//指定时区->TimeZone.getTimeZone("GMT+8:00")
+		// 指定时区->TimeZone.getTimeZone("GMT+8:00")
 		mapper.setTimeZone(TimeZone.getDefault());
-		
-		//限定格式化timestamp.
+
+		// 限定格式化timestamp.
 		mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-		
-		/*反序列化时，忽略属性与json一一对应*/
+
+		/* 反序列化时，忽略属性与json一一对应 */
 		// before jackson 1.9
-//		mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES,
+		// false);
 		// after jackson 2.0
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		
-		//忽略未知属性解析[1:注解申明@JsonIgnoreProperties(ignoreUnknown=true);2:属性配置mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);]
+
+		// 忽略未知属性解析[1:注解申明@JsonIgnoreProperties(ignoreUnknown=true);2:属性配置mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+		// false);]
 	}
-	
+
 	public static JsonNode json2Object(String jsonString) {
-		//JsonNode ArrayNode ObjectNode 
+		// JsonNode ArrayNode ObjectNode
 		try {
 			return mapper.readTree(jsonString);
 		} catch (IOException e) {
@@ -77,8 +86,8 @@ public class UtilJson {
 	}
 
 	/**
-	 * 使用泛型方法，把json字符串转换为相应的JavaBean对象。
-	 * <br>
+	 * 使用泛型方法，把json字符串转换为相应的JavaBean对象。 <br>
+	 * 
 	 * @param jsonString
 	 * @param c
 	 * @return
@@ -126,7 +135,7 @@ public class UtilJson {
 	 * @param jsonString
 	 * @return
 	 */
-	public static Map<String,String> string2Map(String jsonString) {
+	public static Map<String, String> string2Map(String jsonString) {
 		try {
 			return mapper.readValue(jsonString, new TypeReference<Map<String, String>>() {
 			});
