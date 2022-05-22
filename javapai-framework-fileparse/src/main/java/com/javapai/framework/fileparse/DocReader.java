@@ -19,26 +19,27 @@ public interface DocReader<T> {
 	public String getTitle();
 	
 	/**
-	 * 解析指定文件.<br>
+	 * 读取并解析指定文件对象。<br>
 	 * 
 	 * @param file
-	 * @return
+	 * @return 返回文件内容.<br>
 	 */
 	public T readFile(File file);
 
 	/**
-	 * 解析指定路径文件.<br>
+	 * 读取并解析指定路径文件。<br>
 	 * 
 	 * @param filePath
-	 * @return
+	 * @return 返回文件内容.<br>
 	 */
 	public T readFile(String filePath);
 	
 	/**
-	 * 解析指定流数据.<br>
+	 * 读取并解析指定输入流对象。<br>
 	 * 
 	 * @param stream
-	 * @return
+	 *            输入流对象可以是InputStream对象及其子类（例如：FileInputStream）.<br>
+	 * @return 返回文件内容.<br>
 	 */
 	public T readFile(InputStream stream);
 
