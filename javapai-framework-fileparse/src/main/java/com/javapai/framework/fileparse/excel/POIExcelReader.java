@@ -42,7 +42,7 @@ import com.javapai.framework.fileparse.excel.config.SheetConfig;
  * @author pooja
  *
  */
-public abstract class POIExcelReader implements ExcelReader {
+public abstract class POIExcelReader implements IExcelReader {
 	protected static Logger log = LoggerFactory.getLogger(POIExcelReader.class);
 	
 	/**
@@ -58,7 +58,7 @@ public abstract class POIExcelReader implements ExcelReader {
 	 * 
 	 * 注意：如需要对sheet按指定配置进行解析，有两种配置方式：<br>
 	 * 1、对ExcelReader实例对象( 例如new ExcelReader(new SheetConfig()); )进行config配置(所有sheet共享).<br>
-	 * 2、对ExcelReader实例方法( 例如{@link ExcelReader#readSheet(Sheet, SheetConfig)}; )进行config配置(当前sheet独享).<br>
+	 * 2、对ExcelReader实例方法( 例如{@link OfficeExcelReader#readSheet(Sheet, SheetConfig)}; )进行config配置(当前sheet独享).<br>
 	 * 
 	 * @param sheet
 	 *            excel工作表。<br>

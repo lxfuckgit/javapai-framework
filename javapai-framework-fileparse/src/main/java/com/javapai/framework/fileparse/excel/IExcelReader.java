@@ -2,10 +2,11 @@ package com.javapai.framework.fileparse.excel;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.List;
 
 import com.javapai.framework.config.TableFormat;
+import com.javapai.framework.fileparse.DocReader;
 import com.javapai.framework.fileparse.excel.config.SheetConfig;
-import com.javapai.framework.fileparse.office.OfficeReader;
 
 /**
  * 定义Office-Excel文件的读取时的基本行为方式。<br>
@@ -27,7 +28,7 @@ import com.javapai.framework.fileparse.office.OfficeReader;
  * @author pooja
  * 
  */
-public interface ExcelReader extends OfficeReader<TableFormat> {
+public interface IExcelReader extends DocReader<List<TableFormat>> {
 	/**
 	 * 
 	 * @param file
@@ -35,7 +36,7 @@ public interface ExcelReader extends OfficeReader<TableFormat> {
 	 * @return
 	 */
 	public TableFormat readSheet(File file, int sheetIndex);
-	
+
 	/**
 	 * 
 	 * @param file
@@ -44,7 +45,15 @@ public interface ExcelReader extends OfficeReader<TableFormat> {
 	 * @return
 	 */
 	public TableFormat readSheet(File file, int sheetIndex, SheetConfig config);
-	
+
+	/**
+	 * 
+	 * @param file
+	 * @param config
+	 * @return
+	 */
+	// public TableFormat readSheet(File file, SheetConfig config);
+
 	/**
 	 * 指取指定input输入流中的指定sheent表单。<br?
 	 * 
@@ -61,16 +70,17 @@ public interface ExcelReader extends OfficeReader<TableFormat> {
 	public TableFormat readSheet(InputStream inputStream, String sheetName);
 
 	public TableFormat readSheet(InputStream inputStream, String sheetName, SheetConfig config);
-	
-	//未开放原因:通过类实例来绑定config，再调用：readFile(File file)即可。
-//	public java.util.List<TableFormat> readFile(File file, SheetConfig config);
-	
+
+	// 未开放原因:通过类实例来绑定config，再调用：readFile(File file)即可。
+	// public java.util.List<TableFormat> readFile(File file, SheetConfig
+	// config);
+
 	/**
 	 * 返回默认sheet索引标识号。<br>
 	 * 
 	 * @param sheetIndex
 	 *            用户指定sheet索引标识号。<br>
-	 * <strong>注意：</strong>如果sheetIndex参数未输入或输入小于1，则默认sheetIndex=1；原因是友好的面向使用者。<br>
+	 *            <strong>注意：</strong>如果sheetIndex参数未输入或输入小于1，则默认sheetIndex=1；原因是友好的面向使用者。<br>
 	 * @return sheet索引标识号。<br>
 	 */
 	default int getDefaultSheetIndex(int sheetIndex) {

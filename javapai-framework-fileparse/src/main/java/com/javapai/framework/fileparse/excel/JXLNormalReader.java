@@ -8,7 +8,7 @@ import com.javapai.framework.config.TableFormat;
 import com.javapai.framework.fileparse.excel.config.SheetConfig;
 
 /**
- * JXL策略实现。<br>
+ * 利用JXL策略去实现Excel的数据读取操作。<br>
  * 
  * @author pooja
  * 
@@ -70,6 +70,18 @@ public final class JXLNormalReader extends JXLExcelReader {
 
 	@Override
 	public TableFormat readSheet(File File, int sheetIndex, SheetConfig config) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getTitle() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TableFormat> readFile(String filePath) {
 		// TODO Auto-generated method stub
 		return null;
 	}

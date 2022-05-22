@@ -294,4 +294,16 @@ public class POINormalReader extends POIExcelReader {
 		return cellValue;
 	}
 
+	@Override
+	public String getTitle() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TableFormat> readFile(String filePath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

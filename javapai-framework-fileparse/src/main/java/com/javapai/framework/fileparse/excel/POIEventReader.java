@@ -30,7 +30,7 @@ import com.javapai.framework.fileparse.excel.config.SheetConfig;
  * @author pooja
  *
  */
-public final class POIEventReader implements ExcelReader {
+public final class POIEventReader implements IExcelReader {
 	protected static Logger log = LoggerFactory.getLogger(POIEventReader.class);
 
 	protected SheetConfig config;
@@ -365,6 +365,18 @@ public final class POIEventReader implements ExcelReader {
 		public TableFormat getTableFormat() {
 			return this.table;
 		}
+	}
+
+	@Override
+	public String getTitle() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TableFormat> readFile(String filePath) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

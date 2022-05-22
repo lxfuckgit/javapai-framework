@@ -4,6 +4,8 @@ package com.javapai.framework.fileparse.office;
  * 
  * •HWPF － 提供读写Microsoft Word DOC格式档案的功能。
  * <p>
+ * •HSSF － 提供读写Microsoft Excel LSX格式档案的功能。
+ * <p>
  * •XSSF － 提供读写Microsoft Excel OOXML XLSX格式档案的功能。
  * <p>
  * •HSLF － 提供读写Microsoft PowerPoint格式档案的功能。
@@ -18,7 +20,7 @@ package com.javapai.framework.fileparse.office;
  * @author lx
  * 
  */
-public interface OfficeHandler {
+public abstract class AbstractOfficeHandler {
 	/**
 	 * 2003版本
 	 */
