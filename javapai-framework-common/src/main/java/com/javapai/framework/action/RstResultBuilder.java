@@ -1,13 +1,11 @@
 package com.javapai.framework.action;
 
-import java.util.List;
-
 import com.javapai.framework.enums.Enums;
 
 /**
  *
  * @author liuxiang
- * @deprecated　由{@link com.javapai.framework.common.ResultBuilder}代替。
+ * @deprecated　由{@link com.javapai.framework.action.ResultBuilder}代替。
  *
  */
 public final class RstResultBuilder {
@@ -19,15 +17,6 @@ public final class RstResultBuilder {
 	 * 返回成功.
 	 */
 	public static final String RESPONSE_MSG = "请求成功!";
-
-	/**
-	 * 返回失败-状态码.
-	 */
-	public static final String RESPONSE_FAIL = "9999";
-	/**
-	 * 返回失败-状态描述.
-	 */
-	public static final String RESPONSE_FAIL_MSG = "请求失败!";
 
 	// /**
 	// * 构建一个错误报文体.<br>
@@ -92,13 +81,7 @@ public final class RstResultBuilder {
 	 *
 	 */
 	public static <T> RstResult<T> buildErrorResponse(String code, String message) {
-		RstResult<T> entity = new RstResult<>();
-		if ("".equals(code) || !"".equals(message)) {
-			code = "42000001";
-		}
-		entity.setCode(code);
-		entity.setMessage(message);
-		return entity;
+		return ResultBuilder.errorResult(code, message);
 	}
 
 	/**
@@ -137,20 +120,6 @@ public final class RstResultBuilder {
 		RstResult<T> entity = buildNormalResult();
 		entity.setData(data);
 		return entity;
-	}
-	
-	/**
-	 * 构造一个正常的分页响应报文.<br>
-	 *
-	 * @param data
-	 *            响应数据.<br>
-	 * @return
-	 */
-	public static <T> PageResult<T> buildPageResult(int pageIndex, int pageSize, List<T> pageList, long totalRecord) {
-		PageResult<T> result = new PageResult<>(pageIndex, pageSize, pageList, totalRecord);
-		result.setCode(RESPONSE_OK);
-		result.setMessage(RESPONSE_MSG);
-		return result;
 	}
 	
 }
