@@ -1,4 +1,4 @@
-package com.javapai.framework.common.vo;
+package com.javapai.framework.common.vo.tree;
 
 import java.util.List;
 

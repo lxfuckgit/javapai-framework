@@ -1,4 +1,4 @@
-package com.javapai.framework.charts;
+package com.javapai.framework.common.vo.node;
 
 import com.javapai.framework.common.I_KV;
 
@@ -10,7 +10,7 @@ import com.javapai.framework.common.I_KV;
  * @author pooja
  *
  */
-public class Node implements I_KV<String, String> {
+public class NodeVO implements I_KV<String, String> {
 	/**
 	 * 结点标识.
 	 */
@@ -20,11 +20,11 @@ public class Node implements I_KV<String, String> {
 	 */
 	private String value;
 
-	public Node() {
+	public NodeVO() {
 		super();
 	}
 
-	public Node(String key, String value) {
+	public NodeVO(String key, String value) {
 		super();
 		this.key = key;
 		this.value = value;

@@ -5,19 +5,19 @@ import java.util.List;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 import com.javapai.framework.action.PageResult;
-import com.javapai.framework.action.RstResultBuilder;
+import com.javapai.framework.action.ResultBuilder;
 import com.javapai.framework.constant.CL_Database;
 
 /**
  * 基础业务层抽象服务(只适用于JDBC操作).<br>
  * 
- * 
+ * 依赖：<br>
+ * 1、spring-jdbc.jar<br>
  * 
  * @author liu.xiang
  *
  */
 public abstract class AbstractBizService implements TopBaseService {
-//	@javax.annotation.Resource
 	@org.springframework.beans.factory.annotation.Autowired
 	protected org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
 	
@@ -75,8 +75,7 @@ public abstract class AbstractBizService implements TopBaseService {
 		}
 
 		List<T> list = jdbcTemplate.query(sql, sqlArgs, new BeanPropertyRowMapper<T>(mappedClass));
-//		return new RstPageResult<T>((pageIndex / pageSize) + 1, pageSize, list, totalRecord);
-		return RstResultBuilder.buildPageResult((pageIndex / pageSize) + 1, pageSize, list, totalRecord);
+		return ResultBuilder.buildPageResult((pageIndex / pageSize) + 1, pageSize, list, totalRecord);
 	}
 	
 	/**
