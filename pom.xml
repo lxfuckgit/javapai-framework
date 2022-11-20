@@ -12,7 +12,7 @@
 		<hibernate-version>4.3.5.Final</hibernate-version>
 		<spring-version>5.1.2.RELEASE</spring-version>
 		<jackson-version>2.9.3</jackson-version>
-		<poi-version>3.12</poi-version>
+		<poi-version>3.14</poi-version>
 		<slf4j-version>1.7.21</slf4j-version>
 		<httpclient-version>4.5.6</httpclient-version>
 	</properties>
@@ -24,28 +24,27 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-web</artifactId>
 				<version>${spring-version}</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-jdbc</artifactId>
 				<version>${spring-version}</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>${spring-version}</version>
+			    <groupId>org.springframework</groupId>
+			    <artifactId>spring-context</artifactId>
+			    <version>${spring-version}</version>
+			    <scope>provided</scope>
 			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context-support</artifactId>
-				<version>${spring-version}</version>
-			</dependency>
-
+			
 			<!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
 			<dependency>
-			    <groupId>javax.validation</groupId>
-			    <artifactId>validation-api</artifactId>
-			    <version>2.0.1.Final</version>
+				<!-- 注意：因为很多DTO的验证都依赖这套接口抽象，所以没有设置其scope=provided。 -->
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>2.0.1.Final</version>
 			</dependency>
 			
 			<!-- https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.1-api -->
@@ -53,11 +52,13 @@
 				<groupId>org.hibernate.javax.persistence</groupId>
 				<artifactId>hibernate-jpa-2.1-api</artifactId>
 				<version>1.0.2.Final</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-validator</artifactId>
 				<version>5.1.3.Final</version>
+				<scope>provided</scope>
 			</dependency>
 	
 			<!-- Jackson(排除fastjson,gson) -->
@@ -65,16 +66,19 @@
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-core</artifactId>
 				<version>${jackson-version}</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-databind</artifactId>
 				<version>${jackson-version}</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-annotations</artifactId>
 				<version>${jackson-version}</version>
+				<scope>provided</scope>
 			</dependency>
 
 			<!-- Netty -->
@@ -121,29 +125,12 @@
 			    <scope>test</scope>
 			</dependency>
 			
-			<!-- https://mvnrepository.com/artifact/com.itextpdf/itext7-core -->
-			<dependency>
-			    <groupId>com.itextpdf</groupId>
-			    <artifactId>itext7-core</artifactId>
-			    <version>7.1.13</version>
-			    <type>runtime</type>
-			</dependency>
-			
-			<!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
-			<dependency>
-				<groupId>org.apache.pdfbox</groupId>
-				<artifactId>pdfbox</artifactId>
-				<version>2.0.18</version>
-				<scope>runtime</scope>
-			</dependency>
-			
 			<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
 				<version>${slf4j-version}</version>
-				<!-- 原因：这里日志包只依赖slf4j，不依赖具体实现包(log4j/logback)，具体实现请自行解决依赖问题。 -->
-				<!-- 不强制外部系统引用logback -->
+				<!-- 原因：这里日志包只依赖slf4j，不强制外部系统依赖具体实现包(log4j/logback)，具体实现请自行解决依赖问题。 -->
 				<scope>provided</scope>
 			</dependency>
 			
@@ -228,46 +215,23 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.17</version>
-				<configuration>
-					<testFailureIgnore>true</testFailureIgnore>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>3.10.1</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.4</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
 	
 	<modules>
 		<module>javapai-framework-common</module>
-		<module>javapai-framework-hbase</module>
 		<module>javapai-framework-core</module>
 		<module>javapai-framework-jdbc</module>
 		<module>javapai-framework-redis</module>
 		<module>javapai-framework-kafka</module>
 		<module>javapai-framework-protocol</module>
-		<module>javapai-framework-graph</module>
 		<module>javapai-framework-fileparse</module>
 		<module>javapai-framework-javafx</module>
 		<module>javapai-framework-utils</module>
