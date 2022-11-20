@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * 2:当某些没有纳入spring框架管理的类却要调用spring容器中的bean时。 <br>
  * <br>
  * <strong>引入方式：</strong><br>
- * {@link &lt;bean class="com.javapai.framework.utils.UtilSpringContext" /&gt;}
+ * {@link &lt;bean id="SpringContextHolder" class="com.javapai.framework.utils.UtilSpringContext" /&gt;}
  * <br>
  * <strong>OR</strong> <br>
  * {@link @ComponentScan com.javapai.framework.utils.UtilSpringContext} <br>
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
  * @author pooja
  *
  */
-@Component
+//@Component
 public class UtilSpringContext implements ApplicationContextAware {
 	private static ApplicationContext applicationContext;// WebApplicationContextUtils
 
@@ -35,7 +35,9 @@ public class UtilSpringContext implements ApplicationContextAware {
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		// TODO Auto-generated method stub
-		UtilSpringContext.applicationContext = applicationContext;
+		if(null == UtilSpringContext.applicationContext) {
+			UtilSpringContext.applicationContext = applicationContext;
+		}
 	}
 
 	/**
@@ -73,7 +75,7 @@ public class UtilSpringContext implements ApplicationContextAware {
 
 	private static void checkApplicationContext() {
 		if (applicationContext == null) {
-			throw new IllegalStateException("applicaitonContext未注入,请在applicationContext.xml中定义SpringContextHolder");
+			throw new IllegalStateException("applicaitonContext未注入,请参考类说明的“引用方式”章节进行工具类的bean定义引用。");
 		}
 	}
 }
