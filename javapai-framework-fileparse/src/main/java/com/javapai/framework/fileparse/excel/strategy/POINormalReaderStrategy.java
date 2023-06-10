@@ -1,4 +1,4 @@
-package com.javapai.framework.fileparse.excel;
+package com.javapai.framework.fileparse.excel.strategy;
 
 import java.io.File;
 import java.io.InputStream;
@@ -18,7 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.javapai.framework.config.TableFormat;
-import com.javapai.framework.fileparse.excel.config.SheetConfig;
+import com.javapai.framework.fileparse.excel.POIExcelReader;
+import com.javapai.framework.fileparse.excel.config.ReadSheetConfig;
 
 /**
  * 普通模式解析Excel内容。<br>
@@ -26,34 +27,31 @@ import com.javapai.framework.fileparse.excel.config.SheetConfig;
  * @author pooja
  *
  */
-public class POINormalReader extends POIExcelReader {
-	protected static Logger log = LoggerFactory.getLogger(POINormalReader.class);
+public class POINormalReaderStrategy extends POIExcelReader {
+	protected static Logger log = LoggerFactory.getLogger(POINormalReaderStrategy.class);
 
-	protected SheetConfig config;
+	protected ReadSheetConfig config;
 
-	public POINormalReader() {
-		this.config = new SheetConfig();
+	public POINormalReaderStrategy() {
+		this.config = new ReadSheetConfig();
 	}
 
-	public POINormalReader(SheetConfig config) {
+	public POINormalReaderStrategy(ReadSheetConfig config) {
 		this.config = config;
 	}
 
 	@Override
 	public List<TableFormat> readFile(File file) {
-		// TODO Auto-generated method stub
 		return readSheet(getWorkbook(file));
 	}
 
 	@Override
 	public List<TableFormat> readFile(InputStream stream) {
-		// TODO Auto-generated method stub
 		return readSheet(getWorkbook(stream));
 	}
 
 	@Override
 	public List<TableFormat> readSheet(Workbook workBook) {
-		// TODO Auto-generated method stub
 		List<TableFormat> list = new ArrayList<TableFormat>();
 		for (int i = 0; i < workBook.getNumberOfSheets(); i++) {
 			list.add(readSheet(workBook.getSheetAt(i)));
@@ -64,13 +62,11 @@ public class POINormalReader extends POIExcelReader {
 
 	@Override
 	public TableFormat readSheet(Sheet sheet) {
-		// TODO Auto-generated method stub
 		return readSheet(sheet, this.config);
 	}
 
 	@Override
-	public TableFormat readSheet(Sheet sheet, SheetConfig config) {
-		// TODO Auto-generated method stub
+	public TableFormat readSheet(Sheet sheet, ReadSheetConfig config) {
 		int rows = sheet.getPhysicalNumberOfRows();
 		log.info("正在处理sheet表单[" + sheet.getSheetName() + "],表单数据总行数[" + rows + "].");
 
@@ -108,66 +104,55 @@ public class POINormalReader extends POIExcelReader {
 
 	@Override
 	public TableFormat readSheet(Workbook workBook, int sheetIndex) {
-		// TODO Auto-generated method stub
 		return readSheet(workBook.getSheetAt(sheetIndex - 1));
 	}
 
 	@Override
-	public TableFormat readSheet(Workbook workBook, int sheetIndex, SheetConfig config) {
-		// TODO Auto-generated method stub
+	public TableFormat readSheet(Workbook workBook, int sheetIndex, ReadSheetConfig config) {
 		return readSheet(workBook.getSheetAt(sheetIndex), config);
 	}
 
 	@Override
 	public TableFormat readSheet(Workbook workBook, String sheetName) {
-		// TODO Auto-generated method stub
 		return readSheet(workBook.getSheet(sheetName));
 	}
 
 	@Override
-	public TableFormat readSheet(Workbook workBook, String sheetName, SheetConfig config) {
-		// TODO Auto-generated method stub
+	public TableFormat readSheet(Workbook workBook, String sheetName, ReadSheetConfig config) {
 		return readSheet(workBook.getSheet(sheetName), config);
 	}
 
 	@Override
 	public TableFormat readSheet(InputStream strean, int sheetIndex) {
-		// TODO Auto-generated method stub
 		return readSheet(getWorkbook(strean).getSheetAt(sheetIndex));
 	}
 
 	@Override
-	public TableFormat readSheet(InputStream strean, int sheetIndex, SheetConfig config) {
-		// TODO Auto-generated method stub
+	public TableFormat readSheet(InputStream strean, int sheetIndex, ReadSheetConfig config) {
 		return readSheet(getWorkbook(strean).getSheetAt(sheetIndex), config);
 	}
 
 	@Override
 	public TableFormat readSheet(InputStream strean, String sheetName) {
-		// TODO Auto-generated method stub
 		return readSheet(getWorkbook(strean), sheetName);
 	}
 
 	@Override
-	public TableFormat readSheet(InputStream strean, String sheetName, SheetConfig config) {
-		// TODO Auto-generated method stub
+	public TableFormat readSheet(InputStream strean, String sheetName, ReadSheetConfig config) {
 		return readSheet(getWorkbook(strean), sheetName, config);
 	}
 	
 	@Override
 	public TableFormat readSheet(File file, int sheetIndex) {
-		// TODO Auto-generated method stub
 		return readSheet(getWorkbook(file), sheetIndex);
 	}
 
 	@Override
-	public TableFormat readSheet(File file, int sheetIndex, SheetConfig config) {
-		// TODO Auto-generated method stub
+	public TableFormat readSheet(File file, int sheetIndex, ReadSheetConfig config) {
 		return readSheet(getWorkbook(file), sheetIndex, config);
 	}
 	
 	private boolean emptyRow(Row row) {
-		// TODO Auto-generated method stub
 		if (null == row) {
 			log.info(">>>发现一个空行数据对象!");
 			return true;
@@ -302,6 +287,30 @@ public class POINormalReader extends POIExcelReader {
 
 	@Override
 	public List<TableFormat> readFile(String filePath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TableFormat readSheet(File file, String sheetName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TableFormat readSheet(File file, String sheetName, ReadSheetConfig config) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TableFormat> readSheet(File file, ReadSheetConfig config) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TableFormat> readSheet(InputStream inputStream, ReadSheetConfig config) {
 		// TODO Auto-generated method stub
 		return null;
 	}

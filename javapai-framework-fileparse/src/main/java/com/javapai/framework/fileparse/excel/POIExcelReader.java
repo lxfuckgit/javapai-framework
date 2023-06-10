@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.javapai.framework.config.TableFormat;
-import com.javapai.framework.fileparse.excel.config.SheetConfig;
+import com.javapai.framework.fileparse.excel.config.ReadSheetConfig;
 
 /**
  * 利用POI策略去实现Excel的数据读取操作。<br>
@@ -36,7 +36,7 @@ import com.javapai.framework.fileparse.excel.config.SheetConfig;
  * 第二种模式SXSSFWorkbook，适用与较大数据量的poi写入操作。 [POI3.8版本新增加].<br>
  * <br>
  * Excel表单：Sheet、HSSFSheet、XSSFSheet<br>
- * Excel行：Row、HSSFRow、XSSFRow<br>
+ * Excel数据行：Row、HSSFRow、XSSFRow<br>
  * Excel单无格类：Cell、HSSFCell、XSSFCell<br>
  * 
  * @author pooja
@@ -57,8 +57,8 @@ public abstract class POIExcelReader implements IExcelReader {
 	 * POI通过默认配置读取并解析Sheet工作表的行集数据.<br>
 	 * 
 	 * 注意：如需要对sheet按指定配置进行解析，有两种配置方式：<br>
-	 * 1、对ExcelReader实例对象( 例如new ExcelReader(new SheetConfig()); )进行config配置(所有sheet共享).<br>
-	 * 2、对ExcelReader实例方法( 例如{@link OfficeExcelReader#readSheet(Sheet, SheetConfig)}; )进行config配置(当前sheet独享).<br>
+	 * 1、对ExcelReader实例对象( 例如new ExcelReader(new ReadSheetConfig()); )进行config配置(所有sheet共享).<br>
+	 * 2、对ExcelReader实例方法( 例如{@link OfficeExcelReader#readSheet(Sheet, ReadSheetConfig)}; )进行config配置(当前sheet独享).<br>
 	 * 
 	 * @param sheet
 	 *            excel工作表。<br>
@@ -74,7 +74,7 @@ public abstract class POIExcelReader implements IExcelReader {
 	 *            sheet配置。<br>
 	 * @return TableFormat工作表对象.<br>
 	 */
-	protected abstract TableFormat readSheet(Sheet sheet, SheetConfig config);
+	protected abstract TableFormat readSheet(Sheet sheet, ReadSheetConfig config);
 
 	/**
 	 * 读取指定表单的指定工作表.<br>
@@ -99,7 +99,7 @@ public abstract class POIExcelReader implements IExcelReader {
 	 * @param config
 	 * @return 当前表单内容。<br>
 	 */
-	public abstract TableFormat readSheet(Workbook workBook, int sheetIndex, SheetConfig config);
+	public abstract TableFormat readSheet(Workbook workBook, int sheetIndex, ReadSheetConfig config);
 
 	/**
 	 * 读取指定表单的指定工作表.<br>
@@ -118,7 +118,7 @@ public abstract class POIExcelReader implements IExcelReader {
 	 * @param config
 	 * @return
 	 */
-	public abstract TableFormat readSheet(Workbook workBook, String sheetName, SheetConfig config);
+	public abstract TableFormat readSheet(Workbook workBook, String sheetName, ReadSheetConfig config);
 	
 	protected boolean isEmptyRow(Row row) {
 		// TODO Auto-generated method stub

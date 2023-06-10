@@ -8,21 +8,23 @@ import com.javapai.framework.config.XConfig;
 /**
  * Sheet表单操作策略配置项.<br>
  * <br>
- * <strong>提示： </strong>
+ * <strong>提示：</strong>
  * 本配置下的描述的行号值有区别于索引值，一般索引值第1行为0，而为了更好的方便使用的，我们使用Sheet表单显示的行号值作的参数源。<br>
  * 
  * @author pooja
- * @Deprecated
  *
  */
-public final class SheetConfig extends XConfig {
+public final class ReadSheetConfig extends XConfig {
 	/**
 	 * 
 	 */
 	private static final int DEFAULT_TITLE_INDEX = 1;
 	
-	// 未放开原因：每个SheetConfig配置项不应绑定在一个sheet上，而是应用于当前处理对象(可能是个sheet表单也可能是整个数据文件)。
-	// private int sheetIndex;
+//	// 未放开原因：每个ReadSheetConfig配置项不应绑定在一个sheet上，ReadSheetConfig是应用于当前处理对象(可能是个sheet表单也可能是整个数据文件)。
+//	/**
+//	 * 指定当前Sheet表单的索引号。<br>
+//	 */
+//	private int sheetIndex;
 
 	/**
 	 * 指定当前sheet表单的标题行的行号。<br>
@@ -52,27 +54,27 @@ public final class SheetConfig extends XConfig {
 	// public List<MergInfo> mergerIndex;
 	// //谁和谁合，怎么合（合并后的单元格内容怎么拼接，表头叫什么）//poi只对excel格式&数据进行解析，对于后续数据(如单元格内容)的合并，建立单独处理.
 
-	public SheetConfig() {
+	public ReadSheetConfig() {
 		this.titleIndex = DEFAULT_TITLE_INDEX;
 	}
 
 	/**
 	 * 
 	 * @param titleIndex
-	 *            {@linkplain SheetConfig#titleIndex}
+	 *            {@linkplain ReadSheetConfig#titleIndex}
 	 */
-	public SheetConfig(Integer titleIndex) {
+	public ReadSheetConfig(Integer titleIndex) {
 		this.titleIndex = titleIndex;
 	}
 
 	/**
 	 * 
 	 * @param titleIndex
-	 *            {@linkplain SheetConfig#titleIndex}
+	 *            {@linkplain ReadSheetConfig#titleIndex}
 	 * @param dataIndex
-	 *            {@linkplain SheetConfig#dataIndex}
+	 *            {@linkplain ReadSheetConfig#dataIndex}
 	 */
-	public SheetConfig(Integer titleIndex, Integer dataIndex) {
+	public ReadSheetConfig(Integer titleIndex, Integer dataIndex) {
 		this.titleIndex = titleIndex;
 		this.dataIndex = dataIndex;
 	}
