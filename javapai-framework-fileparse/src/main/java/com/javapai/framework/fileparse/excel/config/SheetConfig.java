@@ -7,19 +7,23 @@ import com.javapai.framework.config.XConfig;
 
 /**
  * Sheet表单操作策略配置项.<br>
- * 提示：本配置下的描述的行号值有区别于索引值，一般索引值第1行为0，而为了更好的方便使用的，我们使用Sheet表单显示的行号值作的参数源。<br>
+ * <br>
+ * <strong>提示： </strong>
+ * 本配置下的描述的行号值有区别于索引值，一般索引值第1行为0，而为了更好的方便使用的，我们使用Sheet表单显示的行号值作的参数源。<br>
  * 
  * @author pooja
  * @Deprecated
  *
  */
 public final class SheetConfig extends XConfig {
-	private static final int DEFAULT_TITLE_INDEX = 1;
 	/**
 	 * 
 	 */
-	private int sheetIndex;
+	private static final int DEFAULT_TITLE_INDEX = 1;
 	
+	// 未放开原因：每个SheetConfig配置项不应绑定在一个sheet上，而是应用于当前处理对象(可能是个sheet表单也可能是整个数据文件)。
+	// private int sheetIndex;
+
 	/**
 	 * 指定当前sheet表单的标题行的行号。<br>
 	 * <br>
@@ -29,7 +33,8 @@ public final class SheetConfig extends XConfig {
 
 	/**
 	 * 指定当前sheet表单的数据行的启始行号。<br>
-	 * <br> 提示：默认表单的第2行为数据行，默认索引值为2(即标题行的下一行是数据行)。<br>
+	 * <br>
+	 * 提示：默认表单的第2行为数据行，默认索引值为2(即标题行的下一行是数据行)。<br>
 	 */
 	private Integer dataIndex;
 

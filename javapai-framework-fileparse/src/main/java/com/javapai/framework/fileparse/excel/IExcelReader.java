@@ -40,22 +40,31 @@ public interface IExcelReader extends DocReader<List<TableFormat>> {
 	/**
 	 * 
 	 * @param file
+	 * @param sheetName
+	 * @return
+	 */
+	public TableFormat readSheet(File file, String sheetName);
+	
+	/**
+	 * 
+	 * @param file
 	 * @param sheetIndex
 	 * @param config
 	 * @return
 	 */
 	public TableFormat readSheet(File file, int sheetIndex, SheetConfig config);
-
+	
 	/**
 	 * 
 	 * @param file
+	 * @param sheetName
 	 * @param config
 	 * @return
 	 */
-	// public TableFormat readSheet(File file, SheetConfig config);
+	public TableFormat readSheet(File file, String sheetName, SheetConfig config);
 
 	/**
-	 * 指取指定input输入流中的指定sheent表单。<br?
+	 * 指取指定input输入流中的指定sheent表单。<br>
 	 * 
 	 * @param inputStream
 	 *            输入流。<br>
@@ -65,15 +74,35 @@ public interface IExcelReader extends DocReader<List<TableFormat>> {
 	 */
 	public TableFormat readSheet(InputStream inputStream, int sheetIndex);
 
-	public TableFormat readSheet(InputStream inputStream, int sheetIndex, SheetConfig config);
-
+	/**
+	 * 
+	 * @param inputStream
+	 * @param sheetName
+	 * @return
+	 */
 	public TableFormat readSheet(InputStream inputStream, String sheetName);
-
+	
+	/**
+	 * 
+	 * @param inputStream
+	 * @param sheetIndex
+	 * @param config
+	 * @return
+	 */
+	public TableFormat readSheet(InputStream inputStream, int sheetIndex, SheetConfig config);
+	
+	/**
+	 * 
+	 * @param inputStream
+	 * @param sheetName
+	 * @param config
+	 * @return
+	 */
 	public TableFormat readSheet(InputStream inputStream, String sheetName, SheetConfig config);
 
-	// 未开放原因:通过类实例来绑定config，再调用：readFile(File file)即可。
-	// public java.util.List<TableFormat> readFile(File file, SheetConfig
-	// config);
+	//所有带SheetConfig参数的方法都采用实例绑类的方式：例如：Xxxx xx = new Xxx(SheetConfig config);
+//	public List<TableFormat> readSheet(File file, SheetConfig config);
+//	public List<TableFormat> readSheet(InputStream inputStream, SheetConfig config);
 
 	/**
 	 * 返回默认sheet索引标识号。<br>
