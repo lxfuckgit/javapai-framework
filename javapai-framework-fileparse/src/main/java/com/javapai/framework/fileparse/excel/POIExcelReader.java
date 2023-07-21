@@ -143,22 +143,25 @@ public abstract class POIExcelReader implements IExcelReader {
 		}
 		return true;
 	}
-	// @Override
+	
 	protected Map<Integer, Object> readRow(Row row) {
-//		short lastCell = row.getLastCellNum(); //获取最后一个不为空的列是第几个.
-		short firstCell = row.getFirstCellNum();
-		int totalCells = row.getPhysicalNumberOfCells(); //获取不为空的列的个数。
-		log.info(">>>批注：正在处理Excel表单第" + row.getRowNum() + "行数据!.");
-		log.info(">>>本行数据开始于[" + firstCell + "]列结束于[" + row.getLastCellNum() + "]列,共[" + totalCells + "]列.");
+		return readRow(row, 0);
+	}
+	
+	protected Map<Integer, Object> readRow(Row row, int position) {
+//		short lastCell = row.getLastCellNum(); //获取最后一个不为空的列的索引值.
+		short firstCell = row.getFirstCellNum();// 获取第一个不为空的列的索引值.
+		int totalCells = row.getPhysicalNumberOfCells(); // 获取不为空的列的个数。
+		log.info(">>>批注：正在处理Excel表单第" + row.getRowNum() + "行数据!");
+		log.info(">>>本行数据开始于[" + firstCell + "]列结束于[" + row.getLastCellNum() + "]列，其中有效数据列共计[" + totalCells + "]列!");
 
 		// java.text.DecimalFormat df = new DecimalFormat("#");
 		Map<Integer, Object> datamap = new LinkedHashMap<Integer, Object>();
 
 		/* 如果是第一行，我们当表头行处理，其它行当数据行处理 */
 		if (row.getRowNum() <= 0 || row.getRowNum() == 0) {
-			for (int index = firstCell; index < totalCells - firstCell; index++) {
-				// if (row.getCell(index).getStringCellValue().trim().length()
-				// == 0) {
+			for (int index = firstCell - position; index < totalCells - firstCell; index++) {
+				// if (row.getCell(index).getStringCellValue().trim().length() == 0) {
 				if (null == row.getCell(index) || null == row.getCell(index).getStringCellValue()) {
 					// throw new IOException("列名不允许为空");
 					datamap.put(index, "列[" + index + "]");
@@ -167,7 +170,8 @@ public abstract class POIExcelReader implements IExcelReader {
 				}
 			}
 		} else if (row.getRowNum() >= 1 && firstCell >= 0) {// 加条件是因为有些情况下，firstCell为-1.
-			for (int index = firstCell; index < totalCells; index++) {
+			//for (int index = firstCell; index < totalCells; index++) {
+			for (int index = firstCell - position; index < row.getLastCellNum(); index++) {
 				Object fieldValue = readCell(row.getCell(index));
 				datamap.put(index, fieldValue);
 			}

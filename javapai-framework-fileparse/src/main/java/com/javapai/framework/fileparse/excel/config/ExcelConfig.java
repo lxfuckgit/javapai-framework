@@ -25,7 +25,7 @@ public abstract class ExcelConfig {
 	/**
 	 * 
 	 */
-	private SheetConfig sheetConfig;
+	private ReadSheetConfig sheetConfig;
 	
 	/**
 	 * excel读取配置项(验证、转换等)

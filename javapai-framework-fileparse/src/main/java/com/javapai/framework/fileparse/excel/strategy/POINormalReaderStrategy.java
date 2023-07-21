@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -67,33 +66,44 @@ public class POINormalReaderStrategy extends POIExcelReader {
 
 	@Override
 	public TableFormat readSheet(Sheet sheet, ReadSheetConfig config) {
-		int rows = sheet.getPhysicalNumberOfRows();
-		log.info("正在处理sheet表单[" + sheet.getSheetName() + "],表单数据总行数[" + rows + "].");
-
-		int firstRow = sheet.getFirstRowNum();
-		int lastRow = sheet.getLastRowNum();// 当本行数据为空，格式还存在时，也算最后行。
-		log.info("批注：sheet表单数据开始于[" + firstRow + "]行结束于[" + lastRow + "]行.");
+		/*
+		 * 获取最后行的行号（行号从0开始）。 
+		 * 提示：当本行数据为空时，只要单元格的格式还存在时，也算最后行。
+		 * 比如：原Excel有11行数据，个性后只保留2行，当getLastRowNum()时扔然是11行。解决办法是“跳过空行”。
+		 */
+		int lastRow = sheet.getLastRowNum();
+		/*
+		 * 获取物理行数（不包括空行和隔行的情况，行号从0开始）。
+		 */
+		int physicalRow = sheet.getPhysicalNumberOfRows();
+		/*
+		 * 取最大行数作为遍历行数（其实最大行就是lastRowNum）。
+		 */
+		int rows = lastRow > physicalRow ? lastRow : physicalRow;
+		log.info("正在处理sheet表单[" + sheet.getSheetName() + "]，表单数据总行数[" + rows + "]。");
+		//log.info("批注：sheet表单数据开始于[" + sheet.getFirstRowNum() + "]行结束于[" + lastRow + "]行。");
+		if (rows > 2000) {
+			/* sheet数据集过大有可能报内存问题， 可以借用PoiEventStrategy提供的内部类来优化性解决。 */
+			log.warn(">>>批注:sheet数据集过大可能有内存OOM问题，可以借用PoiEventStrategy提供的内部类来优化性解决。");
+		}
 
 		/**/
 		TableFormat table = new TableFormat();
-		if (rows <= 20000) {
-			for (Row row : sheet) {
-				if (emptyRow(row)) {
-					continue;
-				}
-				Map<Integer, Object> data = readRow(row);
-				if (null != config.getNoteIndex() && config.getNoteIndex().contains(row.getRowNum())) {
-					table.addRemark(data);					
-				} else if (row.getRowNum() == config.getTitleIndex() - 1) {
-					table.setTableTitle(data.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> String.valueOf(entry.getValue()))));
-				} else if (row.getRowNum() >= config.getDataIndex() - 1) {
-					table.addContent(data);
-				}
+		for (int index = 0; index <= rows; index++) { 
+			//for (Row row : sheet) {//此迭代方式无法迭代空行的数据
+			Row row = sheet.getRow(index);
+			if (emptyRow(row)) {
+				log.info(">>>提示：检测到空行，行标位置{}！", (index + 1));
+				continue;
 			}
-		} else {
-			/* sheet数据集过大有可能报内存问题， 可以借用PoiEventStrategy提供的内部类来优化性解决。 */
-			log.info(">>>批注:sheet数据集过大可能有内存OOM问题.可以借用PoiEventStrategy提供的内部类来优化性解决。");
-			sheet.getWorkbook();
+			Map<Integer, Object> data = readRow(row, config.getPosition());
+			if (null != config.getNoteIndex() && config.getNoteIndex().contains(row.getRowNum())) {
+				table.addRemark(data);					
+			} else if (row.getRowNum() == config.getTitleIndex() - 1) {
+				table.setTableTitle(data.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> String.valueOf(entry.getValue()))));
+			} else if (row.getRowNum() >= config.getDataIndex() - 1) {
+				table.addContent(data);
+			}
 		}
 
 		log.info(">>>the sheet(" + sheet.getSheetName() + ")处理完毕!---");
@@ -154,7 +164,6 @@ public class POINormalReaderStrategy extends POIExcelReader {
 	
 	private boolean emptyRow(Row row) {
 		if (null == row) {
-			log.info(">>>发现一个空行数据对象!");
 			return true;
 		}
 		
@@ -177,39 +186,6 @@ public class POINormalReaderStrategy extends POIExcelReader {
 		return true;
 	}
 
-	// @Override
-	protected Map<Integer, Object> readRow(Row row) {
-//		short lastCell = row.getLastCellNum(); //获取最后一个不为空的列是第几个.
-		short firstCell = row.getFirstCellNum();
-		int totalCells = row.getPhysicalNumberOfCells(); // 获取不为空的列的个数。
-		log.info(">>>批注：正在处理Excel表单第" + row.getRowNum() + "行数据!");
-		log.info(">>>本行数据开始于[" + firstCell + "]列结束于[" + row.getLastCellNum() + "]列，其中有效数据列共计[" + totalCells + "]列!");
-
-		// java.text.DecimalFormat df = new DecimalFormat("#");
-		Map<Integer, Object> datamap = new LinkedHashMap<Integer, Object>();
-
-		/* 如果是第一行，我们当表头行处理，其它行当数据行处理 */
-		if (row.getRowNum() <= 0 || row.getRowNum() == 0) {
-			for (int index = firstCell; index < totalCells - firstCell; index++) {
-				// if (row.getCell(index).getStringCellValue().trim().length()
-				// == 0) {
-				if (null == row.getCell(index) || null == row.getCell(index).getStringCellValue()) {
-					// throw new IOException("列名不允许为空");
-					datamap.put(index, "列[" + index + "]");
-				} else {
-					datamap.put(index, row.getCell(index).getStringCellValue());
-				}
-			}
-		} else if (row.getRowNum() >= 1 && firstCell >= 0) {// 加条件是因为有些情况下，firstCell为-1.
-			for (int index = firstCell; index < row.getLastCellNum(); index++) {
-				Object fieldValue = readCell(row.getCell(index));
-				datamap.put(index, fieldValue);
-			}
-		}
-
-		return datamap;
-	}
-	
 	/**
 	 * 返回单元格内容.<br>
 	 * 

@@ -16,33 +16,46 @@ import com.javapai.framework.config.XConfig;
  */
 public final class ReadSheetConfig extends XConfig {
 	/**
-	 * 
+	 * 默认表格标题在第1行。<br>
 	 */
 	private static final int DEFAULT_TITLE_INDEX = 1;
 	
-//	// 未放开原因：每个ReadSheetConfig配置项不应绑定在一个sheet上，ReadSheetConfig是应用于当前处理对象(可能是个sheet表单也可能是整个数据文件)。
+	/**
+	 * 默认表格数据在第2行。<br>
+	 */
+	private static final int DEFAULT_DATA_INDEX = 2;
+	
+//	// sheetIndex未放开原因：每个ReadSheetConfig配置项不应绑定在一个sheet上，ReadSheetConfig是应用于当前处理对象(可能是个sheet表单也可能是整个数据文件)。
 //	/**
 //	 * 指定当前Sheet表单的索引号。<br>
 //	 */
 //	private int sheetIndex;
+	
+	/**
+	 * 指定当前sheet表单的标题行[titleIndex]和数据行[dataIndex]的Y轴数据坐标偏移量，用以实现<strong>从指定列</strong>开始读取数据。<br>
+	 * <br>
+	 * <strong>提示：</strong>默认偏移量为0，即每行数据位置不需要偏移（每行的数据都很常规的将坐标0的位置作为首行首列内容单元格）。
+	 * <br>
+	 */
+	private int position;
 
 	/**
-	 * 指定当前sheet表单的标题行的行号。<br>
+	 * 指定当前sheet表单的标题行在X轴的行号。<br>
 	 * <br>
-	 * 提示：默认表单的第1行为标题行，默认行号值为1。<br>
+	 * <strong>提示：</strong>默认表单的第1行为标题行，默认行号值为1。<br>
 	 */
 	private Integer titleIndex;
 
 	/**
-	 * 指定当前sheet表单的数据行的启始行号。<br>
+	 * 指定当前sheet表单的数据行在X轴的启始行号。<br>
 	 * <br>
-	 * 提示：默认表单的第2行为数据行，默认索引值为2(即标题行的下一行是数据行)。<br>
+	 * <strong>提示：</strong>默认表单的第2行为数据行，默认索引值为2(即标题行的下一行即是数据行)。<br>
 	 */
 	private Integer dataIndex;
-
+	
 	/**
 	 * 当前sheet表单的备注行的行号(支持多行，格式：i,j,k...)。<br>
-	 * 提示：用于特定情况下提取备注数据，默认无特殊备注行。<br>
+	 * <strong>提示：</strong>用于特定情况下提取备注数据，默认无特殊备注行。<br>
 	 */
 	private List<Integer> noteIndex;
 
@@ -56,6 +69,7 @@ public final class ReadSheetConfig extends XConfig {
 
 	public ReadSheetConfig() {
 		this.titleIndex = DEFAULT_TITLE_INDEX;
+		this.dataIndex = DEFAULT_DATA_INDEX;
 	}
 
 	/**
@@ -65,6 +79,7 @@ public final class ReadSheetConfig extends XConfig {
 	 */
 	public ReadSheetConfig(Integer titleIndex) {
 		this.titleIndex = titleIndex;
+		this.dataIndex = DEFAULT_DATA_INDEX;
 	}
 
 	/**
@@ -77,6 +92,37 @@ public final class ReadSheetConfig extends XConfig {
 	public ReadSheetConfig(Integer titleIndex, Integer dataIndex) {
 		this.titleIndex = titleIndex;
 		this.dataIndex = dataIndex;
+	}
+	
+	/**
+	 * 
+	 * @param titleIndex {@linkplain ReadSheetConfig#titleIndex}
+	 * @param dataIndex  {@linkplain ReadSheetConfig#dataIndex}
+	 * @param dataIndex  {@linkplain ReadSheetConfig#position}
+	 */
+	public ReadSheetConfig(Integer titleIndex, Integer dataIndex, int position) {
+		this.titleIndex = titleIndex;
+		this.dataIndex = dataIndex;
+		this.position = position;
+	}
+	
+	/**
+	 * 读取Y轴数据坐标偏移量。<br>
+	 * 
+	 * @see #position
+	 * @return
+	 */
+	public int getPosition() {
+		return position;
+	}
+
+	/**
+	 * 设置Y轴数据坐标偏移量。<br>
+	 * 
+	 * @param position
+	 */
+	public void setPosition(int position) {
+		this.position = position;
 	}
 
 	/**
