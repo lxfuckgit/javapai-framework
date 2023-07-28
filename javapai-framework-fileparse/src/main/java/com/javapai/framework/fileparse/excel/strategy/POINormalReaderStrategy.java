@@ -68,8 +68,8 @@ public class POINormalReaderStrategy extends POIExcelReader {
 	public TableFormat readSheet(Sheet sheet, ReadSheetConfig config) {
 		/*
 		 * 获取最后行的行号（行号从0开始）。 
-		 * 提示：当本行数据为空时，只要单元格的格式还存在时，也算最后行。
-		 * 比如：原Excel有11行数据，个性后只保留2行，当getLastRowNum()时扔然是11行。解决办法是“跳过空行”。
+		 * 提示：sheet.getLastRowNum()检测方式是即使本行数据为空时，只要单元格的格式还存在时，也算有效最后行。
+		 * 例如：原Excel有11行数据，个性后只保留2行，当getLastRowNum()时扔然是11行。解决办法是“跳过空行”。
 		 */
 		int lastRow = sheet.getLastRowNum();
 		/*
@@ -81,28 +81,29 @@ public class POINormalReaderStrategy extends POIExcelReader {
 		 */
 		int rows = lastRow > physicalRow ? lastRow : physicalRow;
 		log.info("正在处理sheet表单[" + sheet.getSheetName() + "]，表单数据总行数[" + rows + "]。");
-		//log.info("批注：sheet表单数据开始于[" + sheet.getFirstRowNum() + "]行结束于[" + lastRow + "]行。");
-		if (rows > 2000) {
+		// log.info("批注：sheet表单数据开始于[" + sheet.getFirstRowNum() + "]行结束于[" + lastRow + "]行。");
+		if (rows > 30000) {
 			/* sheet数据集过大有可能报内存问题， 可以借用PoiEventStrategy提供的内部类来优化性解决。 */
 			log.warn(">>>批注:sheet数据集过大可能有内存OOM问题，可以借用PoiEventStrategy提供的内部类来优化性解决。");
 		}
 
-		/**/
 		TableFormat table = new TableFormat();
-		for (int index = 0; index <= rows; index++) { 
-			//for (Row row : sheet) {//此迭代方式无法迭代空行的数据
+		// for (Row row : sheet) {//此迭代方式无法迭代空行的数据
+		for (int index = 0; index <= rows; index++) {
 			Row row = sheet.getRow(index);
 			if (emptyRow(row)) {
 				log.info(">>>提示：检测到空行，行标位置{}！", (index + 1));
 				continue;
 			}
 			Map<Integer, Object> data = readRow(row, config.getPosition());
-			if (null != config.getNoteIndex() && config.getNoteIndex().contains(row.getRowNum())) {
-				table.addRemark(data);					
-			} else if (row.getRowNum() == config.getTitleIndex() - 1) {
-				table.setTableTitle(data.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> String.valueOf(entry.getValue()))));
-			} else if (row.getRowNum() >= config.getDataIndex() - 1) {
+			if (row.getRowNum() >= config.getDataIndex() - 1) {
+				// config.getDataIndex-1：将用户指定索引号转化为系统索引号。
 				table.addContent(data);
+			} else if (row.getRowNum() == config.getTitleIndex() - 1) {
+				// config.getTitleIndex-1：将用户指定索引号转化为系统索引号。
+				table.setTableTitle(data.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> String.valueOf(entry.getValue()))));
+			} else if (null != config.getNoteIndex() && config.getNoteIndex().contains(row.getRowNum() + 1)) {
+				table.addRemark(data);
 			}
 		}
 
@@ -134,7 +135,7 @@ public class POINormalReaderStrategy extends POIExcelReader {
 
 	@Override
 	public TableFormat readSheet(InputStream strean, int sheetIndex) {
-		return readSheet(getWorkbook(strean).getSheetAt(sheetIndex));
+		return readSheet(getWorkbook(strean).getSheetAt(convertSheetIndex(sheetIndex)));
 	}
 
 	@Override
@@ -166,16 +167,16 @@ public class POINormalReaderStrategy extends POIExcelReader {
 		if (null == row) {
 			return true;
 		}
-		
-		/* 
-		int cells = 0;// 空单元格记数器。
-		Iterator<Cell> iter = row.cellIterator();
-		while (iter.hasNext() && iter.next().getCellType() == Cell.CELL_TYPE_BLANK) {
-			cells++;
-		}
-		return cells == (row.getLastCellNum() - row.getFirstCellNum());
-		*/
-		
+
+		/*
+		 * int cells = 0;// 空单元格记数器。
+		 * Iterator<Cell> iter = row.cellIterator();
+		 * while (iter.hasNext() && iter.next().getCellType() == Cell.CELL_TYPE_BLANK) {
+		 * 		cells++;
+		 * }
+		 * return cells == (row.getLastCellNum() - row.getFirstCellNum());
+		 */
+
 		Iterator<Cell> iter = row.cellIterator();
 		while (iter.hasNext()) {
 			Cell cell = iter.next();
@@ -209,7 +210,7 @@ public class POINormalReaderStrategy extends POIExcelReader {
 				String temp = cell.getStringCellValue();
 				// 判断是否包含小数点，如果不含小数点，则以字符串读取，如果含小数点，则转换为Double类型的字符串
 				if (temp.indexOf(".") > -1) {
-					cellValue = String.valueOf(new Double(temp)).trim();
+					cellValue = String.valueOf(Double.valueOf(temp)).trim();
 				} else {
 					cellValue = temp.trim();
 				}
@@ -269,8 +270,7 @@ public class POINormalReaderStrategy extends POIExcelReader {
 
 	@Override
 	public TableFormat readSheet(File file, String sheetName) {
-		// TODO Auto-generated method stub
-		return null;
+		return readSheet(file, sheetName, this.config);
 	}
 
 	@Override
@@ -287,8 +287,26 @@ public class POINormalReaderStrategy extends POIExcelReader {
 
 	@Override
 	public List<TableFormat> readSheet(InputStream inputStream, ReadSheetConfig config) {
-		// TODO Auto-generated method stub
-		return null;
+		Workbook workBook = getWorkbook(inputStream);
+		List<TableFormat> list = new ArrayList<TableFormat>();
+		for (int i = 0; i < workBook.getNumberOfSheets(); i++) {
+			list.add(readSheet(workBook.getSheetAt(i), config));
+		}
+		return list;
+	}
+
+	/**
+	 * 将用户级的索引号转换成系统级索引号。
+	 * 
+	 * @param sheetIndex 用户指定索引号。
+	 * @return 用户索引号对应的系统索引号。
+	 */
+	private int convertSheetIndex(int sheetIndex) {
+		if (sheetIndex <= 0) {
+			return sheetIndex;
+		} else {
+			return sheetIndex - 1;
+		}
 	}
 
 }
