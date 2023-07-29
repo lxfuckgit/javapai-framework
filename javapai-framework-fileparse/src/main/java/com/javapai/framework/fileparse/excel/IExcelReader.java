@@ -108,20 +108,22 @@ public interface IExcelReader extends DocReader<List<TableFormat>> {
 
 	// 所有带SheetConfig参数的方法都采用实例绑类的方式：例如：Xxxx xx = new Xxx(SheetConfig config);
 	/**
+	 * 读取Excel的所有表单。<br>
 	 * 
-	 * @param file
+	 * @param file   文件句柄。
 	 * @param config
 	 * @return
 	 */
-	public List<TableFormat> readSheet(File file, ReadSheetConfig config);
+	public List<TableFormat> readFile(File file, ReadSheetConfig config);
 	
 	/**
+	 * 指取指定input输入流中的所有表单。<br>
 	 * 
-	 * @param inputStream
+	 * @param inputStream 输入流。<br>
 	 * @param config
 	 * @return
 	 */
-	public List<TableFormat> readSheet(InputStream inputStream, ReadSheetConfig config);
+	public List<TableFormat> readFile(InputStream inputStream, ReadSheetConfig config);
 
 	/**
 	 * 返回默认sheet索引标识号。<br>

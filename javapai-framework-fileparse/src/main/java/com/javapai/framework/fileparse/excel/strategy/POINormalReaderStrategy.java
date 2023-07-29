@@ -280,13 +280,13 @@ public class POINormalReaderStrategy extends POIExcelReader {
 	}
 
 	@Override
-	public List<TableFormat> readSheet(File file, ReadSheetConfig config) {
+	public List<TableFormat> readFile(File file, ReadSheetConfig config) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<TableFormat> readSheet(InputStream inputStream, ReadSheetConfig config) {
+	public List<TableFormat> readFile(InputStream inputStream, ReadSheetConfig config) {
 		Workbook workBook = getWorkbook(inputStream);
 		List<TableFormat> list = new ArrayList<TableFormat>();
 		for (int i = 0; i < workBook.getNumberOfSheets(); i++) {
