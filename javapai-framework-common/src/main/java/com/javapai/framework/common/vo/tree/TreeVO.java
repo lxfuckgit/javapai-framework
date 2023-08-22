@@ -2,49 +2,25 @@ package com.javapai.framework.common.vo.tree;
 
 import java.util.List;
 
+import com.javapai.framework.common.vo.node.NodeVO;
+
 /**
  * 树结构对象.<br>
  * 
  * @author pooja
  *
  */
-public final class TreeVO {
+public final class TreeVO extends NodeVO {
 	/**
-	 * 
-	 */
-	private String key;
-	/**
-	 * 
-	 */
-	private String value;
-	/**
-	 * 
+	 * 树子节点。
 	 */
 	private List<TreeVO> children;
-	
+
 	public TreeVO() {
 	}
-	
-	public TreeVO(String key, String value) {
-		super();
-		this.key = key;
-		this.value = value;
-	}
 
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
+	public TreeVO(String id, String name) {
+		super(id, name);
 	}
 
 	public List<TreeVO> getChildren() {
