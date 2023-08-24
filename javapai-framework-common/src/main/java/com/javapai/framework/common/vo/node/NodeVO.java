@@ -5,7 +5,7 @@ import com.javapai.framework.common.I_KV;
 /**
  * 结点-VO值对象。<br>
  * 
- * 结点对象由两个【基本属性（key和value）】和两个【可选属性（icon和url）】组成。<br>
+ * 结点对象由两个【必选属性（key和value）】和两个【可选属性（icon和route）】组成。<br>
  * 
  * @author pooja
  *
@@ -24,9 +24,9 @@ public class NodeVO implements I_KV<String, String> {
 	 */
 	private String icon;
 	/**
-	 * 结点跳转。
+	 * 结点路由(jump url)
 	 */
-	private String url;
+	private String route;
 
 	public NodeVO() {
 		super();
@@ -67,12 +67,12 @@ public class NodeVO implements I_KV<String, String> {
 		this.icon = icon;
 	}
 
-	public String getUrl() {
-		return url;
+	public String getRoute() {
+		return route;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setRoute(String route) {
+		this.route = route;
 	}
 
 }
