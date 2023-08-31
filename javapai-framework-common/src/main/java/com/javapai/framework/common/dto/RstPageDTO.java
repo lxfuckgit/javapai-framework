@@ -1,6 +1,6 @@
 package com.javapai.framework.common.dto;
 
-import com.javapai.framework.pagination.Paginate;
+import com.javapai.framework.common.page.Paginate;
 
 /**
  * 默认分页DTO参数说明。<br>

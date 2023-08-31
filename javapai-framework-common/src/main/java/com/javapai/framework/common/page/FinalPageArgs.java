@@ -1,12 +1,12 @@
-package com.javapai.framework.pagination;
+package com.javapai.framework.common.page;
 
 /**
- * 分页参数对象.<br>
+ * 数据分页对象（组合情况下用）。<br>
  * 
  * <br>
  * 此对象应用于在分页场景下的参数处理(此处组合优于继承)，默认情况下pageSize的页记录数为20条，页索引号为1。<br>
  */
-public final class PageArgs {
+public final class FinalPageArgs implements Paginate {
 	/**
 	 * 页-记录数.
 	 */
@@ -16,9 +16,10 @@ public final class PageArgs {
 	 */
 	private int pageIndex;
 
+	@Override
 	public int getPageSize() {
-		if (pageSize <= 20) {
-			return 20;
+		if (pageSize < 1) {
+			pageSize = DEFAULT_PAGE_SIZE;
 		}
 		return pageSize;
 	}
@@ -27,9 +28,10 @@ public final class PageArgs {
 		this.pageSize = pageSize;
 	}
 
+	@Override
 	public int getPageIndex() {
 		if (pageIndex <= 0) {
-			return 1;
+			pageIndex = DEFAULT_PAGE_INDEX;
 		}
 		return pageIndex;
 	}
@@ -38,5 +40,9 @@ public final class PageArgs {
 		this.pageIndex = pageIndex;
 	}
 
+	@Override
+	public int getStartIndex() {
+		return 0;
+	}
 
 }

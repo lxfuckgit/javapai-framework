@@ -1,12 +1,11 @@
-package com.javapai.framework.pagination;
+package com.javapai.framework.common.page;
 
 /**
  * 分页动作/分页请求.<br>
  * <br>
  * <p>
- * 用来描述一次分页过程中参数 .<br>
+ * 定义数据分页过程的属性和行为，功能类似于 {@link org.springframework.data.domain.Pageable} 对象<br>
  * 
- * @see org.springframework.data.domain.Pageable
  * 
  * @author liu.xiang
  *
@@ -20,7 +19,7 @@ public interface Paginate {
 	 * 
 	 */
 	public static final int DEFAULT_PAGE_INDEX = 1;
-	
+
 	/**
 	 * 返回当前页记录条数.<br>
 	 * 
@@ -32,9 +31,10 @@ public interface Paginate {
 	 * 返回当前页索引.<br>
 	 */
 	int getPageIndex();
-	
+
 	/**
 	 * 返回数据起始行索引.<br>
+	 * 
 	 * @return
 	 */
 	int getStartIndex();

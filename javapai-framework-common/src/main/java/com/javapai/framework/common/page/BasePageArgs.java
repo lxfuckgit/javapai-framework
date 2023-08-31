@@ -1,7 +1,7 @@
-package com.javapai.framework.pagination;
+package com.javapai.framework.common.page;
 
 /**
- * 继承情况下用.<br>
+ * 数据分页对象（继承情况下用）。<br>
  * 
  * @author pooja
  *
@@ -42,7 +42,6 @@ public abstract class BasePageArgs implements Paginate {
 
 	@Override
 	public int getPageSize() {
-		// TODO Auto-generated method stub
 		if (pageSize <= DEFAULT_PAGE_SIZE) {
 			return DEFAULT_PAGE_SIZE;
 		}
@@ -51,7 +50,6 @@ public abstract class BasePageArgs implements Paginate {
 
 	@Override
 	public int getPageIndex() {
-		// TODO Auto-generated method stub
 		if (pageIndex <= 0) {
 			return DEFAULT_PAGE_INDEX;
 		}
@@ -60,7 +58,6 @@ public abstract class BasePageArgs implements Paginate {
 
 	@Override
 	public int getStartIndex() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
