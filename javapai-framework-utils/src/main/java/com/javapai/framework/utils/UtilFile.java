@@ -23,6 +23,8 @@ import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -495,6 +497,68 @@ public final class UtilFile {
 	public void createJar(String filepath) {
 
 	}
+	
+	/**
+	 * 检查目录是否存在。
+	 * 
+	 * @param dirpath
+	 * @return
+	 */
+	public static boolean checkDir(String dirpath) {
+		Path path = new File(dirpath).toPath();
+		return Files.isDirectory(path);
+	};
+	
+	/**
+	 * 检查目录并创建目录。
+	 * 
+	 * @param dirpath
+	 * @return
+	 */
+	public synchronized static boolean checkAndCreateDir(String dirpath) {
+		File file = new File(dirpath);
+		if (!Files.isDirectory(file.toPath())) {
+			if(file.mkdir()) {
+				log.info("--->create new folder[{}]!", dirpath);
+				return true;
+			} else {
+				log.info("--->create new folder error!!");
+				return false;
+			}
+		}
+		return false;
+	};
+	
+	/**
+	 * 检查目录并创建目录。
+	 * 
+	 * @param dirpath
+	 * @return
+	 */
+	public synchronized static boolean checkAndCreateDirs(String dirpath) {
+		File file = new File(dirpath);
+		if (!Files.isDirectory(file.toPath())) {
+			if(file.mkdirs()) {
+				log.info("--->create new folders[{}]!", dirpath);
+				return true;
+			} else {
+				log.info("--->create new folders error!!");
+				return false;
+			}
+		}
+		return false;
+	};
+
+	/**
+	 * 检查文件是否存在。
+	 * 
+	 * @param filepath
+	 * @return
+	 */
+	public static boolean checkFile(String filepath) {
+		Path path = new File(filepath).toPath();
+		return Files.isRegularFile(path);
+	};
 	
 	/**
 	 * 检查文件夹是否不为空
