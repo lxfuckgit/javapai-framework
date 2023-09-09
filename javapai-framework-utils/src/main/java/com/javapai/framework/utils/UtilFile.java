@@ -241,69 +241,6 @@ public final class UtilFile {
 	}
 
 	/**
-	 * 将指定文件内容写入到指定路径下.<br>
-	 * 
-	 * @param file
-	 *            原文件
-	 * @param targetFilePath
-	 *            保存路径
-	 * @return 错误信息，默认为空
-	 */
-	public static boolean copyFileToFile(File file, String targetFilePath) {
-		try {
-			File targetFile = new File(targetFilePath);
-			return writeToFile(new FileInputStream(file), targetFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		} finally {
-			return false;
-		}
-	}
-	
-	/**
-	 * 将指定的数据流写入到指定文件中.<br>
-	 * 
-	 * @param inStream
-	 *            数据流.<br>
-	 * @param targetFile
-	 *            目标文件.<br>
-	 * @return
-	 */
-	public static boolean writeToFile(InputStream inStream, File targetFile) {
-		FileOutputStream out = null;
-		try {
-			byte[] bs = IOUtils.toByteArray(inStream);
-			out = new FileOutputStream(targetFile, true);
-			// 拷贝数据到新文件
-			IOUtils.write(bs, out);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		} finally {
-			if (null != inStream) {
-				try {
-					inStream.close();
-					inStream = null;
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
-				}
-			}
-			if (null != out) {
-				try {
-					out.close();
-					out = null;
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-	
-	/**
 	 * 以字节为单位读取文件，常用于读二进制文件，如图片、声音、影像等文件。
 	 * 
 	 * @param fileName
