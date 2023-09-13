@@ -37,6 +37,7 @@ public abstract class BaseRstDTO extends BaseDTO {
 	/**
 	 * 请求来源产线(相当于以前字段中的addProduct).<br>
 	 * 取值参考{@link ProductLine.java}
+	 * @deprecated 与appId属性重复性比较大，暂时取消。
 	 */
 	private String productLine;
 
@@ -57,14 +58,14 @@ public abstract class BaseRstDTO extends BaseDTO {
 	// * 由RequestResponse.requestArgs代替。
 	// */
 	// private String requestArgs;
-
+	@Deprecated
 	public String getProductLine() {
 		if(null == productLine) {
 			productLine = "_NA_";
 		}
 		return productLine;
 	}
-
+	@Deprecated
 	public void setProductLine(String productLine) {
 		this.productLine = productLine;
 	}
