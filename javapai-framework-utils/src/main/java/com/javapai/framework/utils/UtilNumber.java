@@ -1,6 +1,7 @@
 package com.javapai.framework.utils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -70,7 +71,6 @@ import java.text.SimpleDateFormat;
 public class UtilNumber {
     // default scale and rounding mode for BigDecimals
     private static final int DEFAULT_BD_SCALE = 2;
-    private static final int DEFAULT_BD_ROUNDING_MODE = BigDecimal.ROUND_HALF_UP;
 
 	/**
 	 * return true if characer c is a digit(0-9)
@@ -276,21 +276,21 @@ public class UtilNumber {
 		return d;
 	}
 	
-    public static BigDecimal A_Divide_B(BigDecimal a,BigDecimal b) {
-    	return A_Divide_B(a, b, DEFAULT_BD_SCALE, DEFAULT_BD_ROUNDING_MODE);
-    }
+	public static BigDecimal A_Divide_B(BigDecimal a, BigDecimal b) {
+		return A_Divide_B(a, b, DEFAULT_BD_SCALE, RoundingMode.HALF_UP);
+	}
     
-    public static BigDecimal A_Divide_B(BigDecimal a,BigDecimal b,int scale, int roundingMode) {
-    	if (UtilValidate.isNotEmpty(a) && UtilValidate.isNotEmpty(b)){
-    		if(b.doubleValue()==0) {
-    			return new BigDecimal("0.0").setScale(scale);
-    		} else {
-    			return a.divide(b,scale,BigDecimal.ROUND_HALF_UP);
-    		}
+	public static BigDecimal A_Divide_B(BigDecimal a, BigDecimal b, int scale, RoundingMode roundingMode) {
+		if (UtilValidate.isNotEmpty(a) && UtilValidate.isNotEmpty(b)) {
+			if (b.doubleValue() == 0) {
+				return new BigDecimal("0.0").setScale(scale);
+			} else {
+				return a.divide(b, scale, roundingMode);
+			}
 		} else {
 			return new BigDecimal("0.0").setScale(scale);
 		}
-    }
+	}
     
     /**
      * Convert String to long
@@ -328,5 +328,5 @@ public class UtilNumber {
             return def;
         }
     }
-
+    
 }
