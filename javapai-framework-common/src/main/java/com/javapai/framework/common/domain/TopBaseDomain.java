@@ -24,7 +24,7 @@ public abstract class TopBaseDomain {
 	 * 创建时间(系统|数据库自动生成).<br>
 	 * 格式:yyyy-MM-dd hh:mm;类型(VARCHAR2(16)):<br>
 	 */
-	@Column(name = "create_time", length = 30, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@Column(name = "create_time", length = 30, nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp createTime; // private String createTime;
 	/**
 	 * 修改时间(数据版本锁).<br>
