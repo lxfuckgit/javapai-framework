@@ -18,9 +18,12 @@ import org.apache.commons.io.IOUtils;
 public final class UtilFileWriter {
 	/**
 	 * 将指定的数据流内容写入到指定文件中.<br>
+	 * <br>
 	 * 
-	 * @param inStream   数据流.<br>
-	 * @param targetFile 目标文件.<br>
+	 * <strong>提示：</strong>inputStream流在写入完成后会关闭。
+	 * 
+	 * @param inputStream 数据流.<br>
+	 * @param targetFile  目标文件.<br>
 	 * @return
 	 */
 	public static boolean writeToFile(InputStream inputStream, File targetFile) {
