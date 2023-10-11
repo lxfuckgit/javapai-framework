@@ -22,7 +22,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import com.javapai.framework.config.TableFormat;
-import com.javapai.framework.fileparse.excel.config.SheetConfig;
+import com.javapai.framework.fileparse.excel.config.ReadSheetConfig;
 
 /**
  * 事件模式解析Excel内容。<br>
@@ -33,13 +33,13 @@ import com.javapai.framework.fileparse.excel.config.SheetConfig;
 public final class POIEventReader implements IExcelReader {
 	protected static Logger log = LoggerFactory.getLogger(POIEventReader.class);
 
-	protected SheetConfig config;
+	protected ReadSheetConfig config;
 
 	public POIEventReader() {
-		this.config = new SheetConfig();
+		this.config = new ReadSheetConfig();
 	}
 
-	public POIEventReader(SheetConfig config) {
+	public POIEventReader(ReadSheetConfig config) {
 		this.config = config;
 	}
 
@@ -50,7 +50,7 @@ public final class POIEventReader implements IExcelReader {
 	}
 
 	@Override
-	public TableFormat readSheet(File file, int sheetIndex, SheetConfig config) {
+	public TableFormat readSheet(File file, int sheetIndex, ReadSheetConfig config) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -68,8 +68,7 @@ public final class POIEventReader implements IExcelReader {
 	}
 
 	@Override
-	public TableFormat readSheet(InputStream strean, int sheetIndex, SheetConfig config) {
-		// TODO Auto-generated method stub
+	public TableFormat readSheet(InputStream strean, int sheetIndex, ReadSheetConfig config) {
 		InputStream sheetStream = null;
 		try {
 			/* 初始化 */
@@ -93,14 +92,12 @@ public final class POIEventReader implements IExcelReader {
 			/* 返回表单内容 */
 			return handler.getTableFormat();
 		} catch (IOException | OpenXML4JException | SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			if(null != sheetStream) {
 				try {
 					sheetStream.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -111,12 +108,11 @@ public final class POIEventReader implements IExcelReader {
 
 	@Override
 	public TableFormat readSheet(InputStream strean, String sheetName) {
-		// TODO Auto-generated method stub
 		return readSheet(strean, sheetName, this.config);
 	}
 
 	@Override
-	public TableFormat readSheet(InputStream strean, String sheetName, SheetConfig config) {
+	public TableFormat readSheet(InputStream strean, String sheetName, ReadSheetConfig config) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -251,7 +247,7 @@ public final class POIEventReader implements IExcelReader {
 	private class Excel07EventHandler extends DefaultHandler {
 		private TableFormat table = new TableFormat();
 
-		private SheetConfig config;
+		private ReadSheetConfig config;
 		/* 共享字符串表 */
 		private SharedStringsTable sst;
 		/* 上一次内容 */
@@ -269,10 +265,10 @@ public final class POIEventReader implements IExcelReader {
 
 		private Excel07EventHandler(SharedStringsTable sst) {
 			this.sst = sst;
-			this.config = new SheetConfig();
+			this.config = new ReadSheetConfig();
 		}
 
-		private Excel07EventHandler(SharedStringsTable sst, SheetConfig config) {
+		private Excel07EventHandler(SharedStringsTable sst, ReadSheetConfig config) {
 			this.sst = sst;
 			this.config = config;
 		}
@@ -375,6 +371,30 @@ public final class POIEventReader implements IExcelReader {
 
 	@Override
 	public List<TableFormat> readFile(String filePath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TableFormat readSheet(File file, String sheetName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TableFormat readSheet(File file, String sheetName, ReadSheetConfig config) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TableFormat> readFile(File file, ReadSheetConfig config) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TableFormat> readFile(InputStream inputStream, ReadSheetConfig config) {
 		// TODO Auto-generated method stub
 		return null;
 	}

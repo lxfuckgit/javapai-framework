@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import com.javapai.framework.config.TableFormat;
-import com.javapai.framework.fileparse.excel.config.SheetConfig;
+import com.javapai.framework.fileparse.excel.config.ReadSheetConfig;
 
 /**
  * 利用JXL策略去实现Excel的数据读取操作。<br>
@@ -33,7 +33,7 @@ public final class JXLNormalReader extends JXLExcelReader {
 	}
 
 	@Override
-	public TableFormat readSheet(InputStream strean, int sheetIndex, SheetConfig config) {
+	public TableFormat readSheet(InputStream strean, int sheetIndex, ReadSheetConfig config) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -45,7 +45,7 @@ public final class JXLNormalReader extends JXLExcelReader {
 	}
 
 	@Override
-	public TableFormat readSheet(InputStream strean, String sheetName, SheetConfig config) {
+	public TableFormat readSheet(InputStream strean, String sheetName, ReadSheetConfig config) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -69,7 +69,7 @@ public final class JXLNormalReader extends JXLExcelReader {
 	}
 
 	@Override
-	public TableFormat readSheet(File File, int sheetIndex, SheetConfig config) {
+	public TableFormat readSheet(File File, int sheetIndex, ReadSheetConfig config) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -82,6 +82,30 @@ public final class JXLNormalReader extends JXLExcelReader {
 
 	@Override
 	public List<TableFormat> readFile(String filePath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TableFormat readSheet(File file, String sheetName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TableFormat readSheet(File file, String sheetName, ReadSheetConfig config) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TableFormat> readFile(File file, ReadSheetConfig config) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TableFormat> readFile(InputStream inputStream, ReadSheetConfig config) {
 		// TODO Auto-generated method stub
 		return null;
 	}

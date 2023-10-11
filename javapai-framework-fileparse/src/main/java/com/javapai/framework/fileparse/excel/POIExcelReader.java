@@ -166,7 +166,7 @@ public abstract class POIExcelReader implements IExcelReader {
 					// throw new IOException("列名不允许为空");
 					datamap.put(index, "列[" + index + "]");
 				} else {
-					datamap.put(index, row.getCell(index).getStringCellValue());
+					datamap.put(index, row.getCell(index).getStringCellValue().trim());
 				}
 			}
 		} else if (row.getRowNum() >= 1 && firstCell >= 0) {// 加条件是因为有些情况下，firstCell为-1.
