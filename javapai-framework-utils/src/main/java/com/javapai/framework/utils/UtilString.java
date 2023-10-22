@@ -312,25 +312,28 @@ public class UtilString {
 		return org.apache.commons.lang3.StringEscapeUtils.unescapeHtml3(str);
 	}
 
-    /**
-     * 将str将多个分隔符进行切分，
-     * 
-     * 示例：StringTokenizerUtils.split("1,2;3 4"," ,;");
-     * 返回: ["1","2","3","4"]
-     * 
-     * @param str
-     * @param seperators
-     * @return
-     */
-	public static String[] split(String str,String seperators) {
-		StringTokenizer tokenlizer = new StringTokenizer(str,seperators);
+	/**
+	 * 将str将多个分隔符进行切分，
+	 * 
+	 * 示例：<br>
+	 * StringTokenizerUtils.split("1,2;3 4"," ,;"); <br>
+	 * 返回: ["1","2","3","4"]
+	 * 
+	 * @param str
+	 * @param seperators
+	 * @return
+	 */
+	public static String[] split(String str, String seperators) {
+		// String.spilt("：")由于性能比StringTokenizer差，所以不采用spilt方式。
+		//https://blog.csdn.net/m0_37762662/article/details/122928641
+		StringTokenizer tokenlizer = new StringTokenizer(str, seperators);
 		List<String> result = new ArrayList<String>();
-		
-		while(tokenlizer.hasMoreElements()) {
+
+		while (tokenlizer.hasMoreElements()) {
 			Object s = tokenlizer.nextElement();
 			result.add(s.toString());
 		}
-		return (String[])result.toArray(new String[result.size()]);
+		return (String[]) result.toArray(new String[result.size()]);
 	}
 	
 	/**
@@ -703,5 +706,51 @@ public class UtilString {
 		}
 		return true;
 	}
+	
+	/**
+	 * 字符串（Str）是否包含any数组中任何一项。
+	 * @param str
+	 * @param any 一个可变的String数组。
+	 * @return
+	 */
+	public static boolean containsAny(String str, String... any) {
+		if (null == str || str.length() == 0) {
+			return false;
+		}
+		if (null == any || any.length == 0) {
+			return false;
+		}
+		for (int i = 0; i < any.length; i++) {
+			if (str.contains(any[i])) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+//	public static boolean containsAny(String str, String... testStrs) {
+//		return containsAny(str, testStrs);
+//	}
+	
+	/**
+	 * 查找指定字符串是否包含指定字符串列表中的任意一个字符串，如果包含返回找到的第一个字符串
+	 *
+	 * @param str      指定字符串
+	 * @param testStrs 需要检查的字符串数组
+	 * @return 被包含的第一个字符串
+	 * @since 3.2.0
+	 */
+//	public static boolean containsAny(CharSequence str, CharSequence... testStrs) {
+//		if (isEmpty(str) || ArrayUtil.isEmpty(testStrs)) {
+//			return null;
+//		}
+//		for (CharSequence checkStr : testStrs) {
+//			if (str.toString().contains(checkStr)) {
+//				return checkStr.toString();
+//			}
+//		}
+//		return null;
+//	}
+
 
 }
