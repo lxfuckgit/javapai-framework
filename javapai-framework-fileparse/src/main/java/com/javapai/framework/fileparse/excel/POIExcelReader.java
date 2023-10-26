@@ -145,10 +145,10 @@ public abstract class POIExcelReader implements IExcelReader {
 	}
 	
 	protected Map<Integer, Object> readRow(Row row) {
-		return readRow(row, 0);
+		return readRow(row, 0, 0);
 	}
 	
-	protected Map<Integer, Object> readRow(Row row, int position) {
+	protected Map<Integer, Object> readRow(Row row, int x1Position, int y2Position) {
 //		short lastCell = row.getLastCellNum(); //获取最后一个不为空的列的索引值.
 		short firstCell = row.getFirstCellNum();// 获取第一个不为空的列的索引值.
 		int totalCells = row.getPhysicalNumberOfCells(); // 获取不为空的列的个数。
@@ -160,20 +160,20 @@ public abstract class POIExcelReader implements IExcelReader {
 
 		/* 如果是第一行，我们当表头行处理，其它行当数据行处理 */
 		if (row.getRowNum() <= 0 || row.getRowNum() == 0) {
-			for (int index = firstCell - position; index < totalCells - firstCell; index++) {
+			for (int index = firstCell - x1Position; index < totalCells - firstCell; index++) {
 				// if (row.getCell(index).getStringCellValue().trim().length() == 0) {
 				if (null == row.getCell(index) || null == row.getCell(index).getStringCellValue()) {
 					// throw new IOException("列名不允许为空");
-					datamap.put(index, "列[" + index + "]");
+					datamap.put(index + y2Position, "列[" + index + "]");
 				} else {
-					datamap.put(index, row.getCell(index).getStringCellValue().trim());
+					datamap.put(index + y2Position, row.getCell(index).getStringCellValue().trim());
 				}
 			}
 		} else if (row.getRowNum() >= 1 && firstCell >= 0) {// 加条件是因为有些情况下，firstCell为-1.
 			//for (int index = firstCell; index < totalCells; index++) {
-			for (int index = firstCell - position; index < row.getLastCellNum(); index++) {
+			for (int index = firstCell - x1Position; index < row.getLastCellNum(); index++) {
 				Object fieldValue = readCell(row.getCell(index));
-				datamap.put(index, fieldValue);
+				datamap.put(index + y2Position, fieldValue);
 			}
 		}
 
@@ -189,7 +189,8 @@ public abstract class POIExcelReader implements IExcelReader {
 	private Object readCell(Cell cell) {
 		if (null == cell) {
 			// row.getLastCellNum()与row.getPhysicalNumberOfCells()不相等时，会出现此类情况.
-			return null;
+			return "";
+			// return null; // 这里不返回NULL了，后面也就不用进行java.util.Objects.isNULL()判断；
 		}
 		
 		Object cellValue = null;

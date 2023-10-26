@@ -88,14 +88,14 @@ public class POINormalReaderStrategy extends POIExcelReader {
 		}
 
 		TableFormat table = new TableFormat();
-		// for (Row row : sheet) {//此迭代方式无法迭代空行的数据
+		// 记录：这里没有采用【for (Row row : sheet)】的形式的原因是于foreach方式无法迭代出空行的数据，且在提示语上也无法定位行标位置。
 		for (int index = 0; index <= rows; index++) {
 			Row row = sheet.getRow(index);
 			if (emptyRow(row)) {
 				log.info(">>>提示：检测到空行，行标位置{}！", (index + 1));
 				continue;
 			}
-			Map<Integer, Object> data = readRow(row, config.getPosition());
+			Map<Integer, Object> data = readRow(row, config.getPosition(), config.getX2Position());
 			if (row.getRowNum() >= config.getDataIndex() - 1) {
 				// config.getDataIndex-1：将用户指定索引号转化为系统索引号。
 				table.addContent(data);

@@ -32,12 +32,20 @@ public final class ReadSheetConfig extends XConfig {
 //	private int sheetIndex;
 	
 	/**
-	 * 指定当前sheet表单的标题行[titleIndex]和数据行[dataIndex]的Y轴数据坐标偏移量，用以实现<strong>从指定列</strong>开始读取数据。<br>
+	 * 读取偏移量(默认值：0)。<br>
 	 * <br>
-	 * <strong>提示：</strong>默认偏移量为0，即每行数据位置不需要偏移（每行的数据都很常规的将坐标0的位置作为首行首列内容单元格）。
+	 * 指定当前sheet表单的标题行[titleIndex]和数据行[dataIndex]的Y轴上数据<strong>读取坐标</strong>的偏移量，用以实现<strong>从指定列</strong>开始读取数据。<br>
 	 * <br>
+	 * <strong>提示：</strong>默认偏移量为0，即每行数据位置不需要偏移（每行的数据都很常规的将坐标0的位置作为首行首列内容单元格）。 <br>
 	 */
 	private int position;
+	
+	/**
+	 * 存储偏移量(默认值：0)。<br>
+	 * <br>
+	 * 指定当前sheet表单的标题行[titleIndex]和数据行[dataIndex]的Y轴上数据<strong>存储坐标</strong>的偏移量，用以实现将<strong>[x,1]坐标的数据放到[x,1x2Position]</strong>坐标上。<br>
+	 */
+	private int x2Position;
 
 	/**
 	 * 指定当前sheet表单的标题行在X轴的行号。<br>
@@ -123,6 +131,25 @@ public final class ReadSheetConfig extends XConfig {
 	 */
 	public void setPosition(int position) {
 		this.position = position;
+	}
+	
+	/**
+	 * 读取Y轴数据坐标偏移量。<br>
+	 * 
+	 * @see #x2Position
+	 * @return
+	 */
+	public int getX2Position() {
+		return x2Position;
+	}
+
+	/**
+	 * 设置Y轴数据坐标偏移量。<br>
+	 * 
+	 * @param x2Position
+	 */
+	public void setX2Position(int x2Position) {
+		this.x2Position = x2Position;
 	}
 
 	/**
