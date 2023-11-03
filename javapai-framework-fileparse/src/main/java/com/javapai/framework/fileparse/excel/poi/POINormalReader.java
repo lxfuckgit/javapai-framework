@@ -1,4 +1,4 @@
-package com.javapai.framework.fileparse.excel.strategy;
+package com.javapai.framework.fileparse.excel.poi;
 
 import java.io.File;
 import java.io.InputStream;
@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.javapai.framework.config.TableFormat;
-import com.javapai.framework.fileparse.excel.POIExcelReader;
 import com.javapai.framework.fileparse.excel.config.ReadSheetConfig;
 
 /**
@@ -26,16 +25,16 @@ import com.javapai.framework.fileparse.excel.config.ReadSheetConfig;
  * @author pooja
  *
  */
-public class POINormalReaderStrategy extends POIExcelReader {
-	protected static Logger log = LoggerFactory.getLogger(POINormalReaderStrategy.class);
+public class POINormalReader extends POIExcelReader {
+	protected static Logger log = LoggerFactory.getLogger(POINormalReader.class);
 
 	protected ReadSheetConfig config;
 
-	public POINormalReaderStrategy() {
+	public POINormalReader() {
 		this.config = new ReadSheetConfig();
 	}
 
-	public POINormalReaderStrategy(ReadSheetConfig config) {
+	public POINormalReader(ReadSheetConfig config) {
 		this.config = config;
 	}
 
@@ -135,9 +134,11 @@ public class POINormalReaderStrategy extends POIExcelReader {
 
 	@Override
 	public TableFormat readSheet(InputStream strean, int sheetIndex) {
-		return readSheet(getWorkbook(strean).getSheetAt(convertSheetIndex(sheetIndex)));
+		// 将用户级的索引号(约定从1开始)转换成系统级索引号（约定从0开始）。
+		int newSheetIndex = (sheetIndex <= 0) ? sheetIndex : sheetIndex - 1;
+		return readSheet(getWorkbook(strean).getSheetAt(newSheetIndex));
 	}
-
+	
 	@Override
 	public TableFormat readSheet(InputStream strean, int sheetIndex, ReadSheetConfig config) {
 		return readSheet(getWorkbook(strean).getSheetAt(sheetIndex), config);
@@ -293,20 +294,6 @@ public class POINormalReaderStrategy extends POIExcelReader {
 			list.add(readSheet(workBook.getSheetAt(i), config));
 		}
 		return list;
-	}
-
-	/**
-	 * 将用户级的索引号转换成系统级索引号。
-	 * 
-	 * @param sheetIndex 用户指定索引号。
-	 * @return 用户索引号对应的系统索引号。
-	 */
-	private int convertSheetIndex(int sheetIndex) {
-		if (sheetIndex <= 0) {
-			return sheetIndex;
-		} else {
-			return sheetIndex - 1;
-		}
 	}
 
 }

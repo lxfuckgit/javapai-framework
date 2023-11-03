@@ -1,4 +1,4 @@
-package com.javapai.framework.fileparse.excel;
+package com.javapai.framework.fileparse.excel.jxl;
 
 import java.io.File;
 import java.io.InputStream;

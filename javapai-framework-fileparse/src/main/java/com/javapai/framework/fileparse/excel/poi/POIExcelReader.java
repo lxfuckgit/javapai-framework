@@ -1,8 +1,9 @@
-package com.javapai.framework.fileparse.excel;
+package com.javapai.framework.fileparse.excel.poi;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.javapai.framework.config.TableFormat;
+import com.javapai.framework.fileparse.excel.IExcelReader;
 import com.javapai.framework.fileparse.excel.config.ReadSheetConfig;
 
 /**
@@ -180,6 +182,8 @@ public abstract class POIExcelReader implements IExcelReader {
 		return datamap;
 	}
 	
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	
 	/**
 	 * 返回单元格内容.<br>
 	 * 
@@ -197,7 +201,13 @@ public abstract class POIExcelReader implements IExcelReader {
 		switch (cell.getCellType()) {
 		case Cell.CELL_TYPE_NUMERIC:
 			if (DateUtil.isCellDateFormatted(cell)) {
-				cellValue = cell.getDateCellValue();
+//				if ("yyyy-MM-dd".equals(cell.getCellStyle().getDataFormatString())) {
+				if (cell.getCellStyle().getDataFormat() == 164) {
+					// 164包含：yyyy-mm-dd、yyyy-MM-dd、yyyy/MM/dd等等。
+					cellValue = sdf.format(cell.getDateCellValue());
+				} else {
+					cellValue = cell.getDateCellValue();
+				}
 			} else {
 				// cellValue = cell.getNumericCellValue();
 				cell.setCellType(Cell.CELL_TYPE_STRING);
