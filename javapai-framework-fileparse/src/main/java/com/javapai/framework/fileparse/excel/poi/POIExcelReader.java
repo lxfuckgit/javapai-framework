@@ -22,7 +22,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.javapai.framework.config.TableFormat;
 import com.javapai.framework.fileparse.excel.IExcelReader;
 import com.javapai.framework.fileparse.excel.config.ReadSheetConfig;
 
@@ -44,7 +43,7 @@ import com.javapai.framework.fileparse.excel.config.ReadSheetConfig;
  * @author pooja
  *
  */
-public abstract class POIExcelReader implements IExcelReader {
+public abstract class POIExcelReader<T> implements IExcelReader<T> {
 	protected static Logger log = LoggerFactory.getLogger(POIExcelReader.class);
 	
 	/**
@@ -53,7 +52,7 @@ public abstract class POIExcelReader implements IExcelReader {
 	 * @param workBook
 	 * @return
 	 */
-	public abstract List<TableFormat> readSheet(Workbook workBook);
+	public abstract List<T> readSheet(Workbook workBook);
 
 	/**
 	 * POI通过默认配置读取并解析Sheet工作表的行集数据.<br>
@@ -65,7 +64,7 @@ public abstract class POIExcelReader implements IExcelReader {
 	 * @param sheet
 	 *            excel工作表。<br>
 	 */
-	protected abstract TableFormat readSheet(Sheet sheet);
+	protected abstract T readSheet(Sheet sheet);
 
 	/**
 	 * POI通过指定配置读取并解析Sheet工作表的行集数据.<br>
@@ -76,7 +75,7 @@ public abstract class POIExcelReader implements IExcelReader {
 	 *            sheet配置。<br>
 	 * @return TableFormat工作表对象.<br>
 	 */
-	protected abstract TableFormat readSheet(Sheet sheet, ReadSheetConfig config);
+	protected abstract T readSheet(Sheet sheet, ReadSheetConfig config);
 
 	/**
 	 * 读取指定表单的指定工作表.<br>
@@ -87,11 +86,11 @@ public abstract class POIExcelReader implements IExcelReader {
 	 *            表单索引号。<br>
 	 * @return 当前表单内容。<br>
 	 * 
-	 * @deprecated 过期原因：<br>
-	 *             1:建议用户通过File对象或是InputStream对象得到一个WorkBook对象，而非直接传入一个WorkBook对象。<br>
-	 *             如果用户能直接拿到workBook对象后
+//	 * @deprecated 过期原因：<br>
+//	 *             1:建议用户通过File对象或是InputStream对象得到一个WorkBook对象，而非直接传入一个WorkBook对象。<br>
+//	 *             如果用户能直接拿到workBook对象后
 	 */
-	public abstract TableFormat readSheet(Workbook workBook, int sheetIndex);
+	public abstract T readSheet(Workbook workBook, int sheetIndex);
 
 	/**
 	 * 按指定的配置信息读取指定表单的指定工作表.<br>
@@ -101,7 +100,7 @@ public abstract class POIExcelReader implements IExcelReader {
 	 * @param config
 	 * @return 当前表单内容。<br>
 	 */
-	public abstract TableFormat readSheet(Workbook workBook, int sheetIndex, ReadSheetConfig config);
+	public abstract T readSheet(Workbook workBook, int sheetIndex, ReadSheetConfig config);
 
 	/**
 	 * 读取指定表单的指定工作表.<br>
@@ -110,7 +109,7 @@ public abstract class POIExcelReader implements IExcelReader {
 	 * @param sheetName
 	 * @return
 	 */
-	public abstract TableFormat readSheet(Workbook workBook, String sheetName);
+	public abstract T readSheet(Workbook workBook, String sheetName);
 
 	/**
 	 * 读取指定表单的指定工作表.<br>
@@ -120,7 +119,7 @@ public abstract class POIExcelReader implements IExcelReader {
 	 * @param config
 	 * @return
 	 */
-	public abstract TableFormat readSheet(Workbook workBook, String sheetName, ReadSheetConfig config);
+	public abstract T readSheet(Workbook workBook, String sheetName, ReadSheetConfig config);
 	
 	protected boolean isEmptyRow(Row row) {
 		// TODO Auto-generated method stub
@@ -150,7 +149,7 @@ public abstract class POIExcelReader implements IExcelReader {
 		return readRow(row, 0, 0);
 	}
 	
-	protected Map<Integer, Object> readRow(Row row, int x1Position, int y2Position) {
+	protected Map<Integer, Object> readRow(Row row, int xPosition, int yPosition) {
 //		short lastCell = row.getLastCellNum(); //获取最后一个不为空的列的索引值.
 		short firstCell = row.getFirstCellNum();// 获取第一个不为空的列的索引值.
 		int totalCells = row.getPhysicalNumberOfCells(); // 获取不为空的列的个数。
@@ -162,20 +161,20 @@ public abstract class POIExcelReader implements IExcelReader {
 
 		/* 如果是第一行，我们当表头行处理，其它行当数据行处理 */
 		if (row.getRowNum() <= 0 || row.getRowNum() == 0) {
-			for (int index = firstCell - x1Position; index < totalCells - firstCell; index++) {
+			for (int index = firstCell - xPosition; index < totalCells - firstCell; index++) {
 				// if (row.getCell(index).getStringCellValue().trim().length() == 0) {
 				if (null == row.getCell(index) || null == row.getCell(index).getStringCellValue()) {
 					// throw new IOException("列名不允许为空");
-					datamap.put(index + y2Position, "列[" + index + "]");
+					datamap.put(index + yPosition, "列[" + index + "]");
 				} else {
-					datamap.put(index + y2Position, row.getCell(index).getStringCellValue().trim());
+					datamap.put(index + yPosition, row.getCell(index).getStringCellValue().trim());
 				}
 			}
 		} else if (row.getRowNum() >= 1 && firstCell >= 0) {// 加条件是因为有些情况下，firstCell为-1.
 			//for (int index = firstCell; index < totalCells; index++) {
-			for (int index = firstCell - x1Position; index < row.getLastCellNum(); index++) {
+			for (int index = firstCell - xPosition; index < row.getLastCellNum(); index++) {
 				Object fieldValue = readCell(row.getCell(index));
-				datamap.put(index + y2Position, fieldValue);
+				datamap.put(index + yPosition, fieldValue);
 			}
 		}
 
