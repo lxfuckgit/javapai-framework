@@ -27,7 +27,7 @@ import com.javapai.framework.fileparse.excel.config.ReadSheetConfig;
  * @author pooja
  * 
  */
-public interface IExcelReader extends DocReader<List<TableFormat>> {
+public interface IExcelReader<T> extends DocReader<T> {
 	/**
 	 * 读取Excel的指定表单。<br>
 	 * 
@@ -35,7 +35,7 @@ public interface IExcelReader extends DocReader<List<TableFormat>> {
 	 * @param sheetIndex 索引号。
 	 * @return
 	 */
-	public TableFormat readSheet(File file, int sheetIndex);
+	public T readSheet(File file, int sheetIndex);
 
 	/**
 	 * 
@@ -45,7 +45,7 @@ public interface IExcelReader extends DocReader<List<TableFormat>> {
 	 * 
 	 * @deprecated 建议采用{@link IExcelReader#Sheet(File file, int sheetIndex)}代替。
 	 */
-	public TableFormat readSheet(File file, String sheetName);
+	public T readSheet(File file, String sheetName);
 
 	/**
 	 * 读取Excel的指定表单。<br>
@@ -55,7 +55,7 @@ public interface IExcelReader extends DocReader<List<TableFormat>> {
 	 * @param config     读取配置项。
 	 * @return
 	 */
-	public TableFormat readSheet(File file, int sheetIndex, ReadSheetConfig config);
+	public T readSheet(File file, int sheetIndex, ReadSheetConfig config);
 
 	/**
 	 * 
@@ -65,8 +65,18 @@ public interface IExcelReader extends DocReader<List<TableFormat>> {
 	 * @return
 	 * @deprecated 建议采用{@link IExcelReader#Sheet(File file, int sheetIndex, ReadSheetConfig config)}代替。
 	 */
-	public TableFormat readSheet(File file, String sheetName, ReadSheetConfig config);
+	public T readSheet(File file, String sheetName, ReadSheetConfig config);
 
+	// 所有带SheetConfig参数的方法都采用实例绑类的方式：例如：Xxxx xx = new Xxx(SheetConfig config);
+	/**
+	 * 读取Excel的所有表单。<br>
+	 * 
+	 * @param file   文件句柄。
+	 * @param config
+	 * @return
+	 */
+	public List<T> readFile(File file, ReadSheetConfig config);
+	
 	/**
 	 * 指取指定input输入流中的指定sheent表单。<br>
 	 * 
@@ -74,7 +84,7 @@ public interface IExcelReader extends DocReader<List<TableFormat>> {
 	 * @param sheetIndex  表单序号（默认第1个表单序号为1）。<br>
 	 * @return 格式化后的表单内容。
 	 */
-	public TableFormat readSheet(InputStream inputStream, int sheetIndex);
+	public T readSheet(InputStream inputStream, int sheetIndex);
 
 	/**
 	 * 
@@ -84,7 +94,7 @@ public interface IExcelReader extends DocReader<List<TableFormat>> {
 	 * 
 	 * @deprecated 建议采用{@link IExcelReader#Sheet(InputStream inputStream, int sheetIndex)}代替。
 	 */
-	public TableFormat readSheet(InputStream inputStream, String sheetName);
+	public T readSheet(InputStream inputStream, String sheetName);
 
 	/**
 	 * 
@@ -93,7 +103,7 @@ public interface IExcelReader extends DocReader<List<TableFormat>> {
 	 * @param config
 	 * @return
 	 */
-	public TableFormat readSheet(InputStream inputStream, int sheetIndex, ReadSheetConfig config);
+	public T readSheet(InputStream inputStream, int sheetIndex, ReadSheetConfig config);
 
 	/**
 	 * 
@@ -104,18 +114,8 @@ public interface IExcelReader extends DocReader<List<TableFormat>> {
 	 * 
 	 * @deprecated 建议采用{@link IExcelReader#Sheet(InputStream inputStream, int sheetIndex, ReadSheetConfig config)}代替。
 	 */
-	public TableFormat readSheet(InputStream inputStream, String sheetName, ReadSheetConfig config);
+	public T readSheet(InputStream inputStream, String sheetName, ReadSheetConfig config);
 
-	// 所有带SheetConfig参数的方法都采用实例绑类的方式：例如：Xxxx xx = new Xxx(SheetConfig config);
-	/**
-	 * 读取Excel的所有表单。<br>
-	 * 
-	 * @param file   文件句柄。
-	 * @param config
-	 * @return
-	 */
-	public List<TableFormat> readFile(File file, ReadSheetConfig config);
-	
 	/**
 	 * 指取指定input输入流中的所有表单。<br>
 	 * 
@@ -123,7 +123,7 @@ public interface IExcelReader extends DocReader<List<TableFormat>> {
 	 * @param config
 	 * @return
 	 */
-	public List<TableFormat> readFile(InputStream inputStream, ReadSheetConfig config);
+	public List<T> readFile(InputStream inputStream, ReadSheetConfig config);
 
 	/**
 	 * 返回默认sheet索引标识号。<br>
