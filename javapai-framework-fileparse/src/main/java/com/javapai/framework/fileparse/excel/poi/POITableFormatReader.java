@@ -3,13 +3,10 @@ package com.javapai.framework.fileparse.excel.poi;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -26,7 +23,7 @@ import com.javapai.framework.fileparse.excel.config.ReadSheetConfig;
  *
  */
 public class POITableFormatReader extends POIExcelReader<TableFormat> {
-	protected static Logger log = LoggerFactory.getLogger(POINormalReader.class);
+	protected static Logger log = LoggerFactory.getLogger(POITableFormatReader.class);
 
 	protected ReadSheetConfig config;
 
@@ -95,7 +92,7 @@ public class POITableFormatReader extends POIExcelReader<TableFormat> {
 		// 记录：这里没有采用【for (Row row : sheet)】的形式的原因是于foreach方式无法迭代出空行的数据，且在提示语上也无法定位行标位置。
 		for (int index = 0; index <= rows; index++) {
 			Row row = sheet.getRow(index);
-			if (emptyRow(row)) {
+			if (isEmptyRow(row)) {
 				log.info(">>>提示：检测到空行，行标位置{}！", (index + 1));
 				continue;
 			}
@@ -201,97 +198,4 @@ public class POITableFormatReader extends POIExcelReader<TableFormat> {
 		return list;
 	}
 	
-	private boolean emptyRow(Row row) {
-		if (null == row) {
-			return true;
-		}
-
-		/*
-		 * int cells = 0;// 空单元格记数器。
-		 * Iterator<Cell> iter = row.cellIterator();
-		 * while (iter.hasNext() && iter.next().getCellType() == Cell.CELL_TYPE_BLANK) {
-		 * 		cells++;
-		 * }
-		 * return cells == (row.getLastCellNum() - row.getFirstCellNum());
-		 */
-
-		Iterator<Cell> iter = row.cellIterator();
-		while (iter.hasNext()) {
-			Cell cell = iter.next();
-			if (null != readCell(cell) && !"".equals(readCell(cell))) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * 返回单元格内容.<br>
-	 * 
-	 * @param cell
-	 * @return
-	 */
-	private Object readCell(Cell cell) {
-		if (null == cell) {
-			// row.getLastCellNum()与row.getPhysicalNumberOfCells()不相等时，会出现此类情况.
-			return null;
-		}
-		
-		Object cellValue = null;
-		switch (cell.getCellType()) {
-		case Cell.CELL_TYPE_NUMERIC:
-			if (DateUtil.isCellDateFormatted(cell)) {
-				cellValue = cell.getDateCellValue();
-			} else {
-				// cellValue = cell.getNumericCellValue();
-				cell.setCellType(Cell.CELL_TYPE_STRING);
-				String temp = cell.getStringCellValue();
-				// 判断是否包含小数点，如果不含小数点，则以字符串读取，如果含小数点，则转换为Double类型的字符串
-				if (temp.indexOf(".") > -1) {
-					cellValue = String.valueOf(Double.valueOf(temp)).trim();
-				} else {
-					cellValue = temp.trim();
-				}
-			}
-			break;
-
-		// if string(cell.getCellType() == 1)
-		case Cell.CELL_TYPE_STRING:
-			cellValue = cell.getStringCellValue().trim();
-			break;
-
-		// if boolean(cell.getCellType() == 4)
-		case Cell.CELL_TYPE_BOOLEAN:
-			cellValue = Boolean.toString(cell.getBooleanCellValue());
-			break;
-
-		// if boolean(cell.getCellType() == 2)
-		case Cell.CELL_TYPE_FORMULA:
-			cell.setCellType(Cell.CELL_TYPE_STRING);
-			cellValue = cell.getStringCellValue();
-			if (cellValue != null) {
-				//cellValue = cellValue.replaceAll("#N/A", "").trim();
-			}
-			break;
-		// case XSSFCell.CELL_TYPE_FORMULA:
-		// cellType = cell.getCachedFormulaResultType();
-		// if (cellType == XSSFCell.CELL_TYPE_NUMERIC) {
-		// result = Double.valueOf(cell.getRawValue());
-		// } else {
-		// result = cell.getCellFormula();
-		// }
-		// break;
-		case Cell.CELL_TYPE_BLANK:
-			break;
-			
-		case Cell.CELL_TYPE_ERROR:
-			break;
-			
-		default:
-			break;
-		}
-		
-		return cellValue;
-	}
-
 }

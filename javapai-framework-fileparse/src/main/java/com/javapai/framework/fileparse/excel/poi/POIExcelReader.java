@@ -129,10 +129,10 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 		}
 
 		/*
-		 * int cells = 0;// 空单元格记数器。 Iterator<Cell> iter = row.cellIterator();
-		 * while (iter.hasNext() && iter.next().getCellType() ==
-		 * Cell.CELL_TYPE_BLANK) { cells++; } return cells ==
-		 * (row.getLastCellNum() - row.getFirstCellNum());
+		 * int cells = 0;// 空单元格记数器。 
+		 * Iterator<Cell> iter = row.cellIterator();
+		 * while (iter.hasNext() && iter.next().getCellType() == Cell.CELL_TYPE_BLANK) { cells++; } 
+		 * return cells == (row.getLastCellNum() - row.getFirstCellNum());
 		 */
 
 		Iterator<Cell> iter = row.cellIterator();
