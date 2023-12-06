@@ -3,6 +3,7 @@ package com.javapai.framework.common.service;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.util.StringUtils;
 
 import com.javapai.framework.action.PageResult;
 import com.javapai.framework.action.ResultBuilder;
@@ -18,6 +19,9 @@ import com.javapai.framework.constant.CL_Database;
  *
  */
 public abstract class AbstractBizService implements TopBaseService {
+	@org.springframework.beans.factory.annotation.Autowired
+	private org.springframework.core.env.Environment environment;
+	
 	@org.springframework.beans.factory.annotation.Autowired
 	protected org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
 	
@@ -71,11 +75,11 @@ public abstract class AbstractBizService implements TopBaseService {
 	public <T> PageResult<T> getPage(String sql, Integer pageIndex, Integer pageSize, Class<T> mappedClass, Object... sqlArgs) {
 		Integer totalRecord = this.getSqlCount(sql, sqlArgs);
 		if (null != pageIndex && null != pageSize) {
-			sql = this.getPageSQL(sql, pageIndex - 1, pageSize);
+			sql = this.getPageSQL(sql, pageIndex, pageSize);
 		}
 
 		List<T> list = jdbcTemplate.query(sql, sqlArgs, new BeanPropertyRowMapper<T>(mappedClass));
-		return ResultBuilder.buildPageResult((pageIndex / pageSize) + 1, pageSize, list, totalRecord);
+		return ResultBuilder.buildPageResult(pageIndex, pageSize, list, totalRecord);
 	}
 	
 	/**
@@ -84,26 +88,28 @@ public abstract class AbstractBizService implements TopBaseService {
 	 * @return
 	 */
 	private String getDefaultDBType() {
-		// String dbType = getSystemConfig().get("system.db.type");
-		// if (StringUtils.isEmpty(dbType))
-		// {
-		// dbType = "MySQL";
-		// }
-		// return dbType;
-		return CL_Database.DATABASE_TYPE_MYSQL;
+		String dbType = environment.getProperty("config.system.dbtype");
+		if (StringUtils.isEmpty(dbType)) {
+			return CL_Database.DATABASE_TYPE_MYSQL;
+		} else {
+			return dbType;
+		}
 	}
 	
 	/**
 	 * 数据分页查询.
 	 * 
+	 * <strong>重要提示：<strong>
+	 * pageIndex和pageSize最小值要求符合{@linkplain com.javapai.framework.common.page.Paginate}接口中定义的规范。
+	 * 
 	 * @param sql
-	 * @param startIndex
+	 * @param pageIndex
 	 * @param pageSize
 	 * @return
 	 */
-	private String getPageSQL(String sql, Integer startIndex, Integer pageSize) {
+	private String getPageSQL(String sql, Integer pageIndex, Integer pageSize) {
 		String dbType = this.getDefaultDBType();
-		return this.getPageSQL(sql, dbType, startIndex, pageSize);
+		return this.getPageSQL(sql, dbType, pageIndex, pageSize);
 	}
 	
 	/**
@@ -113,17 +119,19 @@ public abstract class AbstractBizService implements TopBaseService {
 	 *            :SQL
 	 * @param dbType
 	 *            数据库类型<br>
-	 * @param startIndex
+	 * @param pageIndex
 	 *            起始索引<br>
 	 * @param pageSize
 	 *            分页大小<br>
 	 * @return
 	 */
-	private String getPageSQL(String sql, String dbType, Integer startIndex, Integer pageSize) {
+	private String getPageSQL(String sql, String dbType, Integer pageIndex, Integer pageSize) {
 		if (dbType.equals(CL_Database.DATABASE_TYPE_MYSQL)) {
-			return this.getMySQLPageSQL(sql, startIndex, pageSize);
+			return this.getMySQLPageSQL(sql, pageIndex, pageSize);
+		} else if (dbType.equals(CL_Database.DATABASE_TYPE_SQLITE)) {
+			return this.getSQLitePageSQL(sql, pageIndex, pageSize);
 		} else if (dbType.equals(CL_Database.DATABASE_TYPE_ORALCE)) {
-			return this.getOraclePageSQL(sql, startIndex, pageSize);
+			return this.getOraclePageSQL(sql, pageIndex, pageSize);
 		} else {
 			System.out.println(">>>未指定数据库类型!");
 			return null;
@@ -134,18 +142,32 @@ public abstract class AbstractBizService implements TopBaseService {
 	 * 构造MySQL数据分页SQL.<br>
 	 * 
 	 * @param sql
-	 * @param startIndex
+	 * @param pageIndex
 	 * @param pageSize
 	 * @return
 	 */
-	private String getMySQLPageSQL(String sql, Integer startIndex, Integer pageSize) {
-		if (null != startIndex && null != pageSize) {
-			return sql + " limit " + (startIndex) + "," + pageSize;
-		} else if (null != startIndex && null == pageSize) {
-			return sql + " limit " + startIndex;
+	private String getMySQLPageSQL(String sql, Integer pageIndex, Integer pageSize) {
+		if (null != pageIndex && null != pageSize) {
+			return sql + " limit " + (pageIndex) + "," + pageSize;
+		} else if (null != pageIndex && null == pageSize) {
+			return sql + " limit " + pageIndex;
 		} else {
 			return sql;
 		}
+	}
+	
+	/**
+	 * 构造SQLite3数据分页SQL.<br>
+	 * 
+	 * @param sql
+	 * @param pageIndex
+	 * @param pageSize
+	 * @return
+	 */
+	private String getSQLitePageSQL(String sql, int pageIndex, int pageSize) {
+		// 分页语法1：limit x,y; 解释：从X行开始取到Y行（首行为0行）。
+		// 分页语法2：limit x offset y; 解释：从Y行开始取X行（首行为0行）。
+		return sql + " limit " + pageSize + " offset " + (pageIndex - 1) * pageSize;
 	}
 
 	/**

@@ -8,11 +8,11 @@ package com.javapai.framework.common.page;
  */
 public abstract class BasePageArgs implements Paginate {
 	/**
-	 * 页-记录数.
+	 * 页-记录数（默认值：12）。
 	 */
 	private int pageSize;
 	/**
-	 * 页-索引号.
+	 * 页-索引号（默认值：1）.
 	 */
 	private int pageIndex;
 
@@ -21,10 +21,10 @@ public abstract class BasePageArgs implements Paginate {
 	}
 
 	public BasePageArgs(int pageIndex, Integer pageSize) {
-		if (pageIndex < 0) {
-			pageIndex = DEFAULT_PAGE_INDEX;// throw exception?
+		if (pageIndex <= 0) {
+			pageIndex = DEFAULT_PAGE_INDEX;
 		}
-		if (pageSize < 1) {
+		if (pageSize <= DEFAULT_PAGE_SIZE) {
 			pageSize = DEFAULT_PAGE_SIZE;
 		}
 
@@ -42,23 +42,25 @@ public abstract class BasePageArgs implements Paginate {
 
 	@Override
 	public int getPageSize() {
-		if (pageSize <= DEFAULT_PAGE_SIZE) {
+		if (pageSize >= DEFAULT_PAGE_SIZE) {
+			return pageSize;
+		} else {
 			return DEFAULT_PAGE_SIZE;
 		}
-		return pageSize;
 	}
 
 	@Override
 	public int getPageIndex() {
-		if (pageIndex <= 0) {
+		if (pageIndex >= DEFAULT_PAGE_INDEX) {
+			return pageIndex;
+		} else {
 			return DEFAULT_PAGE_INDEX;
 		}
-		return pageIndex;
 	}
 
 	@Override
 	public int getStartIndex() {
-		return 0;
+		return DEFAULT_PAGE_INDEX;
 	}
 
 }

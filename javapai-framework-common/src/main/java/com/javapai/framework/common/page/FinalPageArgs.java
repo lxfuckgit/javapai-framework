@@ -18,10 +18,11 @@ public final class FinalPageArgs implements Paginate {
 
 	@Override
 	public int getPageSize() {
-		if (pageSize < 1) {
-			pageSize = DEFAULT_PAGE_SIZE;
+		if (pageSize >= DEFAULT_PAGE_SIZE) {
+			return pageSize;
+		} else {
+			return DEFAULT_PAGE_SIZE;
 		}
-		return pageSize;
 	}
 
 	public void setPageSize(int pageSize) {
@@ -30,10 +31,11 @@ public final class FinalPageArgs implements Paginate {
 
 	@Override
 	public int getPageIndex() {
-		if (pageIndex <= 0) {
-			pageIndex = DEFAULT_PAGE_INDEX;
+		if (pageIndex >= DEFAULT_PAGE_INDEX) {
+			return pageIndex;
+		} else {
+			return DEFAULT_PAGE_INDEX;
 		}
-		return pageIndex;
 	}
 
 	public void setPageIndex(int pageIndex) {
@@ -42,7 +44,7 @@ public final class FinalPageArgs implements Paginate {
 
 	@Override
 	public int getStartIndex() {
-		return 0;
+		return DEFAULT_PAGE_INDEX;
 	}
 
 }

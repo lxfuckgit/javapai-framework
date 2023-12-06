@@ -8,6 +8,10 @@ package com.javapai.framework.constant;
  */
 public final class CL_Database {
 	/**
+	 * 数据库类型-SQLite3
+	 */
+	public static final String DATABASE_TYPE_SQLITE = "SQLITE";
+	/**
 	 * 数据库类型-MySQL
 	 */
 	public static final String DATABASE_TYPE_MYSQL = "MYSQL";
