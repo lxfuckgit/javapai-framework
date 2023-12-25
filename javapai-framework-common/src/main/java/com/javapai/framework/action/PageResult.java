@@ -45,15 +45,14 @@ public final class PageResult<T> extends BaseResult implements Serializable {
 	 * 总记录数.<br>
 	 * 在未分页情况下，查询结果集的总条数.<br>
 	 * 
-	 * @deprecated 参见{@link PageResult#totalRecords()}
+	 * 参见{@link PageResult#totalRecords()}
 	 */
 	private long totalRecord;
 
 	/**
 	 * 当前页数据集.
 	 */
-	private List<T> data;// 和RstResult保持一样的属性头信息.
-//	private List<T> pageList;
+	private List<T> data;// 取名data而非pageList的原因是想和和RstResult保持一样的属性头信息.
 
 	/**
 	 * 
@@ -107,8 +106,8 @@ public final class PageResult<T> extends BaseResult implements Serializable {
 	}
 
 	public long getTotalPages() {
-		totalPages = totalRecord / pageSize;// 这样会不会有线程问题
-		return totalPages;
+		// 提示：其中（pageSize -1） 就是（totalRecord/pageSize）的最大余数。
+		return (totalRecord + pageSize - 1) / pageSize;
 	}
 
 	// public void setTotalPages(int totalPages) {

@@ -172,9 +172,12 @@ public final class ResultBuilder {
 
 	/**
 	 * 构造一个正常的分页响应报文.<br>
-	 *
-	 * @param data
-	 *            响应数据.<br>
+	 * 
+	 * @param <T>
+	 * @param pageIndex   当前页码。<br>
+	 * @param pageSize    每页条数。<br>
+	 * @param pageList    分页记录。<br>
+	 * @param totalRecord 总记录数。<br>
 	 * @return
 	 */
 	public static <T> PageResult<T> buildPageResult(int pageIndex, int pageSize, List<T> pageList, long totalRecord) {
