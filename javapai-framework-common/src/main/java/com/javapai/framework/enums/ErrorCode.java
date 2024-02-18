@@ -36,16 +36,24 @@ public enum ErrorCode implements Enums<String,String> {
     PARAMS_SCHOOL("410001004","无效学校信息"),
     PARAMS_RUXUEDATA("410001204","入学时间参数为空!"),
     PARAMS_ADDRESS("410001205","地址参数不能为空"),
-    PARAMS_LASTNAME("41000100","姓名不能为空"),
-    PARAMS_APPID("41000101","必要参数不允许为空!"),
+    PARAMS_LASTNAME("41000100","姓名参数不能为空"),
+    PARAMS_APPID("41000101","应用标识参数不允许为空!"),
     
 	/* [业务类] 错误码  */
     ERROR_REGISTER("", "用户注册失败!"),
     ERROR_LOGIN("40000221", "登录错误，请检查用户名或密码!"),
     ERROR_LOGOUT("40000221", "用户退出失败!"),
+    ERROR_UPLOAD("40000221", "上传操作失败!"),
     
-	ERROR_TOKEN_INVALID("40000110", "登录授权码无法识别!"), 
-	ERROR_TOKEN_EXPIRE("40000111", "登录授权码已过期!"),
+	/* 无效类-错误码 */
+    INVALID_APPID("40000110", "无效的App应用标识!"), 
+    INVALID_TOKEN("40000111", "无效的token登录授权码!"), 
+    INVALID_CODE("40000112", "无效的code编码!"), 
+	/**
+	 * 
+	 * @deprecated 使用{@link ErrorCode#INVALID_TOKEN}代替。<br>
+	 */
+	ERROR_TOKEN_EXPIRE("4000999", "登录授权码已过期!"),
 	
 	ERROR_EDU_INVALID("40000235","学籍认证失败"),
 	ERROR_USER_AUTH_BANKCARD("40000241", "银行卡号与实名认证身份不符!"),
@@ -55,10 +63,13 @@ public enum ErrorCode implements Enums<String,String> {
 	ERROR_USER_IDCARD_18OVER("","身份证号验证失败,未满18岁"),
 	ERROR_USER_AUTH_IDCARD_INVALID("","身份证号验证失败,姓名不一致"),
 	
-    ERROR_EXIST_AUTH_EDU("40000371", "你的学籍已经核查通过，请勿再提交!"),
-    ERROR_EXIST_AUTH_REALNAME("40000372", "无效的验证码!"),
-	ERROR_EXIST_USER("40000377", "该用户已存在!"), 
-	ERROR_EXIST_PHONE("40000378", "该手机号码已被注册!"),
+	/* 唯一核验类-错误码 */
+    EXIST_AUTH_EDU("40000371", "你的学籍已经核查通过，请勿再提交!"),
+    EXIST_AUTH_REALNAME("40000372", "无效的验证码!"),
+    EXIST_CODE("40000377", "该编码已存在!"), 
+	EXIST_USER("40000377", "该用户已存在!"), 
+	EXIST_NAME("40000377", "该名称已存在!"), 
+	EXIST_PHONE("40000378", "该手机号码已被注册!"),
 	
 	PASSWORD_LENGH("", "密码长度要求不达标!"), // 具体多长取决于业务API进一步说明.
 	PASSWORD_PATTERN("", "密码格式为要求不达标!"), // 具体格式取决于API进一步说明.

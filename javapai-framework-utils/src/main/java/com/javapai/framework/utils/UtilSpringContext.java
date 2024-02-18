@@ -3,7 +3,6 @@ package com.javapai.framework.utils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 
 /**
  * Spring容器工具类。<br>
@@ -13,11 +12,20 @@ import org.springframework.stereotype.Component;
  * 1:如果要在静态方法中注入某个spring容器的bean时.<br>
  * 2:当某些没有纳入spring框架管理的类却要调用spring容器中的bean时。 <br>
  * <br>
- * <strong>引入方式：</strong><br>
- * {@link &lt;bean id="SpringContextHolder" class="com.javapai.framework.utils.UtilSpringContext" /&gt;}
+ * <strong>引入过程：</strong><br>
+ * 1、注入UtilSpringContext实例。 在主类上注入实例，例如：<br>
+ * {@linkplain @Import(UtilSpringContext.class) } <br>
  * <br>
  * <strong>OR</strong> <br>
- * {@link @ComponentScan com.javapai.framework.utils.UtilSpringContext} <br>
+ * <br>
+ * {@code @Bean} <br>
+ * public UtilSpringContext getUtilSpringContext() {<br>
+ * return new UtilSpringContext();<br>
+ * }<br>
+ * <br>
+ * 
+ * 2、使用UtilSpringContext对象。 <br>
+ * UtilSpringContext.getBean("beanName");<br>
  * <br>
  * <strong>外部依赖：</strong> <br>
  * spring-context.jar包
@@ -25,8 +33,10 @@ import org.springframework.stereotype.Component;
  * @author pooja
  *
  */
-//@Component
 public class UtilSpringContext implements ApplicationContextAware {
+	/**
+	 * 程序上下文管理器。
+	 */
 	private static ApplicationContext applicationContext;// WebApplicationContextUtils
 
 	/**
@@ -34,8 +44,7 @@ public class UtilSpringContext implements ApplicationContextAware {
 	 */
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		// TODO Auto-generated method stub
-		if(null == UtilSpringContext.applicationContext) {
+		if (null == UtilSpringContext.applicationContext) {
 			UtilSpringContext.applicationContext = applicationContext;
 		}
 	}
@@ -60,10 +69,21 @@ public class UtilSpringContext implements ApplicationContextAware {
 	/**
 	 * 从静态变量ApplicationContext中取得Bean, 自动转型为所赋值对象的类型.
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T> T getBean(Class<T> clazz) {
 		checkApplicationContext();
-		return (T) applicationContext.getBeansOfType(clazz);
+		return getApplicationContext().getBean(clazz);
+	}
+	
+	/**
+	 * 通过name,以及Clazz返回指定的Bean
+	 * 
+	 * @param <T>
+	 * @param name
+	 * @param clazz
+	 * @return
+	 */
+	public static <T> T getBean(String name, Class<T> clazz) {
+		return getApplicationContext().getBean(name, clazz);
 	}
 
 	/**
