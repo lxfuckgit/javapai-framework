@@ -47,6 +47,21 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 	protected static Logger log = LoggerFactory.getLogger(POIExcelReader.class);
 	
 	/**
+	 * 格式化（yyyy-MM-dd）
+	 */
+	protected static SimpleDateFormat sdf1_yyyy_MM_dd = new SimpleDateFormat("yyyy-MM-dd");
+	
+	/**
+	 * 格式化（yyyy/MM/dd）
+	 */
+	protected static SimpleDateFormat sdf2_yyyy_MM_dd = new SimpleDateFormat("yyyy/MM/dd");
+	
+	/**
+	 * 格式化（MM/dd/yyyy）
+	 */
+	protected static SimpleDateFormat sdf3_MM_dd_yyyy = new SimpleDateFormat("MM/dd/yyyy");
+	
+	/**
 	 * 解析workBook工作表对象的所有sheet表单数据。<br>
 	 * 
 	 * @param workBook
@@ -156,7 +171,6 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 		log.info(">>>批注：正在处理Excel表单第" + row.getRowNum() + "行数据!");
 		log.info(">>>本行数据开始于[" + firstCell + "]列结束于[" + row.getLastCellNum() + "]列，其中有效数据列共计[" + totalCells + "]列!");
 
-		// java.text.DecimalFormat df = new DecimalFormat("#");
 		Map<Integer, Object> datamap = new LinkedHashMap<Integer, Object>();
 
 		/* 如果是第一行，我们当表头行处理，其它行当数据行处理 */
@@ -181,8 +195,6 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 		return datamap;
 	}
 	
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	
 	/**
 	 * 返回单元格内容.<br>
 	 * 
@@ -203,7 +215,15 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 //				if ("yyyy-MM-dd".equals(cell.getCellStyle().getDataFormatString())) {
 				if (cell.getCellStyle().getDataFormat() == 164) {
 					// 164包含：yyyy-mm-dd、yyyy-MM-dd、yyyy/MM/dd等等。
-					cellValue = sdf.format(cell.getDateCellValue());
+					cellValue = sdf1_yyyy_MM_dd.format(cell.getDateCellValue());
+				} else if ("m/d/yy".equals(cell.getCellStyle().getDataFormatString())) {
+					// 14包含：m/d/yy、dd/mm/yyyy等等。
+					//cellValue = sdf3_MM_dd_yyyy.format(cell.getDateCellValue());
+					//我也不晓得为什么excel格式设置是m/d/yy（poi返回格式）但excel显示是yyyy_MM_dd，操作系统差异？
+					cellValue = sdf2_yyyy_MM_dd.format(cell.getDateCellValue());
+				} else if (cell.getCellStyle().getDataFormat() == 176) {
+					// 176包含：yyyy\\-mm\\-dd、yyyy/mm/dd等等。
+					cellValue = sdf1_yyyy_MM_dd.format(cell.getDateCellValue());
 				} else {
 					cellValue = cell.getDateCellValue();
 				}
@@ -213,7 +233,7 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 				String temp = cell.getStringCellValue();
 				// 判断是否包含小数点，如果不含小数点，则以字符串读取，如果含小数点，则转换为Double类型的字符串
 				if (temp.indexOf(".") > -1) {
-					cellValue = String.valueOf(new Double(temp)).trim();
+					cellValue = String.valueOf(Double.parseDouble(temp)).trim();
 				} else {
 					cellValue = temp.trim();
 				}
