@@ -12,7 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class NormalCsvHandler extends CsvHandler<List<String>> {
+public final class NormalCsvHandler extends CsvHandler<String> {
 
 	@Override
 	public List<String> readFile(File file) {

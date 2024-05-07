@@ -4,16 +4,17 @@ import com.javapai.framework.fileparse.DocReader;
 
 /**
  * 
+ * RFC 4180 formalized CSV.
+ * 
+ * 可用解析包：<br>
+ * 1、纯手工解析。<br>
+ * 2、Apache Commons CSV <br>
+ * 3、OpenCSV<br>
+ * 4、uniVocity-parsers和https://github.com/uniVocity/csv-parsers-comparison(抽象的csv解析组合)
+ * 5、JavaCSV(2014-12-10后已不再更新) <br>
+ *
  * @author pooja
  * 
- *         RFC 4180 formalized CSV.
- * 
- *         可用解析包：<br>
- *         1、纯手工解析。 2、Apache Commons CSV
- *         3、apche-opencsv和javacsv(2014-12-10后便不再更新) 4、
- *         uniVocity-parsers和https://github.com/uniVocity/csv-parsers-comparison(抽象的csv解析组合)
- *
- * @param <String>
  */
 public abstract class CsvHandler<T> implements DocReader<T> {
 //	private String title;// 文件名 or 文件标题.
