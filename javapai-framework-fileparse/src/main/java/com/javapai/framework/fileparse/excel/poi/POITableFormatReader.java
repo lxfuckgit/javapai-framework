@@ -179,7 +179,7 @@ public class POITableFormatReader extends POIExcelReader<TableFormat> {
 
 	@Override
 	public TableFormat readSheet(File file, String sheetName, ReadSheetConfig config) {
-		return readSheet(file, 0, config);
+		return readSheet(getWorkbook(file), sheetName, config);
 	}
 
 	@Override
