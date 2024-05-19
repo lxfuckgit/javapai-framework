@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
-import com.javapai.framework.config.TableFormat;
 import com.javapai.framework.fileparse.DocReader;
 import com.javapai.framework.fileparse.excel.config.ReadSheetConfig;
 

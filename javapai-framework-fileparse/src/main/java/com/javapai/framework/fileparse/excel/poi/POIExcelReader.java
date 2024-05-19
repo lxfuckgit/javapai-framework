@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,13 +12,14 @@ import java.util.Map;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.NumberToTextConverter;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,10 +30,29 @@ import com.javapai.framework.fileparse.excel.config.ReadSheetConfig;
 /**
  * 利用POI策略去实现Excel的数据读取操作。<br>
  * <br>
- * POI核心类关系：<br>
- * Excel文件：Workbook、HSSFWorkbook(97~03版本)、XSSFWorkbook(07+版本)<br>
+ * 
+ * <strong>POI读取Excel模式：</strong><br>
  * <br>
- * 针对XSSFWorkbook读取Excel有两种模式：XSSFWorkbook模式 和SXSSFWorkbook模式。<br>
+ * <strong>1、老版的xls格式读取方式：</strong><br>
+ * <br>
+ * HSSFWorkbook<br>
+ * <br>
+ * <strong>2、新版的xlsx格式读取方式：</strong><br>
+ * <br>
+ * XSSFWorkbook<br>
+ * <br>
+ * 
+ * <strong>3、新版的xlsx格式（大数据量）读取方式：</strong><br>
+ * <br>
+ * SXSSFWorkbook<br>
+ * <br>
+ * 
+ * 
+ * 
+ * POI核心类关系：<br>
+ * Excel文件：Workbook、(97~03版本)、XSSFWorkbook(07+版本)<br>
+ * <br>
+ * 针对XSSFWorkbook读取Excel有两种模式：XSSFWorkbook模式 和模式。<br>
  * <br>
  * 第一种模式XSSFWorkbook，此方式仅适用与小数据量的poi操作； <br>
  * 第二种模式SXSSFWorkbook，适用与较大数据量的poi写入操作。 [POI3.8版本新增加].<br>
@@ -62,6 +83,11 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 	protected static SimpleDateFormat sdf3_MM_dd_yyyy = new SimpleDateFormat("MM/dd/yyyy");
 	
 	/**
+	 * 格式化（hh:mm:ss）
+	 */
+	protected static DateTimeFormatter sdf1_hh_mm_ss = DateTimeFormatter.ofPattern("hh:mm:ss");
+	
+	/**
 	 * 解析workBook工作表对象的所有sheet表单数据。<br>
 	 * 
 	 * @param workBook
@@ -79,7 +105,7 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 	 * @param sheet
 	 *            excel工作表。<br>
 	 */
-	protected abstract T readSheet(Sheet sheet);
+	public abstract T readSheet(Sheet sheet);
 
 	/**
 	 * POI通过指定配置读取并解析Sheet工作表的行集数据.<br>
@@ -90,7 +116,7 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 	 *            sheet配置。<br>
 	 * @return TableFormat工作表对象.<br>
 	 */
-	protected abstract T readSheet(Sheet sheet, ReadSheetConfig config);
+	public abstract T readSheet(Sheet sheet, ReadSheetConfig config);
 
 	/**
 	 * 读取指定表单的指定工作表.<br>
@@ -168,14 +194,15 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 //		short lastCell = row.getLastCellNum(); //获取最后一个不为空的列的索引值.
 		short firstCell = row.getFirstCellNum();// 获取第一个不为空的列的索引值.
 		int totalCells = row.getPhysicalNumberOfCells(); // 获取不为空的列的个数。
-		log.info(">>>批注：正在处理Excel表单第" + row.getRowNum() + "行数据!");
-		log.info(">>>本行数据开始于[" + firstCell + "]列结束于[" + row.getLastCellNum() + "]列，其中有效数据列共计[" + totalCells + "]列!");
+		log.debug(">>>批注：正在处理Excel表单第" + row.getRowNum() + "行数据!");
+		log.debug(">>>本行数据开始于[" + firstCell + "]列结束于[" + row.getLastCellNum() + "]列，其中有效数据列共计[" + totalCells + "]列!");
 
 		Map<Integer, Object> datamap = new LinkedHashMap<Integer, Object>();
 
 		/* 如果是第一行，我们当表头行处理，其它行当数据行处理 */
 		if (row.getRowNum() <= 0 || row.getRowNum() == 0) {
-			for (int index = firstCell - xPosition; index < totalCells - firstCell; index++) {
+			for (int index = firstCell - xPosition; index < row.getLastCellNum(); index++) {
+//			for (int index = firstCell - xPosition; index < totalCells - firstCell; index++) {//totalCells - firstCell无法处理第1列为空第2列有值的情况。
 				// if (row.getCell(index).getStringCellValue().trim().length() == 0) {
 				if (null == row.getCell(index) || null == row.getCell(index).getStringCellValue()) {
 					// throw new IOException("列名不允许为空");
@@ -209,12 +236,14 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 		}
 		
 		Object cellValue = null;
-		switch (cell.getCellType()) {
-		case Cell.CELL_TYPE_NUMERIC:
+		if (CellType.NUMERIC.equals(cell.getCellType())) {
 			if (DateUtil.isCellDateFormatted(cell)) {
 //				if ("yyyy-MM-dd".equals(cell.getCellStyle().getDataFormatString())) {
 				if (cell.getCellStyle().getDataFormat() == 164) {
 					// 164包含：yyyy-mm-dd、yyyy-MM-dd、yyyy/MM/dd等等。
+					cellValue = sdf1_yyyy_MM_dd.format(cell.getDateCellValue());
+				}	else if("yyyy-mm-dd;@".equals(cell.getCellStyle().getDataFormatString())) {
+					// 177包含：yyyy-mm-dd;@
 					cellValue = sdf1_yyyy_MM_dd.format(cell.getDateCellValue());
 				} else if ("m/d/yy".equals(cell.getCellStyle().getDataFormatString())) {
 					// 14包含：m/d/yy、dd/mm/yyyy等等。
@@ -223,63 +252,63 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 					cellValue = sdf2_yyyy_MM_dd.format(cell.getDateCellValue());
 				} else if (cell.getCellStyle().getDataFormat() == 176) {
 					// 176包含：yyyy\\-mm\\-dd、yyyy/mm/dd等等。
-					cellValue = sdf1_yyyy_MM_dd.format(cell.getDateCellValue());
+					if("yyyy\\/mm\\/dd".equals(cell.getCellStyle().getDataFormatString())) {
+						cellValue = sdf2_yyyy_MM_dd.format(cell.getDateCellValue());
+					} else {
+						cellValue = sdf1_yyyy_MM_dd.format(cell.getDateCellValue());
+					}
+				} else if ("h:mm:ss".equals(cell.getCellStyle().getDataFormatString())) {
+					java.util.Date date = cell.getDateCellValue();
+					cellValue = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+					//这样会多几分钟，不晓得为什么；
+//					java.time.Instant instant = cell.getDateCellValue().toInstant();
+//					java.time.LocalTime time = instant.atZone(java.time.ZoneId.systemDefault()).toLocalTime();
+//					cellValue = time.toString();
 				} else {
 					cellValue = cell.getDateCellValue();
 				}
 			} else {
-				// cellValue = cell.getNumericCellValue();
-				cell.setCellType(Cell.CELL_TYPE_STRING);
-				String temp = cell.getStringCellValue();
+				// 对当前单元格当“常规”的类型处理；
+				/* POI3.8.x处理方法 */
+//				cellValue = cell.getNumericCellValue();
+//				cell.setCellType(Cell.CELL_TYPE_STRING);
+//				cellValue = cell.getCellFormula();
 				// 判断是否包含小数点，如果不含小数点，则以字符串读取，如果含小数点，则转换为Double类型的字符串
-				if (temp.indexOf(".") > -1) {
-					cellValue = String.valueOf(Double.parseDouble(temp)).trim();
-				} else {
-					cellValue = temp.trim();
-				}
+//				if (cellValue.indexOf(".") > -1) {
+//					cellValue = String.valueOf(Double.parseDouble(cellValue)).trim();
+//				} else {
+//					cellValue = temp.trim();
+//				}
+				/* POI5.x处理方法 */
+				//POI5.x取消了cell.setCellType方法，且POI5.x对Number类型的单元格取值方法（cell.getNumericCellValue()）只会返回Double类型；另外，当单元格内容比较长的时候还会返回科学计数法；
+				cellValue = NumberToTextConverter.toText(cell.getNumericCellValue());
 			}
-			break;
-
-		// if string(cell.getCellType() == 1)
-		case Cell.CELL_TYPE_STRING:
+		} else if(CellType.STRING.equals(cell.getCellType())){
 			cellValue = cell.getStringCellValue().trim();
-			break;
-
-		// if boolean(cell.getCellType() == 4)
-		case Cell.CELL_TYPE_BOOLEAN:
-			cellValue = Boolean.toString(cell.getBooleanCellValue());
-			break;
-
-		// if boolean(cell.getCellType() == 2)
-		case Cell.CELL_TYPE_FORMULA:
-			cell.setCellType(Cell.CELL_TYPE_STRING);
-			cellValue = cell.getStringCellValue();
-			if (cellValue != null) {
-				//cellValue = cellValue.replaceAll("#N/A", "").trim();
+		} else if(CellType.FORMULA.equals(cell.getCellType())){
+			// 当前单元格公式：cell.getCellFormula();
+			// 当前单元格返回类型：cell.getCachedFormulaResultType()
+			if (CellType.NUMERIC.equals(cell.getCachedFormulaResultType())) {
+				cellValue = cell.getDateCellValue();
+			} else {
+				cellValue = cell.getCellFormula();
 			}
-			break;
-		// case XSSFCell.CELL_TYPE_FORMULA:
-		// cellType = cell.getCachedFormulaResultType();
-		// if (cellType == XSSFCell.CELL_TYPE_NUMERIC) {
-		// result = Double.valueOf(cell.getRawValue());
-		// } else {
-		// result = cell.getCellFormula();
-		// }
-		// break;
-		case Cell.CELL_TYPE_BLANK:
-			break;
-			
-		case Cell.CELL_TYPE_ERROR:
-			break;
-			
-		default:
-			break;
+		} else if(CellType.BOOLEAN.equals(cell.getCellType())){
+			cellValue = Boolean.toString(cell.getBooleanCellValue());
+		} else {
+			//if CellType.BLANK,set default value.
+			cellValue = "";
 		}
-		
 		return cellValue;
 	}
 	
-	protected static Workbook getWorkbook(File file) {
+	/**
+	 * 全量读取File文件内容。<br>
+	 * 
+	 * @param input
+	 * @return
+	 */
+	public static Workbook getWorkbook(File file) {
 		if (!file.isFile()) {
 			log.error(">>>not found the file,please check it!");
 			return null;
@@ -289,7 +318,7 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 			// log.info(">>>当前文件编码格式：" + System.getProperty("file.encoding"));
 			try {
 				return WorkbookFactory.create(file);
-			} catch (EncryptedDocumentException | InvalidFormatException | IOException e) {
+			} catch (EncryptedDocumentException | IOException e) {
 				e.printStackTrace();
 				return null;
 			}
@@ -324,6 +353,12 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 		*/
 	}
 
+	/**
+	 * 全量读取Stream数据流内容。<br>
+	 * 
+	 * @param input
+	 * @return
+	 */
 	public static Workbook getWorkbook(InputStream input) {
 		Workbook wb = null;
 		try {
@@ -331,7 +366,7 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 			wb = WorkbookFactory.create(input);
 			log.info("ready go......");
 			log.info("共发现" + wb.getNumberOfSheets() + "张sheet表单......：");
-		} catch (InvalidFormatException | IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -369,6 +404,5 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 		}
 		return true;
 	}
-	
 
 }

@@ -123,12 +123,12 @@ public class POINormalFormatReader extends POIExcelReader<List<Map<Integer, Obje
 	}
 
 	@Override
-	protected List<Map<Integer, Object>> readSheet(Sheet sheet) {
+	public List<Map<Integer, Object>> readSheet(Sheet sheet) {
 		return readSheet(sheet, this.config);
 	}
 
 	@Override
-	protected List<Map<Integer, Object>> readSheet(Sheet sheet, ReadSheetConfig config) {
+	public List<Map<Integer, Object>> readSheet(Sheet sheet, ReadSheetConfig config) {
 		/*
 		 * 获取最后行的行号（行号从0开始）。 
 		 * 提示：sheet.getLastRowNum()检测方式是即使本行数据为空时，只要单元格的格式还存在时，也算有效最后行。
