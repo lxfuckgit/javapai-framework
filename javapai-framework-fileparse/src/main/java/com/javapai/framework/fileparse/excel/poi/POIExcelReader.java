@@ -68,6 +68,11 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 	protected static Logger log = LoggerFactory.getLogger(POIExcelReader.class);
 	
 	/**
+	 * 字符串常量-yyyy/mm/dd
+	 */
+	private static final String yyyymmdd3 = "yyyy/mm/dd";
+	
+	/**
 	 * 格式化（yyyy-MM-dd）
 	 */
 	protected static SimpleDateFormat sdf1_yyyy_MM_dd = new SimpleDateFormat("yyyy-MM-dd");
@@ -249,6 +254,9 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 					// 14包含：m/d/yy、dd/mm/yyyy等等。
 					//cellValue = sdf3_MM_dd_yyyy.format(cell.getDateCellValue());
 					//我也不晓得为什么excel格式设置是m/d/yy（poi返回格式）但excel显示是yyyy_MM_dd，操作系统差异？
+					cellValue = sdf2_yyyy_MM_dd.format(cell.getDateCellValue());
+				} else if (yyyymmdd3.equals(cell.getCellStyle().getDataFormatString())) {
+					// 提示：yyyy/mm/dd格式时cell.getCellStyle().getDataFormat()可能是176、178，所以此判断需要前置。
 					cellValue = sdf2_yyyy_MM_dd.format(cell.getDateCellValue());
 				} else if (cell.getCellStyle().getDataFormat() == 176) {
 					// 176包含：yyyy\\-mm\\-dd、yyyy/mm/dd等等。
