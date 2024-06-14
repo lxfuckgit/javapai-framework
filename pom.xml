@@ -11,7 +11,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<hibernate-version>4.3.5.Final</hibernate-version>
 		<spring-version>5.1.2.RELEASE</spring-version>
-		<jackson-version>2.9.3</jackson-version>
+		<jackson-version>2.12.7.1</jackson-version>
 		<poi-version>5.2.5</poi-version>
 		<slf4j-version>1.7.21</slf4j-version>
 		<httpclient-version>4.5.6</httpclient-version>
