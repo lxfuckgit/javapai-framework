@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
@@ -17,6 +20,7 @@ import com.opencsv.CSVReaderBuilder;
  *
  */
 public final class OpenCsvHandler extends CsvHandler<String[]> {
+	protected static Logger logger = LoggerFactory.getLogger(OpenCsvHandler.class);
 
 	@Override
 	public List<String[]> readFile(File file) {
@@ -32,7 +36,7 @@ public final class OpenCsvHandler extends CsvHandler<String[]> {
 
 	@Override
 	public List<String[]> readFile(InputStream stream) {
-		return readFile(stream, 0);
+		return readFile(stream, "GB2312", 0);
 	}
 	
 	/**
@@ -43,33 +47,7 @@ public final class OpenCsvHandler extends CsvHandler<String[]> {
 	 * @return
 	 */
 	public List<String[]> readFile(InputStream stream, int maxReadSize) {
-		List<String[]> csvList = null;
-		CSVReader reader = null;
-		try {
-			reader = new CSVReaderBuilder(new InputStreamReader(stream, "GB2312")).build();
-			if (maxReadSize > 0) {
-				csvList = new LinkedList<>();
-				int initSize = 0;
-				String[] record = null;
-				while ((record = reader.readNext()) != null && initSize < maxReadSize) {
-					initSize++;
-					csvList.add(record);
-				}
-			} else {
-				csvList = reader.readAll();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (null != reader) {
-				try {
-					reader.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return csvList;
+		return readFile(stream, "GB2312", maxReadSize);
 	}
 	
 	/**
@@ -98,6 +76,9 @@ public final class OpenCsvHandler extends CsvHandler<String[]> {
 			if (null == charset || charset.length() == 0) {
 				charset = "GB2312";
 			}
+			
+			//com.opencsv.CSVParser parser = new CSVParserBuilder().withSeparator(',').build();
+			//reader = new CSVReaderBuilder(new InputStreamReader(stream, charset)).withCSVParser(parser).build();
 			reader = new CSVReaderBuilder(new InputStreamReader(stream, charset)).build();
 			if (maxReadSize > 0) {
 				csvList = new LinkedList<>();
@@ -112,6 +93,7 @@ public final class OpenCsvHandler extends CsvHandler<String[]> {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error("--->文件字符集解析异常：", e);
 		} finally {
 			if (null != reader) {
 				try {
