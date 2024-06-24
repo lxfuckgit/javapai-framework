@@ -38,8 +38,9 @@ public enum ErrorCode implements Enums<String,String> {
     PARAMS_ADDRESS("410001205","地址参数不能为空"),
     PARAMS_LASTNAME("41000100","姓名参数不能为空"),
     PARAMS_APPID("41000101","应用标识参数不允许为空!"),
+    PARAMS_ID("41000101","数据标识参数不允许为空!"),
     
-	/* [业务类] 错误码  */
+	/* 业务类-错误码  */
     ERROR_REGISTER("", "用户注册失败!"),
     ERROR_LOGIN("40000221", "登录错误，请检查用户名或密码!"),
     ERROR_LOGOUT("40000221", "用户退出失败!"),
@@ -48,6 +49,7 @@ public enum ErrorCode implements Enums<String,String> {
 	/* 无效类-错误码 */
     INVALID_APPID("40000110", "无效的App应用标识!"), 
     INVALID_TOKEN("40000111", "无效的token登录授权码!"), 
+    INVALID_ID("40000112", "无效的id编码!"), 
     INVALID_CODE("40000112", "无效的code编码!"), 
 	/**
 	 * 
