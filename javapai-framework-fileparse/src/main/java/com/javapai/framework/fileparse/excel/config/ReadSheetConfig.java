@@ -66,6 +66,11 @@ public final class ReadSheetConfig extends XConfig {
 	 * <strong>提示：</strong>用于特定情况下提取备注数据，默认无特殊备注行。<br>
 	 */
 	private List<Integer> noteIndex;
+	
+	/**
+	 * 最大读取行数。<br>
+	 */
+	private int maxReadSize;
 
 	/**
 	 * 使用场景：用于将已存在列之间[内容合并]的场景。
@@ -200,6 +205,20 @@ public final class ReadSheetConfig extends XConfig {
 	 */
 	public void setNoteIndex(Integer[] noteIndex) {
 		this.noteIndex = Arrays.asList(noteIndex);
+	}
+
+	/**
+	 * @see #maxReadSize
+	 */
+	public int getMaxReadSize() {
+		return maxReadSize;
+	}
+
+	/**
+	 * @see #maxReadSize
+	 */
+	public void setMaxReadSize(int maxReadSize) {
+		this.maxReadSize = maxReadSize;
 	}
 	
 }

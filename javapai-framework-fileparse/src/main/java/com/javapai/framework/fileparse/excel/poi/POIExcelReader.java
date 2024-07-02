@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -88,9 +90,29 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 	protected static SimpleDateFormat sdf3_MM_dd_yyyy = new SimpleDateFormat("MM/dd/yyyy");
 	
 	/**
+	 * 格式化（yyyy/MM/dd HH:mm:ss）
+	 */
+	protected static SimpleDateFormat SDF4 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	
+	/**
+	 * 格式化（yyyy-MM-dd HH:mm:ss）
+	 */
+	protected static SimpleDateFormat SDF5 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	/**
+	 * 通用格式化（HH:mm:ss）
+	 */
+	protected static DateTimeFormatter SDF1_HH_mm_ss = DateTimeFormatter.ofPattern("[]H:[]m:[]s");
+	
+	/**
+	 * 通用格式化（HH:mm:ss）
+	 */
+	protected static DateTimeFormatter SDF2_HH_mm_ss = DateTimeFormatter.ofPattern("HH:mm:ss");
+	
+	/**
 	 * 格式化（hh:mm:ss）
 	 */
-	protected static DateTimeFormatter sdf1_hh_mm_ss = DateTimeFormatter.ofPattern("hh:mm:ss");
+//	protected static DateTimeFormatter sdf1_hh_mm_ss = DateTimeFormatter.ofPattern("hh:mm:ss");
 	
 	/**
 	 * 解析workBook工作表对象的所有sheet表单数据。<br>
@@ -230,6 +252,8 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 	/**
 	 * 返回单元格内容.<br>
 	 * 
+	 * 关于单元格是日期时的格式说明(基于POI.5.2.x版本)： <br>
+	 * 
 	 * @param cell
 	 * @return
 	 */
@@ -247,14 +271,24 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 				if (cell.getCellStyle().getDataFormat() == 164) {
 					// 164包含：yyyy-mm-dd、yyyy-MM-dd、yyyy/MM/dd等等。
 					cellValue = sdf1_yyyy_MM_dd.format(cell.getDateCellValue());
-				}	else if("yyyy-mm-dd;@".equals(cell.getCellStyle().getDataFormatString())) {
+				} else if ("yyyy-mm-dd;@".equals(cell.getCellStyle().getDataFormatString())) {
 					// 177包含：yyyy-mm-dd;@
 					cellValue = sdf1_yyyy_MM_dd.format(cell.getDateCellValue());
+				} else if (179 == cell.getCellStyle().getDataFormat()) {
+					// 179包含：yyyy\-mm\-dd\ hh:mm:ss
+					cellValue = SDF5.format(cell.getDateCellValue());
 				} else if ("m/d/yy".equals(cell.getCellStyle().getDataFormatString())) {
 					// 14包含：m/d/yy、dd/mm/yyyy等等。
 					//cellValue = sdf3_MM_dd_yyyy.format(cell.getDateCellValue());
 					//我也不晓得为什么excel格式设置是m/d/yy（poi返回格式）但excel显示是yyyy_MM_dd，操作系统差异？
 					cellValue = sdf2_yyyy_MM_dd.format(cell.getDateCellValue());
+				} else if ("m/d/yy h:mm".equals(cell.getCellStyle().getDataFormatString())) {
+					//22包含：m/d/yy h:mm
+					if (22 == cell.getCellStyle().getDataFormat()) {
+						cellValue = SDF4.format(cell.getDateCellValue());
+					} else {
+						cellValue = cell.getDateCellValue();
+					}
 				} else if (yyyymmdd3.equals(cell.getCellStyle().getDataFormatString())) {
 					// 提示：yyyy/mm/dd格式时cell.getCellStyle().getDataFormat()可能是176、178，所以此判断需要前置。
 					cellValue = sdf2_yyyy_MM_dd.format(cell.getDateCellValue());
@@ -266,12 +300,14 @@ public abstract class POIExcelReader<T> implements IExcelReader<T> {
 						cellValue = sdf1_yyyy_MM_dd.format(cell.getDateCellValue());
 					}
 				} else if ("h:mm:ss".equals(cell.getCellStyle().getDataFormatString())) {
-					java.util.Date date = cell.getDateCellValue();
-					cellValue = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-					//这样会多几分钟，不晓得为什么；
-//					java.time.Instant instant = cell.getDateCellValue().toInstant();
-//					java.time.LocalTime time = instant.atZone(java.time.ZoneId.systemDefault()).toLocalTime();
-//					cellValue = time.toString();
+					java.time.Instant instant = cell.getDateCellValue().toInstant();
+					LocalTime time = instant.atOffset(ZoneOffset.ofHours(8)).toLocalTime();
+					//在使用OffsetDateTime表示时间时，会遇到一个问题：当时间为 0 秒时，OffsetDateTime 没有显示秒时间的能力。例如：15:55:00 只会显示15:55；
+					if (time.toString().length() < 7) {
+						cellValue = SDF2_HH_mm_ss.format(time);
+					} else {
+						cellValue = time.toString();
+					}
 				} else {
 					cellValue = cell.getDateCellValue();
 				}
