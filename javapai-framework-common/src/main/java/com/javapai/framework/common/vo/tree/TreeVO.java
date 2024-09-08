@@ -19,8 +19,8 @@ public final class TreeVO extends NodeVO {
 	public TreeVO() {
 	}
 
-	public TreeVO(String id, String name) {
-		super(id, name);
+	public TreeVO(String key, String value) {
+		super(key, value);
 	}
 
 	public List<TreeVO> getChildren() {

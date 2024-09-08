@@ -131,6 +131,7 @@ public final class ResultBuilder {
 	}
 	
 	/**
+	 * 构造一个默认成功的响应报文.<br>
 	 * 
 	 * @return
 	 */
@@ -142,7 +143,7 @@ public final class ResultBuilder {
 	}
 	
 	/**
-	 * 构造一个正常的响应报文。<br>
+	 * 构造一个默认成功的响应报文。<br>
 	 * 
 	 * @param data
 	 * @return
@@ -156,7 +157,7 @@ public final class ResultBuilder {
 	}
 
 	/**
-	 * 构造一个正常的响应报文。<br>
+	 * 构造一个默认成功的响应报文。<br>
 	 *
 	 * @param message
 	 *            自定义响应说明描述。<br>
@@ -169,9 +170,24 @@ public final class ResultBuilder {
 		entity.setMessage(message);
 		return entity;
 	}
+	
+	/**
+	 * 构造一个默认失败的分页响应报文.<br>
+	 * 
+	 * @param <T>
+	 * @param pageIndex   当前页码。<br>
+	 * @param pageSize    每页条数。<br>
+	 * @return
+	 */
+	public static <T> PageResult<T> buildPageResult(int pageIndex, int pageSize) {
+		PageResult<T> result = new PageResult<>(pageIndex, pageSize, List.of(), 0L);
+		result.setCode(ErrorCode.EXCEPTION_SELECT.getKey());
+		result.setMessage(ErrorCode.EXCEPTION_SELECT.getValue());
+		return result;
+	}
 
 	/**
-	 * 构造一个正常的分页响应报文.<br>
+	 * 构造一个默认成功的分页响应报文.<br>
 	 * 
 	 * @param <T>
 	 * @param pageIndex   当前页码。<br>
