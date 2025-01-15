@@ -17,7 +17,39 @@ import javax.servlet.http.HttpServletRequest;
  *
  */
 public class UtilResource {
-	private static final String module = UtilResource.class.getName();
+	//private static final String module = UtilResource.class.getName();
+	
+	/**
+	 * 
+	 * @return 系统临时目录。
+	 */
+	public static String getTempPath() {
+		if ("".equals("linux")) {
+			return "";
+		} else if ("".equals("win")) {
+			return "";
+		} else {
+			return "";
+		}
+	}
+	
+	/**
+	 * 获取系统的临时目录。
+	 * 
+	 * @return
+	 */
+	public static String getTempFolder() {
+		return System.getProperty("java.io.tmpdir");
+	}
+	
+	/**
+	 * 获取系统的桌面目录。
+	 * 
+	 * @return
+	 */
+	public static String getDeskTopFolder() {
+		return System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop";
+	}
 	
 	/**
 	 * Web应用程序的根目录为基点读取资源文件.<br>

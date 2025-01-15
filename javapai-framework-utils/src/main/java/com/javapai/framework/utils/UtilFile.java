@@ -41,23 +41,6 @@ import org.slf4j.LoggerFactory;
  */
 public final class UtilFile {
 	private static final Logger log = LoggerFactory.getLogger(UtilFile.class);
-	/**
-	 * 
-	 * @return 系统临时目录。
-	 */
-	public static String getTempPath() {
-		if ("".equals("linux")) {
-			return "";
-		} else if ("".equals("win")) {
-			return "";
-		} else {
-			return "";
-		}
-	}
-	
-	public static String getTempFolder() {
-		return System.getProperty("java.io.tmpdir");
-	}
 
 	/**
 	 * 写入指定内容到指定文件。<br>
