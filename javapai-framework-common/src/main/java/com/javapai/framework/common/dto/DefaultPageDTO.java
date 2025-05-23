@@ -1,20 +1,28 @@
 package com.javapai.framework.common.dto;
 
+import com.javapai.framework.common.page.BasePageArgs;
 import com.javapai.framework.common.page.Paginate;
 
 /**
- * 默认分页DTO参数说明。<br>
+ * 默认分页对象。<br>
  * 
  * <br>
- * 此类不可被继承，仅应用于无参且需要分页的情况;
- * 
- * <br>如果需要对请求中参数对象加入分页参数可自行<strong>implements</strong> {@link com.javapai.framework.pagination}接口并增加接口中要求的分页参数.<br>
+ * <strong>应用场景：</strong>此对象应用于一些默认分页查询场景（即：不需要其它业务参数时，仅需要简单分页查询的情况）。<br>
+ * <strong>更多提示：</strong>因为此类被定义为不可被继承，所以当您需要更多业务参数条件且需要分页参数条件查询时，请自行定义查询DTO然后继承{@link BasePageArgs}对象。
  * <br>
+ * 例如：<br>
+ * public class ListUserDTO extends BasePageArgs {<br>
+ * ......<br>
+ * ......<br>
+ * }<br>
+ * 
+ * <br>
+ * 
  * @author pooja
  *
  */
 @SuppressWarnings("serial")
-public final class RstPageDTO extends BaseRstDTO implements Paginate {
+public final class DefaultPageDTO extends BaseRstDTO implements Paginate {
 	/**
 	 * 页-记录数.
 	 */
@@ -23,12 +31,12 @@ public final class RstPageDTO extends BaseRstDTO implements Paginate {
 	 * 页-索引号.
 	 */
 	private int pageIndex;
-	
-	public RstPageDTO() {
+
+	public DefaultPageDTO() {
 		super();
 	}
 
-	public RstPageDTO(int pageIndex, Integer pageSize) {
+	public DefaultPageDTO(int pageIndex, Integer pageSize) {
 		if (pageIndex < 0) {
 			pageIndex = DEFAULT_PAGE_INDEX;// throw exception?
 		}
@@ -50,7 +58,6 @@ public final class RstPageDTO extends BaseRstDTO implements Paginate {
 
 	@Override
 	public int getPageSize() {
-		// TODO Auto-generated method stub
 		if (pageSize <= DEFAULT_PAGE_SIZE) {
 			return DEFAULT_PAGE_SIZE;
 		}
@@ -59,7 +66,6 @@ public final class RstPageDTO extends BaseRstDTO implements Paginate {
 
 	@Override
 	public int getPageIndex() {
-		// TODO Auto-generated method stub
 		if (pageIndex <= 0) {
 			return DEFAULT_PAGE_INDEX;
 		}
@@ -68,7 +74,6 @@ public final class RstPageDTO extends BaseRstDTO implements Paginate {
 
 	@Override
 	public int getStartIndex() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
