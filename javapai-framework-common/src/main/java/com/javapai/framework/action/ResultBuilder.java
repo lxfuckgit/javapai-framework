@@ -35,38 +35,6 @@ public final class ResultBuilder {
 	public static final String RESPONSE_FAIL_MSG = "请求失败!";
 
 	/**
-	 * 构造一个自定义返回响应对象。<br>
-	 * 
-	 * <br>
-	 * <strong>使用建议：</strong> <br>
-	 * 通常情况下，我们不建议使用此方法来构造一个返回对象，因为自定义的code->message无法管理，容易造成code lost control。<br>
-	 * 所以建议使用{@link ResultBuilder#buildResult(Enums enums)}代替本方法；当然，你也可以使用{@link ResultBuilder#nomarResult}来明确返回一个正常对象或使用{@link ResultBuilder#errorResult}返回一个错误对象。<br>
-	 * <br>
-	 *
-	 * @param code
-	 *            自定义编码。<br>
-	 * @param message
-	 *            自定义说明。<br>
-	 * @return RstResult普通报文对象。
-	 * 
-	 * @deprecated 由{@link ResultBuilder#buildResult(Enums enums)}代替.
-	 *
-	 */
-	public static <T> RstResult<T> buildResult(String code, String message) {
-		RstResult<T> entity = new RstResult<>();
-		if ("".equals(code) || !"".equals(message)) {
-			code = RESPONSE_FAIL;
-		}
-		entity.setCode(code);
-
-		if (null == message || "".equals(message)) {
-			message = RESPONSE_FAIL_MSG;
-		}
-		entity.setMessage(message);
-		return entity;
-	}
-	
-	/**
 	 * 构造返回响应对象。<br>
 	 * 
 	 * @param enums
@@ -86,7 +54,7 @@ public final class ResultBuilder {
 	 * @param enums
 	 *            自定义枚举对象。<br>
 	 * @param message
-	 *            定义定消息说明。<br>
+	 *            自定义错误消息。<br>
 	 * @return
 	 */
 	public static <T> RstResult<T> buildResult(Enums<String, String> enums, String message) {
@@ -101,20 +69,35 @@ public final class ResultBuilder {
 	}
 
 	/**
-	 * 构造一个失败响应.<br>
-	 *
-	 * @param code
-	 *            失败错误编码.<br>
-	 * @param message
-	 *            失败错误说明.<br>
-	 * @return
+	 * 构造一个自定义返回失败响应对象。<br>
 	 * 
-	 * @deprecated 由{@link ResultBuilder#buildResult(String code, String message)}代替.
+	 * <br>
+	 * <strong>使用建议：</strong> <br>
+	 * 通常情况下，由于用户想透传三方返回信息给调用方（当用户不想完全重复定义第三方API返回信息成Enums时），可以使用此方法。<br>
+	 * <br>
+	 * 否则我们不建议您使用此方法来构造一个返回对象，因为用户自定义的code->message无法管理，系统容易造成code lost control。<br>
+	 * 所以我们建议您尽可能使用{@link ResultBuilder#buildResult(Enums enums)}方法或是使用{@link ResultBuilder#nomarResult}方法来返回一个请求返回报文对象；<br>
+	 * <br>
+	 *
+	 * @param code    自定义错误编码。<br>
+	 * @param message 自定义错误说明。<br>
+	 * @return RstResult普通报文对象。
+	 * 
 	 */
-	public static <T> RstResult<T> errorResult(String code, String message) {
-		return buildResult(code, message);
+	public static <T> RstResult<T> buildResult(String code, String message) {
+		RstResult<T> entity = new RstResult<>();
+		if ("".equals(code) || !"".equals(message)) {
+			code = RESPONSE_FAIL;
+		}
+		entity.setCode(code);
+
+		if (null == message || "".equals(message)) {
+			message = RESPONSE_FAIL_MSG;
+		}
+		entity.setMessage(message);
+		return entity;
 	}
-	
+
 	/**
 	 * 构造一个失败响应.<br>
 	 *

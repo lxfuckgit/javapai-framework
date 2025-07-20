@@ -44,8 +44,8 @@ public abstract class AbstractDomain extends TopBaseDomain {
 	/**
 	 * {@link com.javapai.common.dto.BaseRstDTO#getAppName()}<br>
 	 */
-	@Column(name = "appName", length = 30)
-	private String appName;
+//	@Column(name = "appName", length = 30)
+//	private String appName;
 
 	/**
 	 * {@link com.javapai.common.dto.BaseRstDTO#getVersion()}<br>
@@ -112,13 +112,13 @@ public abstract class AbstractDomain extends TopBaseDomain {
 		this.appId = appId;
 	}
 
-	public String getAppName() {
-		return appName;
-	}
-
-	public void setAppName(String appName) {
-		this.appName = appName;
-	}
+//	public String getAppName() {
+//		return appName;
+//	}
+//
+//	public void setAppName(String appName) {
+//		this.appName = appName;
+//	}
 
 	public String getVersion() {
 		return version;
