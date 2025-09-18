@@ -139,7 +139,9 @@ public abstract class AbstractBizService implements TopBaseService {
 	}
 	
 	/**
-	 * 构造MySQL数据分页SQL.<br>
+	 * 构造MySQL数据分页SQL。<br>
+	 * 
+	 * <strong>提示：</strong>此分页方法（limit offset,size）不适用大数量下的深度分页。<br>
 	 * 
 	 * @param sql
 	 * @param pageIndex
@@ -147,13 +149,8 @@ public abstract class AbstractBizService implements TopBaseService {
 	 * @return
 	 */
 	private String getMySQLPageSQL(String sql, Integer pageIndex, Integer pageSize) {
-		if (null != pageIndex && null != pageSize) {
-			return sql + " limit " + (pageIndex) + "," + pageSize;
-		} else if (null != pageIndex && null == pageSize) {
-			return sql + " limit " + pageIndex;
-		} else {
-			return sql;
-		}
+		// 提示：框架中的BasePageArgs对象已进行内部处理，所以这里不推判PageIndex和PageSize参数的可用性。
+		return sql + " limit " + (pageIndex - 1) * pageSize + "," + pageSize;
 	}
 	
 	/**
