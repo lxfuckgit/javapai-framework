@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.javapai.framework</groupId>
 		<artifactId>javapai-framework</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>v2.0.0</version>
 	</parent>
 	
 	<properties>
@@ -34,6 +34,16 @@
 			<artifactId>poi-scratchpad</artifactId>
 		</dependency>
 		-->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+		    <artifactId>easyexcel</artifactId>
+		    <exclusions>
+		        <exclusion>
+		            <artifactId>poi-ooxml-schemas</artifactId>
+		            <groupId>org.apache.poi</groupId>
+		        </exclusion>
+		    </exclusions>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>

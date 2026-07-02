@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.javapai.framework</groupId>
 	<artifactId>javapai-framework</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>v2.0.0</version>
 	<name>javapai-framework</name>
 	<packaging>pom</packaging>
 	
@@ -36,6 +36,26 @@
 			    <groupId>org.springframework</groupId>
 			    <artifactId>spring-context</artifactId>
 			    <version>${spring-version}</version>
+			    <scope>provided</scope>
+			</dependency>
+			
+			<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+			<dependency>
+			    <groupId>javax.servlet</groupId>
+			    <artifactId>javax.servlet-api</artifactId>
+			    <version>3.1.0</version>
+			    <scope>test</scope>
+			</dependency>
+			
+			<!-- https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api -->
+			<dependency>
+				<!-- 注意：javax.servlet 和 jakarta.servlet 是 Java Servlet API 的两个版本。 -->
+				<!-- 
+				在过去，Java Servlet API 是由 Sun Microsystems（现在是 Oracle）开发和维护的，其包名以 javax.servlet 开头。然而，从 Java EE 8 开始，Servlet API 的维护权转交给了 Eclipse Foundation 的 Jakarta EE 社区，因此，在最新的 Jakarta EE 版本中，Servlet API 的包名已经更改为 jakarta.servlet。简而言之，javax.servlet 是旧版本的包名，而 jakarta.servlet 是新版本的包名。这个变化是为了反映 Jakarta EE 作为一个独立的开源项目，并且将标准 Java 技术规范的发展移交给了 Jakarta EE 社区。
+				-->
+			    <groupId>jakarta.servlet</groupId>
+			    <artifactId>jakarta.servlet-api</artifactId>
+			    <version>6.0.0</version>
 			    <scope>provided</scope>
 			</dependency>
 			
@@ -123,12 +143,17 @@
 			    <scope>provided</scope>
 			</dependency>
 			
-			<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+			<!-- EasyExcel(使用EasyExcel3.0.0及以上版本配合POI5+时，需要手动在项目的依赖管理中排除poi-ooxml-schemas依赖) -->
 			<dependency>
-			    <groupId>javax.servlet</groupId>
-			    <artifactId>javax.servlet-api</artifactId>
-			    <version>3.1.0</version>
-			    <scope>test</scope>
+				<groupId>com.alibaba</groupId>
+			    <artifactId>easyexcel</artifactId>
+			    <version>3.1.3</version>
+			    <exclusions>
+			        <exclusion>
+			            <artifactId>poi-ooxml-schemas</artifactId>
+			            <groupId>org.apache.poi</groupId>
+			        </exclusion>
+			    </exclusions>
 			</dependency>
 			
 			<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
