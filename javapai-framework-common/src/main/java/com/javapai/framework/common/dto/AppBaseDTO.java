@@ -1,15 +1,15 @@
 package com.javapai.framework.common.dto;
 
 /**
- * 默认请求基础入参对象。<br>
+ * App端请求基础报文对象。<br>
  * 
- * BaseRstDTO主要用以描述当前请求中涉及到和App应用相关的参数信息。
+ * AppBaseDTO主要用以描述当前请求中涉及到和App应用相关的参数信息。
  * 
  * @author pooja
  *
  */
 @SuppressWarnings("serial")
-public abstract class BaseRstDTO extends BaseDTO {
+public abstract class AppBaseDTO extends BaseDTO {
 	/**
 	 * 请求应用ID标识.
 	 */

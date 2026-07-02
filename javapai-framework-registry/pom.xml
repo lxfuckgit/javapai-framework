@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.javapai.framework</groupId>
 	<artifactId>javapai-framework-registry</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>javapai-framework-registry</name>
@@ -10,7 +9,7 @@
 	<parent>
 		<groupId>com.javapai.framework</groupId>
 		<artifactId>javapai-framework</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>v2.0.0</version>
 	</parent>
 	
 	<properties>
@@ -31,12 +30,6 @@
 			<artifactId>curator-client</artifactId>
 			<version>4.2.0</version>
 			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
