@@ -2,8 +2,8 @@ package com.javapai.framework.common.domain;
 
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 
 /**
  * AbstractDomain:抽象实体类，可作为所有领域实体的基类。<br>
@@ -14,10 +14,6 @@ import javax.persistence.MappedSuperclass;
  * @author liu.xiang
  *
  */
-// @Entity
-// @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-// public abstract class AbstractEntity implements Domain {
-// }
 @MappedSuperclass
 public abstract class TopBaseDomain {
 	//insertable 和 updatable 是JPA中 @Column 注解的两个属性，用于控制 Hibernate 在生成 SQL 语句时是否包含该字段。

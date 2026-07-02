@@ -1,7 +1,7 @@
 package com.javapai.framework.common.domain;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class AbstractDomain extends TopBaseDomain {
