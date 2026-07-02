@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>com.javapai.framework</groupId>
 		<artifactId>javapai-framework</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>v2.0.0</version>
 	</parent>
 	
 	<properties>
@@ -22,6 +22,7 @@
 		<dependency>
 		    <groupId>commons-io</groupId>
 		    <artifactId>commons-io</artifactId>
+		    <scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

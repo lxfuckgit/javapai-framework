@@ -36,9 +36,9 @@ public abstract class AbstractDomain extends TopBaseDomain {
 	private String deviceIdfv;
 	
 	/**
-	 * @see com.javapai.common.dto.BaseRstDTO#getAppId()<br>
+	 * @see com.javapai.framework.common.dto#getAppId()<br>
 	 */
-	@Column(name = "appId", length = 16)
+	@Column(name = "appId", length = 32,nullable = false)
 	private String appId;
 	
 	/**
@@ -48,9 +48,9 @@ public abstract class AbstractDomain extends TopBaseDomain {
 //	private String appName;
 
 	/**
-	 * {@link com.javapai.common.dto.BaseRstDTO#getVersion()}<br>
+	 * {@link com.javapai.framework.common.dto#getVersion()}<br>
 	 */
-	@Column(name = "version", length = 12)
+	@Column(name = "version", length = 12, nullable = false)
 	private String version;
 
 	// /**
@@ -59,7 +59,7 @@ public abstract class AbstractDomain extends TopBaseDomain {
 	// */
 	// private String rstSource;
 	/**
-	 * {@link com.javapai.common.dto.BaseRstDTO#getFromChannel()}
+	 * {@link com.javapai.framework.common.dto#getFromChannel()}
 	 */
 	@Column(name = "fromChannel", length = 30)
 	private String fromChannel;

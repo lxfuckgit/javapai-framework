@@ -20,16 +20,20 @@ import javax.persistence.MappedSuperclass;
 // }
 @MappedSuperclass
 public abstract class TopBaseDomain {
+	//insertable 和 updatable 是JPA中 @Column 注解的两个属性，用于控制 Hibernate 在生成 SQL 语句时是否包含该字段。
+	// 简单理解：
+	// insertable = false：插入（INSERT）时忽略这个字段
+	// updatable = false：更新（UPDATE）时忽略这个字段
 	/**
 	 * 创建时间(系统|数据库自动生成).<br>
 	 * 格式:yyyy-MM-dd hh:mm;类型(VARCHAR2(16)):<br>
 	 */
-	@Column(name = "create_time", length = 30, nullable = false,insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private Timestamp createTime; // private String createTime;//insertable = false是什么场景用
+	@Column(name = "create_time", length = 30, nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	private Timestamp createTime; // private String createTime;
 	/**
 	 * 修改时间(数据版本锁).<br>
 	 */
-	@Column(name = "update_time", length = 30)
+	@Column(name = "update_time", length = 30, updatable = true, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 	private Timestamp updateTime; // private String updateTime;
 
 	public Timestamp getCreateTime() {
