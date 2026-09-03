@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>com.javapai.framework</groupId>
 		<artifactId>javapai-framework</artifactId>
-		<version>v2.0.0</version>
+		<version>v3.0.0</version>
 	</parent>
 	
 	<properties>
@@ -17,6 +17,11 @@
 	</properties>
 	
 	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		
 		<!-- 说明：此处采用最小引用原则，并实行非向下传递，理由：
 	 	1避免过重引入springboot,boot引入由下游决定.
 	 	2:jdbc-template应用后续剥离到framework包 
@@ -31,23 +36,18 @@
 			<artifactId>spring-jdbc</artifactId>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-		    <groupId>javax.validation</groupId>
-		    <artifactId>validation-api</artifactId>
+			<groupId>jakarta.persistence</groupId>
+			<artifactId>jakarta.persistence-api</artifactId>
+			<scope>provided</scope>
 		</dependency>
-		<dependency>
-		    <groupId>org.hibernate.javax.persistence</groupId>
-		    <artifactId>hibernate-jpa-2.1-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
+		
 		<!-- XTokenRequestWrapper类依赖Utils工具包-->
 		<dependency>
 			<groupId>com.javapai.framework</groupId>
