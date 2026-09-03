@@ -39,31 +39,31 @@ public enum ErrorCode implements Enums<String,String> {
     PARAMS_LASTNAME("41000100","姓名参数不能为空"),
     PARAMS_APPID("41000101","应用标识参数不允许为空!"),
     PARAMS_ID("41000101","数据标识参数不允许为空!"),
+    PARAMS_ACCOUNTNO("41002001","账户参数不允许为空!"),
+    PARAMS_ACCOUNTNAME("41002002","账户名参数不允许为空!"),
+	PARAMS_NEWPASSWORD("41002003", "新密码参数不能为空！"),
+//  ,PARAMS_NEWPWDAGAIN(ErrorCode.ERROR_CODE+2,"两次输入密码不一致！")
+    
+	/* 无效类-错误码 */
+    INVALID_LICENSE("40000100", "无效的license授权!"), 
+    INVALID_APPID("40000110", "无效的App应用标识!"), 
+    INVALID_TOKEN("40000111", "无效的token登录授权码!"), 
+    INVALID_ID("40000112", "无效的id标识!"), 
+    INVALID_CODE("40000113", "无效的code编码!"), 
     
 	/* 业务类-错误码  */
     ERROR_REGISTER("", "用户注册失败!"),
     ERROR_LOGIN("40000221", "登录错误，请检查用户名或密码!"),
     ERROR_LOGOUT("40000221", "用户退出失败!"),
     ERROR_UPLOAD("40000221", "上传操作失败!"),
-    
-	/* 无效类-错误码 */
-    INVALID_APPID("40000110", "无效的App应用标识!"), 
-    INVALID_TOKEN("40000111", "无效的token登录授权码!"), 
-    INVALID_ID("40000112", "无效的id编码!"), 
-    INVALID_CODE("40000112", "无效的code编码!"), 
-	/**
-	 * 
-	 * @deprecated 使用{@link ErrorCode#INVALID_TOKEN}代替。<br>
-	 */
-	ERROR_TOKEN_EXPIRE("4000999", "登录授权码已过期!"),
-	
+	ERROR_LIMIT_OVER("40000223", "超过业务允许阀值！"),
 	ERROR_EDU_INVALID("40000235","学籍认证失败"),
 	ERROR_USER_AUTH_BANKCARD("40000241", "银行卡号与实名认证身份不符!"),
 	ERROR_USER_AUTH_LOCKED("40000270", "因提交次数过多，认证功能已被锁定!"),
 	ERROR_USER_CAPTCHA_INVALID("40000280", "无效的验证码!"),
-	ERROR_USER_IDCARD_INVALID("","身份证号无效"),
-	ERROR_USER_IDCARD_18OVER("","身份证号验证失败,未满18岁"),
-	ERROR_USER_AUTH_IDCARD_INVALID("","身份证号验证失败,姓名不一致"),
+	ERROR_USER_IDCARD_INVALID("40000281","身份证号无效"),
+	ERROR_USER_IDCARD_18OVER("40000282","身份证号验证失败,未满18岁"),
+	ERROR_USER_AUTH_IDCARD_INVALID("40000283","身份证号验证失败,姓名不一致"),
 	
 	/* 唯一核验类-错误码 */
     EXIST_AUTH_EDU("40000371", "你的学籍已经核查通过，请勿再提交!"),
@@ -72,6 +72,12 @@ public enum ErrorCode implements Enums<String,String> {
 	EXIST_USER("40000377", "该用户已存在!"), 
 	EXIST_NAME("40000377", "该名称已存在!"), 
 	EXIST_PHONE("40000378", "该手机号码已被注册!"),
+	EXIST_CHILDNODE("40000379", "存在子节点数据!"),
+	
+	/*值限定类-错误码*/
+	VALUE_TOO_LARGE_LIMIT("40000401", "参数值过大!"), 
+	VALUE_TOO_SMALL_LIMIT("40000402", "参数值过小!"),
+	VALUE_NOT_ENOUGH_LIMIT("40000410", "没有足够的可用额度!"),
 	
 	PASSWORD_LENGH("", "密码长度要求不达标!"), // 具体多长取决于业务API进一步说明.
 	PASSWORD_PATTERN("", "密码格式为要求不达标!"), // 具体格式取决于API进一步说明.
@@ -144,13 +150,11 @@ public enum ErrorCode implements Enums<String,String> {
 
 	@Override
 	public String getKey() {
-		// TODO Auto-generated method stub
 		return code;
 	}
 
 	@Override
 	public String getValue() {
-		// TODO Auto-generated method stub
 		return message;
 	}
 }
