@@ -18,6 +18,10 @@ public enum StatusEnum {
 	 */
 	INIT("INIT"),
 	/**
+	 * 处理中
+	 */
+	PROCESSING("PROCESSING"),
+	/**
 	 * 可用
 	 */
 	ENABLE("ENABLE"),
